@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.gateway.mapper.ChannelMapper" >
+  <resultMap id="BaseResultMap" type="com.pay.gateway.entity.Channel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="channelNo" property="channelNo" jdbcType="VARCHAR" />
+    <result column="channelAccount" property="channelAccount" jdbcType="VARCHAR" />
+    <result column="channelName" property="channelName" jdbcType="VARCHAR" />
+    <result column="channelStautus" property="channelStautus" jdbcType="INTEGER" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="submitTime" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="submitSystem" property="submitSystem" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, channelNo, channelAccount, channelName, channelStautus, createTime, submitTime, 
+    submitSystem, status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pay.gateway.entity.ChannelExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from manage_channel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from manage_channel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from manage_channel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pay.gateway.entity.ChannelExample" >
+    delete from manage_channel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pay.gateway.entity.Channel" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_channel (channelNo, channelAccount, channelName, 
+      channelStautus, createTime, submitTime, 
+      submitSystem, status)
+    values (#{channelNo,jdbcType=VARCHAR}, #{channelAccount,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, 
+      #{channelStautus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{submitTime,jdbcType=TIMESTAMP}, 
+      #{submitSystem,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pay.gateway.entity.Channel" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_channel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="channelNo != null" >
+        channelNo,
+      </if>
+      <if test="channelAccount != null" >
+        channelAccount,
+      </if>
+      <if test="channelName != null" >
+        channelName,
+      </if>
+      <if test="channelStautus != null" >
+        channelStautus,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="submitTime != null" >
+        submitTime,
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelAccount != null" >
+        #{channelAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelStautus != null" >
+        #{channelStautus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitTime != null" >
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pay.gateway.entity.ChannelExample" resultType="java.lang.Integer" >
+    select count(*) from manage_channel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update manage_channel
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.channelNo != null" >
+        channelNo = #{record.channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelAccount != null" >
+        channelAccount = #{record.channelAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelName != null" >
+        channelName = #{record.channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelStautus != null" >
+        channelStautus = #{record.channelStautus,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitTime != null" >
+        submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitSystem != null" >
+        submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update manage_channel
+    set id = #{record.id,jdbcType=INTEGER},
+      channelNo = #{record.channelNo,jdbcType=VARCHAR},
+      channelAccount = #{record.channelAccount,jdbcType=VARCHAR},
+      channelName = #{record.channelName,jdbcType=VARCHAR},
+      channelStautus = #{record.channelStautus,jdbcType=INTEGER},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pay.gateway.entity.Channel" >
+    update manage_channel
+    <set >
+      <if test="channelNo != null" >
+        channelNo = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelAccount != null" >
+        channelAccount = #{channelAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        channelName = #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelStautus != null" >
+        channelStautus = #{channelStautus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitTime != null" >
+        submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pay.gateway.entity.Channel" >
+    update manage_channel
+    set channelNo = #{channelNo,jdbcType=VARCHAR},
+      channelAccount = #{channelAccount,jdbcType=VARCHAR},
+      channelName = #{channelName,jdbcType=VARCHAR},
+      channelStautus = #{channelStautus,jdbcType=INTEGER},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.gateway.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.pay.gateway.entity.User" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userId" jdbcType="VARCHAR" />
+    <result column="userName" property="userName" jdbcType="VARCHAR" />
+    <result column="userPassword" property="userPassword" jdbcType="VARCHAR" />
+    <result column="userSalt" property="userSalt" jdbcType="VARCHAR" />
+    <result column="userMail" property="userMail" jdbcType="VARCHAR" />
+    <result column="userPhone" property="userPhone" jdbcType="VARCHAR" />
+    <result column="userQQ" property="userQQ" jdbcType="VARCHAR" />
+    <result column="userWechar" property="userWechar" jdbcType="VARCHAR" />
+    <result column="userType" property="userType" jdbcType="INTEGER" />
+    <result column="userAddress" property="userAddress" jdbcType="VARCHAR" />
+    <result column="userCity" property="userCity" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="submitTime" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="submitSystem" property="submitSystem" jdbcType="VARCHAR" />
+    <result column="payPassword" property="payPassword" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="retain1" property="retain1" jdbcType="VARCHAR" />
+    <result column="retain2" property="retain2" jdbcType="VARCHAR" />
+    <result column="retain3" property="retain3" jdbcType="VARCHAR" />
+    <result column="retain4" property="retain4" jdbcType="VARCHAR" />
+    <result column="retain5" property="retain5" jdbcType="VARCHAR" />
+    <result column="retain6" property="retain6" jdbcType="VARCHAR" />
+    <result column="retain7" property="retain7" jdbcType="VARCHAR" />
+    <result column="retain8" property="retain8" jdbcType="VARCHAR" />
+    <result column="retain9" property="retain9" jdbcType="VARCHAR" />
+    <result column="retain10" property="retain10" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, userId, userName, userPassword, userSalt, userMail, userPhone, userQQ, userWechar, 
+    userType, userAddress, userCity, createTime, submitTime, submitSystem, payPassword, 
+    status, retain1, retain2, retain3, retain4, retain5, retain6, retain7, retain8, retain9, 
+    retain10
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pay.gateway.entity.UserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from system_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.pay.gateway.entity.User" useGeneratedKeys="true" keyProperty="id" >
+    insert into system_user (userId, userName, userPassword, 
+      userSalt, userMail, userPhone, 
+      userQQ, userWechar, userType, 
+      userAddress, userCity, createTime, 
+      submitTime, submitSystem, payPassword, 
+      status, retain1, retain2, 
+      retain3, retain4, retain5, 
+      retain6, retain7, retain8, 
+      retain9, retain10)
+    values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, 
+      #{userSalt,jdbcType=VARCHAR}, #{userMail,jdbcType=VARCHAR}, #{userPhone,jdbcType=VARCHAR}, 
+      #{userQQ,jdbcType=VARCHAR}, #{userWechar,jdbcType=VARCHAR}, #{userType,jdbcType=INTEGER}, 
+      #{userAddress,jdbcType=VARCHAR}, #{userCity,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{submitTime,jdbcType=TIMESTAMP}, #{submitSystem,jdbcType=VARCHAR}, #{payPassword,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{retain1,jdbcType=VARCHAR}, #{retain2,jdbcType=VARCHAR}, 
+      #{retain3,jdbcType=VARCHAR}, #{retain4,jdbcType=VARCHAR}, #{retain5,jdbcType=VARCHAR}, 
+      #{retain6,jdbcType=VARCHAR}, #{retain7,jdbcType=VARCHAR}, #{retain8,jdbcType=VARCHAR}, 
+      #{retain9,jdbcType=VARCHAR}, #{retain10,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pay.gateway.entity.User" useGeneratedKeys="true" keyProperty="id" >
+    insert into system_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="userName != null" >
+        userName,
+      </if>
+      <if test="userPassword != null" >
+        userPassword,
+      </if>
+      <if test="userSalt != null" >
+        userSalt,
+      </if>
+      <if test="userMail != null" >
+        userMail,
+      </if>
+      <if test="userPhone != null" >
+        userPhone,
+      </if>
+      <if test="userQQ != null" >
+        userQQ,
+      </if>
+      <if test="userWechar != null" >
+        userWechar,
+      </if>
+      <if test="userType != null" >
+        userType,
+      </if>
+      <if test="userAddress != null" >
+        userAddress,
+      </if>
+      <if test="userCity != null" >
+        userCity,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="submitTime != null" >
+        submitTime,
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem,
+      </if>
+      <if test="payPassword != null" >
+        payPassword,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="retain1 != null" >
+        retain1,
+      </if>
+      <if test="retain2 != null" >
+        retain2,
+      </if>
+      <if test="retain3 != null" >
+        retain3,
+      </if>
+      <if test="retain4 != null" >
+        retain4,
+      </if>
+      <if test="retain5 != null" >
+        retain5,
+      </if>
+      <if test="retain6 != null" >
+        retain6,
+      </if>
+      <if test="retain7 != null" >
+        retain7,
+      </if>
+      <if test="retain8 != null" >
+        retain8,
+      </if>
+      <if test="retain9 != null" >
+        retain9,
+      </if>
+      <if test="retain10 != null" >
+        retain10,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null" >
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userSalt != null" >
+        #{userSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="userMail != null" >
+        #{userMail,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null" >
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userQQ != null" >
+        #{userQQ,jdbcType=VARCHAR},
+      </if>
+      <if test="userWechar != null" >
+        #{userWechar,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="userAddress != null" >
+        #{userAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="userCity != null" >
+        #{userCity,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitTime != null" >
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="payPassword != null" >
+        #{payPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="retain1 != null" >
+        #{retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="retain2 != null" >
+        #{retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="retain3 != null" >
+        #{retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="retain4 != null" >
+        #{retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="retain5 != null" >
+        #{retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="retain6 != null" >
+        #{retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="retain7 != null" >
+        #{retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="retain8 != null" >
+        #{retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="retain9 != null" >
+        #{retain9,jdbcType=VARCHAR},
+      </if>
+      <if test="retain10 != null" >
+        #{retain10,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pay.gateway.entity.UserExample" resultType="java.lang.Integer" >
+    select count(*) from system_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update system_user
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        userId = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userName != null" >
+        userName = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPassword != null" >
+        userPassword = #{record.userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userSalt != null" >
+        userSalt = #{record.userSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userMail != null" >
+        userMail = #{record.userMail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPhone != null" >
+        userPhone = #{record.userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userQQ != null" >
+        userQQ = #{record.userQQ,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userWechar != null" >
+        userWechar = #{record.userWechar,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userType != null" >
+        userType = #{record.userType,jdbcType=INTEGER},
+      </if>
+      <if test="record.userAddress != null" >
+        userAddress = #{record.userAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userCity != null" >
+        userCity = #{record.userCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitTime != null" >
+        submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitSystem != null" >
+        submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payPassword != null" >
+        payPassword = #{record.payPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.retain1 != null" >
+        retain1 = #{record.retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain2 != null" >
+        retain2 = #{record.retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain3 != null" >
+        retain3 = #{record.retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain4 != null" >
+        retain4 = #{record.retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain5 != null" >
+        retain5 = #{record.retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain6 != null" >
+        retain6 = #{record.retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain7 != null" >
+        retain7 = #{record.retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain8 != null" >
+        retain8 = #{record.retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain9 != null" >
+        retain9 = #{record.retain9,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain10 != null" >
+        retain10 = #{record.retain10,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update system_user
+    set id = #{record.id,jdbcType=INTEGER},
+      userId = #{record.userId,jdbcType=VARCHAR},
+      userName = #{record.userName,jdbcType=VARCHAR},
+      userPassword = #{record.userPassword,jdbcType=VARCHAR},
+      userSalt = #{record.userSalt,jdbcType=VARCHAR},
+      userMail = #{record.userMail,jdbcType=VARCHAR},
+      userPhone = #{record.userPhone,jdbcType=VARCHAR},
+      userQQ = #{record.userQQ,jdbcType=VARCHAR},
+      userWechar = #{record.userWechar,jdbcType=VARCHAR},
+      userType = #{record.userType,jdbcType=INTEGER},
+      userAddress = #{record.userAddress,jdbcType=VARCHAR},
+      userCity = #{record.userCity,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      payPassword = #{record.payPassword,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      retain1 = #{record.retain1,jdbcType=VARCHAR},
+      retain2 = #{record.retain2,jdbcType=VARCHAR},
+      retain3 = #{record.retain3,jdbcType=VARCHAR},
+      retain4 = #{record.retain4,jdbcType=VARCHAR},
+      retain5 = #{record.retain5,jdbcType=VARCHAR},
+      retain6 = #{record.retain6,jdbcType=VARCHAR},
+      retain7 = #{record.retain7,jdbcType=VARCHAR},
+      retain8 = #{record.retain8,jdbcType=VARCHAR},
+      retain9 = #{record.retain9,jdbcType=VARCHAR},
+      retain10 = #{record.retain10,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

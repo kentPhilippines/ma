@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.gateway.mapper.AccountInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.pay.gateway.entity.AccountInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="accountId" property="accountId" jdbcType="VARCHAR" />
+    <result column="agentAccount" property="agentAccount" jdbcType="VARCHAR" />
+    <result column="isAgant" property="isAgant" jdbcType="INTEGER" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="submitTime" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="submitSystem" property="submitSystem" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="appKey" property="appKey" jdbcType="LONGVARCHAR" />
+    <result column="appDesKey" property="appDesKey" jdbcType="LONGVARCHAR" />
+    <result column="accountIp" property="accountIp" jdbcType="LONGVARCHAR" />
+    <result column="havaInterface" property="havaInterface" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.pay.gateway.entity.AccountInfo" extends="BaseResultMap" >
+    
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, accountId, agentAccount, isAgant, password, createTime, submitTime, submitSystem,   appKey, appDesKey, accountIp, havaInterface,
+    status
+  </sql>
+  <sql id="Blob_Column_List" >
+  
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.pay.gateway.entity.AccountInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from manage_account_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pay.gateway.entity.AccountInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from manage_account_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from manage_account_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from manage_account_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pay.gateway.entity.AccountInfoExample" >
+    delete from manage_account_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pay.gateway.entity.AccountInfo" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_account_info (accountId, agentAccount, isAgant, 
+      password, createTime, submitTime, 
+      submitSystem, status, appKey, 
+      appDesKey, accountIp, havaInterface
+      )
+    values (#{accountId,jdbcType=VARCHAR}, #{agentAccount,jdbcType=VARCHAR}, #{isAgant,jdbcType=INTEGER}, 
+      #{password,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{submitTime,jdbcType=TIMESTAMP}, 
+      #{submitSystem,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{appKey,jdbcType=LONGVARCHAR}, 
+      #{appDesKey,jdbcType=LONGVARCHAR}, #{accountIp,jdbcType=LONGVARCHAR}, #{havaInterface,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pay.gateway.entity.AccountInfo" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_account_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountId != null" >
+        accountId,
+      </if>
+      <if test="agentAccount != null" >
+        agentAccount,
+      </if>
+      <if test="isAgant != null" >
+        isAgant,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="submitTime != null" >
+        submitTime,
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="appKey != null" >
+        appKey,
+      </if>
+      <if test="appDesKey != null" >
+        appDesKey,
+      </if>
+      <if test="accountIp != null" >
+        accountIp,
+      </if>
+      <if test="havaInterface != null" >
+        havaInterface,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountId != null" >
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="agentAccount != null" >
+        #{agentAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="isAgant != null" >
+        #{isAgant,jdbcType=INTEGER},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitTime != null" >
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="appKey != null" >
+        #{appKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="appDesKey != null" >
+        #{appDesKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="accountIp != null" >
+        #{accountIp,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="havaInterface != null" >
+        #{havaInterface,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pay.gateway.entity.AccountInfoExample" resultType="java.lang.Integer" >
+    select count(*) from manage_account_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update manage_account_info
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.accountId != null" >
+        accountId = #{record.accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agentAccount != null" >
+        agentAccount = #{record.agentAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isAgant != null" >
+        isAgant = #{record.isAgant,jdbcType=INTEGER},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitTime != null" >
+        submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitSystem != null" >
+        submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.appKey != null" >
+        appKey = #{record.appKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.appDesKey != null" >
+        appDesKey = #{record.appDesKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.accountIp != null" >
+        accountIp = #{record.accountIp,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.havaInterface != null" >
+        havaInterface = #{record.havaInterface,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update manage_account_info
+    set id = #{record.id,jdbcType=INTEGER},
+      accountId = #{record.accountId,jdbcType=VARCHAR},
+      agentAccount = #{record.agentAccount,jdbcType=VARCHAR},
+      isAgant = #{record.isAgant,jdbcType=INTEGER},
+      password = #{record.password,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      appKey = #{record.appKey,jdbcType=LONGVARCHAR},
+      appDesKey = #{record.appDesKey,jdbcType=LONGVARCHAR},
+      accountIp = #{record.accountIp,jdbcType=LONGVARCHAR},
+      havaInterface = #{record.havaInterface,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update manage_account_info
+    set id = #{record.id,jdbcType=INTEGER},
+      accountId = #{record.accountId,jdbcType=VARCHAR},
+      agentAccount = #{record.agentAccount,jdbcType=VARCHAR},
+      isAgant = #{record.isAgant,jdbcType=INTEGER},
+      password = #{record.password,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pay.gateway.entity.AccountInfo" >
+    update manage_account_info
+    <set >
+      <if test="accountId != null" >
+        accountId = #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="agentAccount != null" >
+        agentAccount = #{agentAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="isAgant != null" >
+        isAgant = #{isAgant,jdbcType=INTEGER},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitTime != null" >
+        submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="appKey != null" >
+        appKey = #{appKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="appDesKey != null" >
+        appDesKey = #{appDesKey,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="accountIp != null" >
+        accountIp = #{accountIp,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="havaInterface != null" >
+        havaInterface = #{havaInterface,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pay.gateway.entity.AccountInfo" >
+    update manage_account_info
+    set accountId = #{accountId,jdbcType=VARCHAR},
+      agentAccount = #{agentAccount,jdbcType=VARCHAR},
+      isAgant = #{isAgant,jdbcType=INTEGER},
+      password = #{password,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      appKey = #{appKey,jdbcType=LONGVARCHAR},
+      appDesKey = #{appDesKey,jdbcType=LONGVARCHAR},
+      accountIp = #{accountIp,jdbcType=LONGVARCHAR},
+      havaInterface = #{havaInterface,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pay.gateway.entity.AccountInfo" >
+    update manage_account_info
+    set accountId = #{accountId,jdbcType=VARCHAR},
+      agentAccount = #{agentAccount,jdbcType=VARCHAR},
+      isAgant = #{isAgant,jdbcType=INTEGER},
+      password = #{password,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

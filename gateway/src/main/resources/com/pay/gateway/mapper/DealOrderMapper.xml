@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.gateway.mapper.DealOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.pay.gateway.entity.DealOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="orderId" property="orderId" jdbcType="VARCHAR" />
+    <result column="associatedId" property="associatedId" jdbcType="VARCHAR" />
+    <result column="orderStatus" property="orderStatus" jdbcType="INTEGER" />
+    <result column="dealAmount" property="dealAmount" jdbcType="DECIMAL" />
+    <result column="dealFee" property="dealFee" jdbcType="DECIMAL" />
+    <result column="actualAmount" property="actualAmount" jdbcType="DECIMAL" />
+    <result column="orderType" property="orderType" jdbcType="INTEGER" />
+    <result column="orderAccount" property="orderAccount" jdbcType="VARCHAR" />
+    <result column="externalOrderId" property="externalOrderId" jdbcType="VARCHAR" />
+    <result column="orderGenerationIp" property="orderGenerationIp" jdbcType="VARCHAR" />
+    <result column="dealType" property="dealType" jdbcType="INTEGER" />
+    <result column="dealCardId" property="dealCardId" jdbcType="VARCHAR" />
+    <result column="dealChannel" property="dealChannel" jdbcType="VARCHAR" />
+    <result column="submitTime" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="submitSystem" property="submitSystem" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="retain1" property="retain1" jdbcType="VARCHAR" />
+    <result column="retain2" property="retain2" jdbcType="VARCHAR" />
+    <result column="retain3" property="retain3" jdbcType="VARCHAR" />
+    <result column="retain4" property="retain4" jdbcType="VARCHAR" />
+    <result column="retain5" property="retain5" jdbcType="VARCHAR" />
+    <result column="retain6" property="retain6" jdbcType="VARCHAR" />
+    <result column="retain7" property="retain7" jdbcType="VARCHAR" />
+    <result column="retain8" property="retain8" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.pay.gateway.entity.DealOrder" extends="BaseResultMap" >
+    <result column="dealDescribe" property="dealDescribe" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, createTime, orderId, associatedId, orderStatus, dealAmount, dealFee, actualAmount, 
+    orderType, orderAccount, externalOrderId, orderGenerationIp, dealType, dealCardId, 
+    dealChannel, submitTime, submitSystem, status, retain1, retain2, retain3, retain4, 
+    retain5, retain6, retain7, retain8
+  </sql>
+  <sql id="Blob_Column_List" >
+    dealDescribe
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.pay.gateway.entity.DealOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from manage_deal_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pay.gateway.entity.DealOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from manage_deal_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from manage_deal_order
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from manage_deal_order
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pay.gateway.entity.DealOrderExample" >
+    delete from manage_deal_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pay.gateway.entity.DealOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_deal_order (createTime, orderId, associatedId, 
+      orderStatus, dealAmount, dealFee, 
+      actualAmount, orderType, orderAccount, 
+      externalOrderId, orderGenerationIp, dealType, 
+      dealCardId, dealChannel, submitTime, 
+      submitSystem, status, retain1, 
+      retain2, retain3, retain4, 
+      retain5, retain6, retain7, 
+      retain8, dealDescribe)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{orderId,jdbcType=VARCHAR}, #{associatedId,jdbcType=VARCHAR}, 
+      #{orderStatus,jdbcType=INTEGER}, #{dealAmount,jdbcType=DECIMAL}, #{dealFee,jdbcType=DECIMAL}, 
+      #{actualAmount,jdbcType=DECIMAL}, #{orderType,jdbcType=INTEGER}, #{orderAccount,jdbcType=VARCHAR}, 
+      #{externalOrderId,jdbcType=VARCHAR}, #{orderGenerationIp,jdbcType=VARCHAR}, #{dealType,jdbcType=INTEGER}, 
+      #{dealCardId,jdbcType=VARCHAR}, #{dealChannel,jdbcType=VARCHAR}, #{submitTime,jdbcType=TIMESTAMP}, 
+      #{submitSystem,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{retain1,jdbcType=VARCHAR}, 
+      #{retain2,jdbcType=VARCHAR}, #{retain3,jdbcType=VARCHAR}, #{retain4,jdbcType=VARCHAR}, 
+      #{retain5,jdbcType=VARCHAR}, #{retain6,jdbcType=VARCHAR}, #{retain7,jdbcType=VARCHAR}, 
+      #{retain8,jdbcType=VARCHAR}, #{dealDescribe,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pay.gateway.entity.DealOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_deal_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="orderId != null" >
+        orderId,
+      </if>
+      <if test="associatedId != null" >
+        associatedId,
+      </if>
+      <if test="orderStatus != null" >
+        orderStatus,
+      </if>
+      <if test="dealAmount != null" >
+        dealAmount,
+      </if>
+      <if test="dealFee != null" >
+        dealFee,
+      </if>
+      <if test="actualAmount != null" >
+        actualAmount,
+      </if>
+      <if test="orderType != null" >
+        orderType,
+      </if>
+      <if test="orderAccount != null" >
+        orderAccount,
+      </if>
+      <if test="externalOrderId != null" >
+        externalOrderId,
+      </if>
+      <if test="orderGenerationIp != null" >
+        orderGenerationIp,
+      </if>
+      <if test="dealType != null" >
+        dealType,
+      </if>
+      <if test="dealCardId != null" >
+        dealCardId,
+      </if>
+      <if test="dealChannel != null" >
+        dealChannel,
+      </if>
+      <if test="submitTime != null" >
+        submitTime,
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="retain1 != null" >
+        retain1,
+      </if>
+      <if test="retain2 != null" >
+        retain2,
+      </if>
+      <if test="retain3 != null" >
+        retain3,
+      </if>
+      <if test="retain4 != null" >
+        retain4,
+      </if>
+      <if test="retain5 != null" >
+        retain5,
+      </if>
+      <if test="retain6 != null" >
+        retain6,
+      </if>
+      <if test="retain7 != null" >
+        retain7,
+      </if>
+      <if test="retain8 != null" >
+        retain8,
+      </if>
+      <if test="dealDescribe != null" >
+        dealDescribe,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="associatedId != null" >
+        #{associatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dealAmount != null" >
+        #{dealAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dealFee != null" >
+        #{dealFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualAmount != null" >
+        #{actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderAccount != null" >
+        #{orderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="externalOrderId != null" >
+        #{externalOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderGenerationIp != null" >
+        #{orderGenerationIp,jdbcType=VARCHAR},
+      </if>
+      <if test="dealType != null" >
+        #{dealType,jdbcType=INTEGER},
+      </if>
+      <if test="dealCardId != null" >
+        #{dealCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="dealChannel != null" >
+        #{dealChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="submitTime != null" >
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="retain1 != null" >
+        #{retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="retain2 != null" >
+        #{retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="retain3 != null" >
+        #{retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="retain4 != null" >
+        #{retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="retain5 != null" >
+        #{retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="retain6 != null" >
+        #{retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="retain7 != null" >
+        #{retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="retain8 != null" >
+        #{retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDescribe != null" >
+        #{dealDescribe,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pay.gateway.entity.DealOrderExample" resultType="java.lang.Integer" >
+    select count(*) from manage_deal_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update manage_deal_order
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderId != null" >
+        orderId = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.associatedId != null" >
+        associatedId = #{record.associatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderStatus != null" >
+        orderStatus = #{record.orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.dealAmount != null" >
+        dealAmount = #{record.dealAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dealFee != null" >
+        dealFee = #{record.dealFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.actualAmount != null" >
+        actualAmount = #{record.actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderType != null" >
+        orderType = #{record.orderType,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderAccount != null" >
+        orderAccount = #{record.orderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.externalOrderId != null" >
+        externalOrderId = #{record.externalOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderGenerationIp != null" >
+        orderGenerationIp = #{record.orderGenerationIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealType != null" >
+        dealType = #{record.dealType,jdbcType=INTEGER},
+      </if>
+      <if test="record.dealCardId != null" >
+        dealCardId = #{record.dealCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealChannel != null" >
+        dealChannel = #{record.dealChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitTime != null" >
+        submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitSystem != null" >
+        submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.retain1 != null" >
+        retain1 = #{record.retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain2 != null" >
+        retain2 = #{record.retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain3 != null" >
+        retain3 = #{record.retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain4 != null" >
+        retain4 = #{record.retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain5 != null" >
+        retain5 = #{record.retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain6 != null" >
+        retain6 = #{record.retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain7 != null" >
+        retain7 = #{record.retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain8 != null" >
+        retain8 = #{record.retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealDescribe != null" >
+        dealDescribe = #{record.dealDescribe,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update manage_deal_order
+    set id = #{record.id,jdbcType=INTEGER},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      orderId = #{record.orderId,jdbcType=VARCHAR},
+      associatedId = #{record.associatedId,jdbcType=VARCHAR},
+      orderStatus = #{record.orderStatus,jdbcType=INTEGER},
+      dealAmount = #{record.dealAmount,jdbcType=DECIMAL},
+      dealFee = #{record.dealFee,jdbcType=DECIMAL},
+      actualAmount = #{record.actualAmount,jdbcType=DECIMAL},
+      orderType = #{record.orderType,jdbcType=INTEGER},
+      orderAccount = #{record.orderAccount,jdbcType=VARCHAR},
+      externalOrderId = #{record.externalOrderId,jdbcType=VARCHAR},
+      orderGenerationIp = #{record.orderGenerationIp,jdbcType=VARCHAR},
+      dealType = #{record.dealType,jdbcType=INTEGER},
+      dealCardId = #{record.dealCardId,jdbcType=VARCHAR},
+      dealChannel = #{record.dealChannel,jdbcType=VARCHAR},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      retain1 = #{record.retain1,jdbcType=VARCHAR},
+      retain2 = #{record.retain2,jdbcType=VARCHAR},
+      retain3 = #{record.retain3,jdbcType=VARCHAR},
+      retain4 = #{record.retain4,jdbcType=VARCHAR},
+      retain5 = #{record.retain5,jdbcType=VARCHAR},
+      retain6 = #{record.retain6,jdbcType=VARCHAR},
+      retain7 = #{record.retain7,jdbcType=VARCHAR},
+      retain8 = #{record.retain8,jdbcType=VARCHAR},
+      dealDescribe = #{record.dealDescribe,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update manage_deal_order
+    set id = #{record.id,jdbcType=INTEGER},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      orderId = #{record.orderId,jdbcType=VARCHAR},
+      associatedId = #{record.associatedId,jdbcType=VARCHAR},
+      orderStatus = #{record.orderStatus,jdbcType=INTEGER},
+      dealAmount = #{record.dealAmount,jdbcType=DECIMAL},
+      dealFee = #{record.dealFee,jdbcType=DECIMAL},
+      actualAmount = #{record.actualAmount,jdbcType=DECIMAL},
+      orderType = #{record.orderType,jdbcType=INTEGER},
+      orderAccount = #{record.orderAccount,jdbcType=VARCHAR},
+      externalOrderId = #{record.externalOrderId,jdbcType=VARCHAR},
+      orderGenerationIp = #{record.orderGenerationIp,jdbcType=VARCHAR},
+      dealType = #{record.dealType,jdbcType=INTEGER},
+      dealCardId = #{record.dealCardId,jdbcType=VARCHAR},
+      dealChannel = #{record.dealChannel,jdbcType=VARCHAR},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      retain1 = #{record.retain1,jdbcType=VARCHAR},
+      retain2 = #{record.retain2,jdbcType=VARCHAR},
+      retain3 = #{record.retain3,jdbcType=VARCHAR},
+      retain4 = #{record.retain4,jdbcType=VARCHAR},
+      retain5 = #{record.retain5,jdbcType=VARCHAR},
+      retain6 = #{record.retain6,jdbcType=VARCHAR},
+      retain7 = #{record.retain7,jdbcType=VARCHAR},
+      retain8 = #{record.retain8,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pay.gateway.entity.DealOrder" >
+    update manage_deal_order
+    <set >
+      <if test="orderId != null" >
+        orderId = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="associatedId != null" >
+        associatedId = #{associatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        orderStatus = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dealAmount != null" >
+        dealAmount = #{dealAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dealFee != null" >
+        dealFee = #{dealFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualAmount != null" >
+        actualAmount = #{actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderType != null" >
+        orderType = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderAccount != null" >
+        orderAccount = #{orderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="externalOrderId != null" >
+        externalOrderId = #{externalOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderGenerationIp != null" >
+        orderGenerationIp = #{orderGenerationIp,jdbcType=VARCHAR},
+      </if>
+      <if test="dealType != null" >
+        dealType = #{dealType,jdbcType=INTEGER},
+      </if>
+      <if test="dealCardId != null" >
+        dealCardId = #{dealCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="dealChannel != null" >
+        dealChannel = #{dealChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="submitTime != null" >
+        submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="retain1 != null" >
+        retain1 = #{retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="retain2 != null" >
+        retain2 = #{retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="retain3 != null" >
+        retain3 = #{retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="retain4 != null" >
+        retain4 = #{retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="retain5 != null" >
+        retain5 = #{retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="retain6 != null" >
+        retain6 = #{retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="retain7 != null" >
+        retain7 = #{retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="retain8 != null" >
+        retain8 = #{retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDescribe != null" >
+        dealDescribe = #{dealDescribe,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pay.gateway.entity.DealOrder" >
+    update manage_deal_order
+    set orderId = #{orderId,jdbcType=VARCHAR},
+      associatedId = #{associatedId,jdbcType=VARCHAR},
+      orderStatus = #{orderStatus,jdbcType=INTEGER},
+      dealAmount = #{dealAmount,jdbcType=DECIMAL},
+      dealFee = #{dealFee,jdbcType=DECIMAL},
+      actualAmount = #{actualAmount,jdbcType=DECIMAL},
+      orderType = #{orderType,jdbcType=INTEGER},
+      orderAccount = #{orderAccount,jdbcType=VARCHAR},
+      externalOrderId = #{externalOrderId,jdbcType=VARCHAR},
+      orderGenerationIp = #{orderGenerationIp,jdbcType=VARCHAR},
+      dealType = #{dealType,jdbcType=INTEGER},
+      dealCardId = #{dealCardId,jdbcType=VARCHAR},
+      dealChannel = #{dealChannel,jdbcType=VARCHAR},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      retain1 = #{retain1,jdbcType=VARCHAR},
+      retain2 = #{retain2,jdbcType=VARCHAR},
+      retain3 = #{retain3,jdbcType=VARCHAR},
+      retain4 = #{retain4,jdbcType=VARCHAR},
+      retain5 = #{retain5,jdbcType=VARCHAR},
+      retain6 = #{retain6,jdbcType=VARCHAR},
+      retain7 = #{retain7,jdbcType=VARCHAR},
+      retain8 = #{retain8,jdbcType=VARCHAR},
+      dealDescribe = #{dealDescribe,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pay.gateway.entity.DealOrder" >
+    update manage_deal_order
+    set orderId = #{orderId,jdbcType=VARCHAR},
+      associatedId = #{associatedId,jdbcType=VARCHAR},
+      orderStatus = #{orderStatus,jdbcType=INTEGER},
+      dealAmount = #{dealAmount,jdbcType=DECIMAL},
+      dealFee = #{dealFee,jdbcType=DECIMAL},
+      actualAmount = #{actualAmount,jdbcType=DECIMAL},
+      orderType = #{orderType,jdbcType=INTEGER},
+      orderAccount = #{orderAccount,jdbcType=VARCHAR},
+      externalOrderId = #{externalOrderId,jdbcType=VARCHAR},
+      orderGenerationIp = #{orderGenerationIp,jdbcType=VARCHAR},
+      dealType = #{dealType,jdbcType=INTEGER},
+      dealCardId = #{dealCardId,jdbcType=VARCHAR},
+      dealChannel = #{dealChannel,jdbcType=VARCHAR},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      retain1 = #{retain1,jdbcType=VARCHAR},
+      retain2 = #{retain2,jdbcType=VARCHAR},
+      retain3 = #{retain3,jdbcType=VARCHAR},
+      retain4 = #{retain4,jdbcType=VARCHAR},
+      retain5 = #{retain5,jdbcType=VARCHAR},
+      retain6 = #{retain6,jdbcType=VARCHAR},
+      retain7 = #{retain7,jdbcType=VARCHAR},
+      retain8 = #{retain8,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </update>
+</mapper>

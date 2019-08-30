@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.gateway.mapper.RunningOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.pay.gateway.entity.RunningOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="orderRunId" property="orderRunId" jdbcType="VARCHAR" />
+    <result column="orderId" property="orderId" jdbcType="VARCHAR" />
+    <result column="runStatus" property="runStatus" jdbcType="INTEGER" />
+    <result column="runType" property="runType" jdbcType="INTEGER" />
+    <result column="orderAccount" property="orderAccount" jdbcType="VARCHAR" />
+    <result column="runOrderAmount" property="runOrderAmount" jdbcType="VARCHAR" />
+    <result column="orderGenerationIp" property="orderGenerationIp" jdbcType="VARCHAR" />
+    <result column="cardRunD" property="cardRunD" jdbcType="VARCHAR" />
+    <result column="cardNameRunD" property="cardNameRunD" jdbcType="VARCHAR" />
+    <result column="cardRunW" property="cardRunW" jdbcType="VARCHAR" />
+    <result column="cardNameRunW" property="cardNameRunW" jdbcType="VARCHAR" />
+    <result column="submitTime" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="submitSystem" property="submitSystem" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="retain1" property="retain1" jdbcType="VARCHAR" />
+    <result column="retain2" property="retain2" jdbcType="VARCHAR" />
+    <result column="retain3" property="retain3" jdbcType="VARCHAR" />
+    <result column="retain4" property="retain4" jdbcType="VARCHAR" />
+    <result column="retain5" property="retain5" jdbcType="VARCHAR" />
+    <result column="retain6" property="retain6" jdbcType="VARCHAR" />
+    <result column="retain7" property="retain7" jdbcType="VARCHAR" />
+    <result column="retain8" property="retain8" jdbcType="VARCHAR" />
+    <result column="retain9" property="retain9" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.pay.gateway.entity.RunningOrder" extends="BaseResultMap" >
+    <result column="dealDescribe" property="dealDescribe" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, createTime, orderRunId, orderId, runStatus, runType, orderAccount, runOrderAmount, 
+    orderGenerationIp, cardRunD, cardNameRunD, cardRunW, cardNameRunW, submitTime, submitSystem, 
+    status, retain1, retain2, retain3, retain4, retain5, retain6, retain7, retain8, retain9
+  </sql>
+  <sql id="Blob_Column_List" >
+    dealDescribe
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.pay.gateway.entity.RunningOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from manage_running_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pay.gateway.entity.RunningOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from manage_running_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from manage_running_order
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from manage_running_order
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pay.gateway.entity.RunningOrderExample" >
+    delete from manage_running_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pay.gateway.entity.RunningOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_running_order (createTime, orderRunId, orderId, 
+      runStatus, runType, orderAccount, 
+      runOrderAmount, orderGenerationIp, cardRunD, 
+      cardNameRunD, cardRunW, cardNameRunW, 
+      submitTime, submitSystem, status, 
+      retain1, retain2, retain3, 
+      retain4, retain5, retain6, 
+      retain7, retain8, retain9, 
+      dealDescribe)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{orderRunId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{runStatus,jdbcType=INTEGER}, #{runType,jdbcType=INTEGER}, #{orderAccount,jdbcType=VARCHAR}, 
+      #{runOrderAmount,jdbcType=VARCHAR}, #{orderGenerationIp,jdbcType=VARCHAR}, #{cardRunD,jdbcType=VARCHAR}, 
+      #{cardNameRunD,jdbcType=VARCHAR}, #{cardRunW,jdbcType=VARCHAR}, #{cardNameRunW,jdbcType=VARCHAR}, 
+      #{submitTime,jdbcType=TIMESTAMP}, #{submitSystem,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{retain1,jdbcType=VARCHAR}, #{retain2,jdbcType=VARCHAR}, #{retain3,jdbcType=VARCHAR}, 
+      #{retain4,jdbcType=VARCHAR}, #{retain5,jdbcType=VARCHAR}, #{retain6,jdbcType=VARCHAR}, 
+      #{retain7,jdbcType=VARCHAR}, #{retain8,jdbcType=VARCHAR}, #{retain9,jdbcType=VARCHAR}, 
+      #{dealDescribe,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pay.gateway.entity.RunningOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_running_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="orderRunId != null" >
+        orderRunId,
+      </if>
+      <if test="orderId != null" >
+        orderId,
+      </if>
+      <if test="runStatus != null" >
+        runStatus,
+      </if>
+      <if test="runType != null" >
+        runType,
+      </if>
+      <if test="orderAccount != null" >
+        orderAccount,
+      </if>
+      <if test="runOrderAmount != null" >
+        runOrderAmount,
+      </if>
+      <if test="orderGenerationIp != null" >
+        orderGenerationIp,
+      </if>
+      <if test="cardRunD != null" >
+        cardRunD,
+      </if>
+      <if test="cardNameRunD != null" >
+        cardNameRunD,
+      </if>
+      <if test="cardRunW != null" >
+        cardRunW,
+      </if>
+      <if test="cardNameRunW != null" >
+        cardNameRunW,
+      </if>
+      <if test="submitTime != null" >
+        submitTime,
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="retain1 != null" >
+        retain1,
+      </if>
+      <if test="retain2 != null" >
+        retain2,
+      </if>
+      <if test="retain3 != null" >
+        retain3,
+      </if>
+      <if test="retain4 != null" >
+        retain4,
+      </if>
+      <if test="retain5 != null" >
+        retain5,
+      </if>
+      <if test="retain6 != null" >
+        retain6,
+      </if>
+      <if test="retain7 != null" >
+        retain7,
+      </if>
+      <if test="retain8 != null" >
+        retain8,
+      </if>
+      <if test="retain9 != null" >
+        retain9,
+      </if>
+      <if test="dealDescribe != null" >
+        dealDescribe,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderRunId != null" >
+        #{orderRunId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="runStatus != null" >
+        #{runStatus,jdbcType=INTEGER},
+      </if>
+      <if test="runType != null" >
+        #{runType,jdbcType=INTEGER},
+      </if>
+      <if test="orderAccount != null" >
+        #{orderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="runOrderAmount != null" >
+        #{runOrderAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="orderGenerationIp != null" >
+        #{orderGenerationIp,jdbcType=VARCHAR},
+      </if>
+      <if test="cardRunD != null" >
+        #{cardRunD,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNameRunD != null" >
+        #{cardNameRunD,jdbcType=VARCHAR},
+      </if>
+      <if test="cardRunW != null" >
+        #{cardRunW,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNameRunW != null" >
+        #{cardNameRunW,jdbcType=VARCHAR},
+      </if>
+      <if test="submitTime != null" >
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="retain1 != null" >
+        #{retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="retain2 != null" >
+        #{retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="retain3 != null" >
+        #{retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="retain4 != null" >
+        #{retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="retain5 != null" >
+        #{retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="retain6 != null" >
+        #{retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="retain7 != null" >
+        #{retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="retain8 != null" >
+        #{retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="retain9 != null" >
+        #{retain9,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDescribe != null" >
+        #{dealDescribe,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pay.gateway.entity.RunningOrderExample" resultType="java.lang.Integer" >
+    select count(*) from manage_running_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update manage_running_order
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderRunId != null" >
+        orderRunId = #{record.orderRunId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        orderId = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runStatus != null" >
+        runStatus = #{record.runStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.runType != null" >
+        runType = #{record.runType,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderAccount != null" >
+        orderAccount = #{record.orderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runOrderAmount != null" >
+        runOrderAmount = #{record.runOrderAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderGenerationIp != null" >
+        orderGenerationIp = #{record.orderGenerationIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardRunD != null" >
+        cardRunD = #{record.cardRunD,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardNameRunD != null" >
+        cardNameRunD = #{record.cardNameRunD,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardRunW != null" >
+        cardRunW = #{record.cardRunW,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardNameRunW != null" >
+        cardNameRunW = #{record.cardNameRunW,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitTime != null" >
+        submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitSystem != null" >
+        submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.retain1 != null" >
+        retain1 = #{record.retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain2 != null" >
+        retain2 = #{record.retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain3 != null" >
+        retain3 = #{record.retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain4 != null" >
+        retain4 = #{record.retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain5 != null" >
+        retain5 = #{record.retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain6 != null" >
+        retain6 = #{record.retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain7 != null" >
+        retain7 = #{record.retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain8 != null" >
+        retain8 = #{record.retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain9 != null" >
+        retain9 = #{record.retain9,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealDescribe != null" >
+        dealDescribe = #{record.dealDescribe,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update manage_running_order
+    set id = #{record.id,jdbcType=INTEGER},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      orderRunId = #{record.orderRunId,jdbcType=VARCHAR},
+      orderId = #{record.orderId,jdbcType=VARCHAR},
+      runStatus = #{record.runStatus,jdbcType=INTEGER},
+      runType = #{record.runType,jdbcType=INTEGER},
+      orderAccount = #{record.orderAccount,jdbcType=VARCHAR},
+      runOrderAmount = #{record.runOrderAmount,jdbcType=VARCHAR},
+      orderGenerationIp = #{record.orderGenerationIp,jdbcType=VARCHAR},
+      cardRunD = #{record.cardRunD,jdbcType=VARCHAR},
+      cardNameRunD = #{record.cardNameRunD,jdbcType=VARCHAR},
+      cardRunW = #{record.cardRunW,jdbcType=VARCHAR},
+      cardNameRunW = #{record.cardNameRunW,jdbcType=VARCHAR},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      retain1 = #{record.retain1,jdbcType=VARCHAR},
+      retain2 = #{record.retain2,jdbcType=VARCHAR},
+      retain3 = #{record.retain3,jdbcType=VARCHAR},
+      retain4 = #{record.retain4,jdbcType=VARCHAR},
+      retain5 = #{record.retain5,jdbcType=VARCHAR},
+      retain6 = #{record.retain6,jdbcType=VARCHAR},
+      retain7 = #{record.retain7,jdbcType=VARCHAR},
+      retain8 = #{record.retain8,jdbcType=VARCHAR},
+      retain9 = #{record.retain9,jdbcType=VARCHAR},
+      dealDescribe = #{record.dealDescribe,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update manage_running_order
+    set id = #{record.id,jdbcType=INTEGER},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      orderRunId = #{record.orderRunId,jdbcType=VARCHAR},
+      orderId = #{record.orderId,jdbcType=VARCHAR},
+      runStatus = #{record.runStatus,jdbcType=INTEGER},
+      runType = #{record.runType,jdbcType=INTEGER},
+      orderAccount = #{record.orderAccount,jdbcType=VARCHAR},
+      runOrderAmount = #{record.runOrderAmount,jdbcType=VARCHAR},
+      orderGenerationIp = #{record.orderGenerationIp,jdbcType=VARCHAR},
+      cardRunD = #{record.cardRunD,jdbcType=VARCHAR},
+      cardNameRunD = #{record.cardNameRunD,jdbcType=VARCHAR},
+      cardRunW = #{record.cardRunW,jdbcType=VARCHAR},
+      cardNameRunW = #{record.cardNameRunW,jdbcType=VARCHAR},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      retain1 = #{record.retain1,jdbcType=VARCHAR},
+      retain2 = #{record.retain2,jdbcType=VARCHAR},
+      retain3 = #{record.retain3,jdbcType=VARCHAR},
+      retain4 = #{record.retain4,jdbcType=VARCHAR},
+      retain5 = #{record.retain5,jdbcType=VARCHAR},
+      retain6 = #{record.retain6,jdbcType=VARCHAR},
+      retain7 = #{record.retain7,jdbcType=VARCHAR},
+      retain8 = #{record.retain8,jdbcType=VARCHAR},
+      retain9 = #{record.retain9,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pay.gateway.entity.RunningOrder" >
+    update manage_running_order
+    <set >
+      <if test="orderRunId != null" >
+        orderRunId = #{orderRunId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        orderId = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="runStatus != null" >
+        runStatus = #{runStatus,jdbcType=INTEGER},
+      </if>
+      <if test="runType != null" >
+        runType = #{runType,jdbcType=INTEGER},
+      </if>
+      <if test="orderAccount != null" >
+        orderAccount = #{orderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="runOrderAmount != null" >
+        runOrderAmount = #{runOrderAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="orderGenerationIp != null" >
+        orderGenerationIp = #{orderGenerationIp,jdbcType=VARCHAR},
+      </if>
+      <if test="cardRunD != null" >
+        cardRunD = #{cardRunD,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNameRunD != null" >
+        cardNameRunD = #{cardNameRunD,jdbcType=VARCHAR},
+      </if>
+      <if test="cardRunW != null" >
+        cardRunW = #{cardRunW,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNameRunW != null" >
+        cardNameRunW = #{cardNameRunW,jdbcType=VARCHAR},
+      </if>
+      <if test="submitTime != null" >
+        submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="retain1 != null" >
+        retain1 = #{retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="retain2 != null" >
+        retain2 = #{retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="retain3 != null" >
+        retain3 = #{retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="retain4 != null" >
+        retain4 = #{retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="retain5 != null" >
+        retain5 = #{retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="retain6 != null" >
+        retain6 = #{retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="retain7 != null" >
+        retain7 = #{retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="retain8 != null" >
+        retain8 = #{retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="retain9 != null" >
+        retain9 = #{retain9,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDescribe != null" >
+        dealDescribe = #{dealDescribe,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pay.gateway.entity.RunningOrder" >
+    update manage_running_order
+    set orderRunId = #{orderRunId,jdbcType=VARCHAR},
+      orderId = #{orderId,jdbcType=VARCHAR},
+      runStatus = #{runStatus,jdbcType=INTEGER},
+      runType = #{runType,jdbcType=INTEGER},
+      orderAccount = #{orderAccount,jdbcType=VARCHAR},
+      runOrderAmount = #{runOrderAmount,jdbcType=VARCHAR},
+      orderGenerationIp = #{orderGenerationIp,jdbcType=VARCHAR},
+      cardRunD = #{cardRunD,jdbcType=VARCHAR},
+      cardNameRunD = #{cardNameRunD,jdbcType=VARCHAR},
+      cardRunW = #{cardRunW,jdbcType=VARCHAR},
+      cardNameRunW = #{cardNameRunW,jdbcType=VARCHAR},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      retain1 = #{retain1,jdbcType=VARCHAR},
+      retain2 = #{retain2,jdbcType=VARCHAR},
+      retain3 = #{retain3,jdbcType=VARCHAR},
+      retain4 = #{retain4,jdbcType=VARCHAR},
+      retain5 = #{retain5,jdbcType=VARCHAR},
+      retain6 = #{retain6,jdbcType=VARCHAR},
+      retain7 = #{retain7,jdbcType=VARCHAR},
+      retain8 = #{retain8,jdbcType=VARCHAR},
+      retain9 = #{retain9,jdbcType=VARCHAR},
+      dealDescribe = #{dealDescribe,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pay.gateway.entity.RunningOrder" >
+    update manage_running_order
+    set orderRunId = #{orderRunId,jdbcType=VARCHAR},
+      orderId = #{orderId,jdbcType=VARCHAR},
+      runStatus = #{runStatus,jdbcType=INTEGER},
+      runType = #{runType,jdbcType=INTEGER},
+      orderAccount = #{orderAccount,jdbcType=VARCHAR},
+      runOrderAmount = #{runOrderAmount,jdbcType=VARCHAR},
+      orderGenerationIp = #{orderGenerationIp,jdbcType=VARCHAR},
+      cardRunD = #{cardRunD,jdbcType=VARCHAR},
+      cardNameRunD = #{cardNameRunD,jdbcType=VARCHAR},
+      cardRunW = #{cardRunW,jdbcType=VARCHAR},
+      cardNameRunW = #{cardNameRunW,jdbcType=VARCHAR},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      retain1 = #{retain1,jdbcType=VARCHAR},
+      retain2 = #{retain2,jdbcType=VARCHAR},
+      retain3 = #{retain3,jdbcType=VARCHAR},
+      retain4 = #{retain4,jdbcType=VARCHAR},
+      retain5 = #{retain5,jdbcType=VARCHAR},
+      retain6 = #{retain6,jdbcType=VARCHAR},
+      retain7 = #{retain7,jdbcType=VARCHAR},
+      retain8 = #{retain8,jdbcType=VARCHAR},
+      retain9 = #{retain9,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+      and createTime = #{createTime,jdbcType=TIMESTAMP}
+  </update>
+</mapper>

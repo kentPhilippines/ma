@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.gateway.mapper.BankCardMapper" >
+  <resultMap id="BaseResultMap" type="com.pay.gateway.entity.BankCard" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="bankId" property="bankId" jdbcType="INTEGER" />
+    <result column="bankType" property="bankType" jdbcType="INTEGER" />
+    <result column="bankCard" property="bankCard" jdbcType="VARCHAR" />
+    <result column="bankName" property="bankName" jdbcType="VARCHAR" />
+    <result column="cardholder" property="cardholder" jdbcType="VARCHAR" />
+    <result column="treasurer" property="treasurer" jdbcType="VARCHAR" />
+    <result column="liabilities" property="liabilities" jdbcType="VARCHAR" />
+    <result column="bankAmount" property="bankAmount" jdbcType="DECIMAL" />
+    <result column="bankPhone" property="bankPhone" jdbcType="VARCHAR" />
+    <result column="cardholderId" property="cardholderId" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="submitTime" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="submitSystem" property="submitSystem" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="retain1" property="retain1" jdbcType="VARCHAR" />
+    <result column="retain2" property="retain2" jdbcType="VARCHAR" />
+    <result column="retain3" property="retain3" jdbcType="VARCHAR" />
+    <result column="retain4" property="retain4" jdbcType="VARCHAR" />
+    <result column="retain5" property="retain5" jdbcType="VARCHAR" />
+    <result column="retain6" property="retain6" jdbcType="VARCHAR" />
+    <result column="retain7" property="retain7" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.pay.gateway.entity.BankCard" extends="BaseResultMap" >
+    <result column="bankNote" property="bankNote" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, bankId, bankType, bankCard, bankName, cardholder, treasurer, liabilities, bankAmount, 
+    bankPhone, cardholderId, createTime, submitTime, submitSystem, status, retain1, retain2, 
+    retain3, retain4, retain5, retain6, retain7
+  </sql>
+  <sql id="Blob_Column_List" >
+    bankNote
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.pay.gateway.entity.BankCardExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from manage_bankcard
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pay.gateway.entity.BankCardExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from manage_bankcard
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from manage_bankcard
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from manage_bankcard
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pay.gateway.entity.BankCardExample" >
+    delete from manage_bankcard
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pay.gateway.entity.BankCard" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_bankcard (bankId, bankType, bankCard, 
+      bankName, cardholder, treasurer, 
+      liabilities, bankAmount, bankPhone, 
+      cardholderId, createTime, submitTime, 
+      submitSystem, status, retain1, 
+      retain2, retain3, retain4, 
+      retain5, retain6, retain7, 
+      bankNote)
+    values (#{bankId,jdbcType=INTEGER}, #{bankType,jdbcType=INTEGER}, #{bankCard,jdbcType=VARCHAR}, 
+      #{bankName,jdbcType=VARCHAR}, #{cardholder,jdbcType=VARCHAR}, #{treasurer,jdbcType=VARCHAR}, 
+      #{liabilities,jdbcType=VARCHAR}, #{bankAmount,jdbcType=DECIMAL}, #{bankPhone,jdbcType=VARCHAR}, 
+      #{cardholderId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{submitTime,jdbcType=TIMESTAMP}, 
+      #{submitSystem,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{retain1,jdbcType=VARCHAR}, 
+      #{retain2,jdbcType=VARCHAR}, #{retain3,jdbcType=VARCHAR}, #{retain4,jdbcType=VARCHAR}, 
+      #{retain5,jdbcType=VARCHAR}, #{retain6,jdbcType=VARCHAR}, #{retain7,jdbcType=VARCHAR}, 
+      #{bankNote,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pay.gateway.entity.BankCard" useGeneratedKeys="true" keyProperty="id" >
+    insert into manage_bankcard
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bankId != null" >
+        bankId,
+      </if>
+      <if test="bankType != null" >
+        bankType,
+      </if>
+      <if test="bankCard != null" >
+        bankCard,
+      </if>
+      <if test="bankName != null" >
+        bankName,
+      </if>
+      <if test="cardholder != null" >
+        cardholder,
+      </if>
+      <if test="treasurer != null" >
+        treasurer,
+      </if>
+      <if test="liabilities != null" >
+        liabilities,
+      </if>
+      <if test="bankAmount != null" >
+        bankAmount,
+      </if>
+      <if test="bankPhone != null" >
+        bankPhone,
+      </if>
+      <if test="cardholderId != null" >
+        cardholderId,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="submitTime != null" >
+        submitTime,
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="retain1 != null" >
+        retain1,
+      </if>
+      <if test="retain2 != null" >
+        retain2,
+      </if>
+      <if test="retain3 != null" >
+        retain3,
+      </if>
+      <if test="retain4 != null" >
+        retain4,
+      </if>
+      <if test="retain5 != null" >
+        retain5,
+      </if>
+      <if test="retain6 != null" >
+        retain6,
+      </if>
+      <if test="retain7 != null" >
+        retain7,
+      </if>
+      <if test="bankNote != null" >
+        bankNote,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bankId != null" >
+        #{bankId,jdbcType=INTEGER},
+      </if>
+      <if test="bankType != null" >
+        #{bankType,jdbcType=INTEGER},
+      </if>
+      <if test="bankCard != null" >
+        #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardholder != null" >
+        #{cardholder,jdbcType=VARCHAR},
+      </if>
+      <if test="treasurer != null" >
+        #{treasurer,jdbcType=VARCHAR},
+      </if>
+      <if test="liabilities != null" >
+        #{liabilities,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAmount != null" >
+        #{bankAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="bankPhone != null" >
+        #{bankPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cardholderId != null" >
+        #{cardholderId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitTime != null" >
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="retain1 != null" >
+        #{retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="retain2 != null" >
+        #{retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="retain3 != null" >
+        #{retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="retain4 != null" >
+        #{retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="retain5 != null" >
+        #{retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="retain6 != null" >
+        #{retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="retain7 != null" >
+        #{retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNote != null" >
+        #{bankNote,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pay.gateway.entity.BankCardExample" resultType="java.lang.Integer" >
+    select count(*) from manage_bankcard
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update manage_bankcard
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.bankId != null" >
+        bankId = #{record.bankId,jdbcType=INTEGER},
+      </if>
+      <if test="record.bankType != null" >
+        bankType = #{record.bankType,jdbcType=INTEGER},
+      </if>
+      <if test="record.bankCard != null" >
+        bankCard = #{record.bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankName != null" >
+        bankName = #{record.bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardholder != null" >
+        cardholder = #{record.cardholder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.treasurer != null" >
+        treasurer = #{record.treasurer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.liabilities != null" >
+        liabilities = #{record.liabilities,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankAmount != null" >
+        bankAmount = #{record.bankAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.bankPhone != null" >
+        bankPhone = #{record.bankPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardholderId != null" >
+        cardholderId = #{record.cardholderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitTime != null" >
+        submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitSystem != null" >
+        submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.retain1 != null" >
+        retain1 = #{record.retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain2 != null" >
+        retain2 = #{record.retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain3 != null" >
+        retain3 = #{record.retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain4 != null" >
+        retain4 = #{record.retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain5 != null" >
+        retain5 = #{record.retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain6 != null" >
+        retain6 = #{record.retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain7 != null" >
+        retain7 = #{record.retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankNote != null" >
+        bankNote = #{record.bankNote,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update manage_bankcard
+    set id = #{record.id,jdbcType=INTEGER},
+      bankId = #{record.bankId,jdbcType=INTEGER},
+      bankType = #{record.bankType,jdbcType=INTEGER},
+      bankCard = #{record.bankCard,jdbcType=VARCHAR},
+      bankName = #{record.bankName,jdbcType=VARCHAR},
+      cardholder = #{record.cardholder,jdbcType=VARCHAR},
+      treasurer = #{record.treasurer,jdbcType=VARCHAR},
+      liabilities = #{record.liabilities,jdbcType=VARCHAR},
+      bankAmount = #{record.bankAmount,jdbcType=DECIMAL},
+      bankPhone = #{record.bankPhone,jdbcType=VARCHAR},
+      cardholderId = #{record.cardholderId,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      retain1 = #{record.retain1,jdbcType=VARCHAR},
+      retain2 = #{record.retain2,jdbcType=VARCHAR},
+      retain3 = #{record.retain3,jdbcType=VARCHAR},
+      retain4 = #{record.retain4,jdbcType=VARCHAR},
+      retain5 = #{record.retain5,jdbcType=VARCHAR},
+      retain6 = #{record.retain6,jdbcType=VARCHAR},
+      retain7 = #{record.retain7,jdbcType=VARCHAR},
+      bankNote = #{record.bankNote,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update manage_bankcard
+    set id = #{record.id,jdbcType=INTEGER},
+      bankId = #{record.bankId,jdbcType=INTEGER},
+      bankType = #{record.bankType,jdbcType=INTEGER},
+      bankCard = #{record.bankCard,jdbcType=VARCHAR},
+      bankName = #{record.bankName,jdbcType=VARCHAR},
+      cardholder = #{record.cardholder,jdbcType=VARCHAR},
+      treasurer = #{record.treasurer,jdbcType=VARCHAR},
+      liabilities = #{record.liabilities,jdbcType=VARCHAR},
+      bankAmount = #{record.bankAmount,jdbcType=DECIMAL},
+      bankPhone = #{record.bankPhone,jdbcType=VARCHAR},
+      cardholderId = #{record.cardholderId,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      retain1 = #{record.retain1,jdbcType=VARCHAR},
+      retain2 = #{record.retain2,jdbcType=VARCHAR},
+      retain3 = #{record.retain3,jdbcType=VARCHAR},
+      retain4 = #{record.retain4,jdbcType=VARCHAR},
+      retain5 = #{record.retain5,jdbcType=VARCHAR},
+      retain6 = #{record.retain6,jdbcType=VARCHAR},
+      retain7 = #{record.retain7,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pay.gateway.entity.BankCard" >
+    update manage_bankcard
+    <set >
+      <if test="bankId != null" >
+        bankId = #{bankId,jdbcType=INTEGER},
+      </if>
+      <if test="bankType != null" >
+        bankType = #{bankType,jdbcType=INTEGER},
+      </if>
+      <if test="bankCard != null" >
+        bankCard = #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardholder != null" >
+        cardholder = #{cardholder,jdbcType=VARCHAR},
+      </if>
+      <if test="treasurer != null" >
+        treasurer = #{treasurer,jdbcType=VARCHAR},
+      </if>
+      <if test="liabilities != null" >
+        liabilities = #{liabilities,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAmount != null" >
+        bankAmount = #{bankAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="bankPhone != null" >
+        bankPhone = #{bankPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cardholderId != null" >
+        cardholderId = #{cardholderId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitTime != null" >
+        submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitSystem != null" >
+        submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="retain1 != null" >
+        retain1 = #{retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="retain2 != null" >
+        retain2 = #{retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="retain3 != null" >
+        retain3 = #{retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="retain4 != null" >
+        retain4 = #{retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="retain5 != null" >
+        retain5 = #{retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="retain6 != null" >
+        retain6 = #{retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="retain7 != null" >
+        retain7 = #{retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNote != null" >
+        bankNote = #{bankNote,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pay.gateway.entity.BankCard" >
+    update manage_bankcard
+    set bankId = #{bankId,jdbcType=INTEGER},
+      bankType = #{bankType,jdbcType=INTEGER},
+      bankCard = #{bankCard,jdbcType=VARCHAR},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      cardholder = #{cardholder,jdbcType=VARCHAR},
+      treasurer = #{treasurer,jdbcType=VARCHAR},
+      liabilities = #{liabilities,jdbcType=VARCHAR},
+      bankAmount = #{bankAmount,jdbcType=DECIMAL},
+      bankPhone = #{bankPhone,jdbcType=VARCHAR},
+      cardholderId = #{cardholderId,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      retain1 = #{retain1,jdbcType=VARCHAR},
+      retain2 = #{retain2,jdbcType=VARCHAR},
+      retain3 = #{retain3,jdbcType=VARCHAR},
+      retain4 = #{retain4,jdbcType=VARCHAR},
+      retain5 = #{retain5,jdbcType=VARCHAR},
+      retain6 = #{retain6,jdbcType=VARCHAR},
+      retain7 = #{retain7,jdbcType=VARCHAR},
+      bankNote = #{bankNote,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pay.gateway.entity.BankCard" >
+    update manage_bankcard
+    set bankId = #{bankId,jdbcType=INTEGER},
+      bankType = #{bankType,jdbcType=INTEGER},
+      bankCard = #{bankCard,jdbcType=VARCHAR},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      cardholder = #{cardholder,jdbcType=VARCHAR},
+      treasurer = #{treasurer,jdbcType=VARCHAR},
+      liabilities = #{liabilities,jdbcType=VARCHAR},
+      bankAmount = #{bankAmount,jdbcType=DECIMAL},
+      bankPhone = #{bankPhone,jdbcType=VARCHAR},
+      cardholderId = #{cardholderId,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitSystem = #{submitSystem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      retain1 = #{retain1,jdbcType=VARCHAR},
+      retain2 = #{retain2,jdbcType=VARCHAR},
+      retain3 = #{retain3,jdbcType=VARCHAR},
+      retain4 = #{retain4,jdbcType=VARCHAR},
+      retain5 = #{retain5,jdbcType=VARCHAR},
+      retain6 = #{retain6,jdbcType=VARCHAR},
+      retain7 = #{retain7,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
