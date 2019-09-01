@@ -50,30 +50,6 @@ public class H5aliPayService extends PayOrderService{
  		return result;
 	}
 	
-	@Override
-	public String toPay(PayOrder order) {
-		return null;
-	}
-
-	@Override
-	public Map<String, Object> getParameter2Map(Map<String, String[]> parameterMap, InputStream is) {
-		return null;
-	}
-
-	@Override
-	public BufferedImage genQrPay(PayOrder order) {
-		return null;
-	}
-
-	@Override
-	public Map<String, Object> query(String tradeNo, String outTradeNo) {
-		return null;
-	}
-
-	@Override
-	public Map<String, Object> orderInfo(PayOrder order) {
-		return null;
-	}
 
 	
 	

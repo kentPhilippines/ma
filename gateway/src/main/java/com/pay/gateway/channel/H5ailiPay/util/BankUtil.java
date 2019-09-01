@@ -11,10 +11,13 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.pay.gateway.channel.H5ailiPay.service.H5aliPayService;
 import com.pay.gateway.config.common.Common;
 import com.pay.gateway.config.redis.RedisUtil;
 import com.pay.gateway.entity.BankCard;
@@ -29,7 +32,7 @@ import cn.hutool.core.util.StrUtil;
  */
 @Service(value = "BankUtil")
 public class BankUtil {
-	
+	Logger log = LoggerFactory.getLogger(BankUtil.class);
 	 @Autowired
 	 RedisUtil redisUtil;
      private static BankUtil bankUtil;
@@ -152,20 +155,34 @@ public class BankUtil {
 		return amount;
 	}
 	public BigDecimal findDealAmount(BigDecimal amount ) {
-		List<Object> amountList =  bankUtil.redisUtil.lGet("Amount",0,-1);
+		List<Object> amountList =  bankUtil.redisUtil.lGet("Amount",0,-1);//获取该字段下所有的集合
+		log.info("--------【现有金额列表,正在使用金额列表："+amountList.toString()+"】-----------");
 		if(CollUtil.isNotEmpty(amountList)) {
-			if(amountList.contains(amount.toString())) {
+			if(amountList.contains(amount.toString())) {//集合包含这个数据
 				amount = amount.add(new BigDecimal("0.01"));//递增的钱数
 				return findDealAmount(amount);
 			}
-			amountList.add(amount.toString());
-			 bankUtil.redisUtil.deleteKey("Amount");//删除Key 以及数据
-			 bankUtil.redisUtil.lSet("Amount",amountList);//跟新数据
+		}//集合不包含
+		List<String> list = new ArrayList<String>();
+		for(Object amounts: amountList) {//bankKey 就是具体的银行卡使用记录的  key
+			Object object =  bankUtil.redisUtil.get(amounts.toString());
+			if(ObjectUtil.isNotNull(object)) {//说明当前缓存内的金额使用记录 已过期
+				list.add(object.toString());
+			}
 		}
+		list.add(amount.toString());
+		bankUtil.redisUtil.deleteKey("Amount");//删除Key 以及数据
+		for(String a: list) {
+			bankUtil.redisUtil.lSet("Amount",a);//跟新数据
+		}
+		bankUtil.redisUtil.set(amount.toString(),amount.toString(),240);//4分钟过期时间
 		return amount;
 	}
-	
-	
-	
-
+	/**
+	 * <p>删除缓存里面的金额</p>
+	 * @param amount
+	 */
+	public void deleteDealAmount(BigDecimal amount ) {
+		bankUtil.redisUtil.deleteKey(amount.toString());//删除Key 以及数据
+	}
 }

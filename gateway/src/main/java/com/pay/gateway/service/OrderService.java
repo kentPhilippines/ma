@@ -27,4 +27,12 @@ public interface OrderService {
 	 */
 	Boolean addOrderAll(OrderAll orderAll);
 
+	/**
+	 * <p>根据全局订单号和订单金额生成交易订单</p>
+	 * @param order
+	 * @param amount
+	 * @return
+	 */
+	boolean createOrder(String order, String amount);
+
 }

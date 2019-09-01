@@ -71,7 +71,7 @@ public class DealContorller {
 	@Autowired
 	H5aliPayService H5aliPayServiceImpl;
 	Logger log = LoggerFactory.getLogger(DealContorller.class);
-	@PostMapping("/payH5Ali")
+	@RequestMapping("/payH5Ali")
 	@Transactional
 	public void payH5Ali(Deal deal ,HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
@@ -145,6 +145,8 @@ public class DealContorller {
 			orderAll.setOrderIp(IpUtil.getIpAddr(request));
 			orderAll.setOrderType(Common.BANKORDERALL_DEAL);
 			orderAll.setRetain1(orderid);
+			orderAll.setRetain2(accountFee.getId().toString());
+			orderAll.setRetain3(notifyurl);//回调
 			Boolean flag = orderServiceImpl.addOrderAll(orderAll);
 			if(!flag) {
 				log.info("------------------------------【14005:订单生成异常】------------------------------");

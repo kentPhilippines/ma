@@ -55,7 +55,7 @@ public class UrlFilter  implements Filter {
 	}
 	public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest)req;
-		 log.info("|-----------------【进入项目拦截器】-----------------------");
+		 /*log.info("|-----------------【进入项目拦截器】-----------------------");
 		 log.info("访问URL：" + request.getRequestURL());
 		 log.info("请求参数字符编码: " + request.getCharacterEncoding());
 		 if(StrUtil.isBlank(request.getCharacterEncoding())) { 
@@ -120,6 +120,7 @@ public class UrlFilter  implements Filter {
 			 response.getWriter().write("15010--验签失败");
 			 return;
 		}
+		*/
 		 chain.doFilter(request, response);
 	}
 

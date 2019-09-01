@@ -29,29 +29,31 @@ public abstract class PayOrderService implements PayService{
 	protected String tradeId;//外部订单号
 	protected BigDecimal amount;//交易金额
 	protected String appid;//商户号
-	String orderType;//交易订单
-	String orderGenerationIp;//外部ip
-	String dealCardId;//交易银行
-	String dealChannel;//交易渠道
-	OrderAll orderAll;//全局订单
-	AccountFee accountFee;//商户手续费
-	Account account;//账户信息
+	protected Integer orderType;//订单类型
+	protected String orderGenerationIp;//外部ip
+	protected String dealCardId;//交易银行
+	protected String dealChannel;//交易渠道
+	protected OrderAll orderAll;//全局订单
+	protected AccountFee accountFee;//商户手续费
+	protected Account account;//账户信息
+	protected String notfty;//订单回调地址
+	
 	/**
 	 * <p>生成订单逻辑</p>
 	 * <li>1,</li>
-	 * 
 	 * @return
 	 */
 	public Boolean dealOrder() {
+		log.info("=========【订单生成抽象类开始执行订单成生方法：生成订单的各个参数为：外部订单号："+tradeId+"，交易金额："+amount+"，全局订单："+orderAll.getOrderId()+"】===========");
 		DealOrder dealOrder = new DealOrder();
 		String fee = accountFee.getAccountFee();
-		BigDecimal dealFee = amount.multiply(new BigDecimal(fee));
+		BigDecimal dealFee = amount.multiply(new BigDecimal(fee));//交易金额 乘 交易费率 = 手续费
 		dealOrder.setOrderId(DealNumber.GetDealOrder());
 		dealOrder.setAssociatedId(orderAll.getOrderId());
 		dealOrder.setOrderStatus(Common.ORDERDEASTATUS_T);//订单处理中
 		dealOrder.setDealAmount(amount);//交易金额
 		dealOrder.setDealFee(dealFee);//交易手续费
-		dealOrder.setActualAmount(amount.subtract(dealFee));//实际到账金额
+		dealOrder.setActualAmount(amount.subtract(dealFee));//实际到账金额       交易金额减掉扣去手续费
 		dealOrder.setOrderType(Common.ORDERDEALTYP_DEAL);//订单为交易订单类型
 		dealOrder.setOrderAccount(appid);
 		dealOrder.setExternalOrderId(tradeId);
@@ -59,106 +61,9 @@ public abstract class PayOrderService implements PayService{
 		if(StrUtil.isNotBlank(dealCardId))//只有使用自己渠道的时候该值才存在
 			dealOrder.setDealCardId(dealCardId);
 		dealOrder.setDealChannel(dealChannel);
-		log.info("---【订单填充时数据："+dealOrder.toString()+"】------");
+		dealOrder.setRetain1(notfty);
+		log.info("---【订单填充玩不后的数据："+dealOrder.toString()+"】------");
 		Boolean  falg = OrderServiceImpl.addDealOrder(dealOrder);
 		return falg;
 	}
-	
-	
-	public BigDecimal getAmount() {
-		return amount;
-	}
-	public Logger getLog() {
-		return log;
-	}
-	public void setLog(Logger log) {
-		this.log = log;
-	}
-	public OrderService getOrderServiceImpl() {
-		return OrderServiceImpl;
-	}
-	public void setOrderServiceImpl(OrderService orderServiceImpl) {
-		OrderServiceImpl = orderServiceImpl;
-	}
-
-
-	public String getDealCardId() {
-		return dealCardId;
-	}
-
-
-	public void setDealCardId(String dealCardId) {
-		this.dealCardId = dealCardId;
-	}
-
-
-	public String getDealChannel() {
-		return dealChannel;
-	}
-
-
-	public void setDealChannel(String dealChannel) {
-		this.dealChannel = dealChannel;
-	}
-
-
-	public OrderAll getOrderAll() {
-		return orderAll;
-	}
-
-
-	public void setOrderAll(OrderAll orderAll) {
-		this.orderAll = orderAll;
-	}
-
-
-	public AccountFee getAccountFee() {
-		return accountFee;
-	}
-
-
-	public void setAccountFee(AccountFee accountFee) {
-		this.accountFee = accountFee;
-	}
-
-
-	public Account getAccount() {
-		return account;
-	}
-
-
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-	public String getOrderGenerationIp() {
-		return orderGenerationIp;
-	}
-	public void setOrderGenerationIp(String orderGenerationIp) {
-		this.orderGenerationIp = orderGenerationIp;
-	}
-	public String getTradeId() {
-		return tradeId;
-	}
-	public void setTradeId(String tradeId) {
-		this.tradeId = tradeId;
-	}
-	public String getAppid() {
-		return appid;
-	}
-	public void setAppid(String appid) {
-		this.appid = appid;
-	}
-	public String getOrderType() {
-		return orderType;
-	}
-	public void setOrderType(String orderType) {
-		this.orderType = orderType;
-	}
-	
-	
 }
