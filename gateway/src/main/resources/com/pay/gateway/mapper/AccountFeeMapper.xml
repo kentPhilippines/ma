@@ -3,18 +3,30 @@
 <mapper namespace="com.pay.gateway.mapper.AccountFeeMapper" >
   <resultMap id="BaseResultMap" type="com.pay.gateway.entity.AccountFee" >
     <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="withdrawalCost" property="withdrawalCost" jdbcType="VARCHAR" />
     <result column="accountId" property="accountId" jdbcType="VARCHAR" />
     <result column="accountChannel" property="accountChannel" jdbcType="VARCHAR" />
     <result column="ChannelProduct" property="channelProduct" jdbcType="VARCHAR" />
     <result column="accountFee" property="accountFee" jdbcType="VARCHAR" />
     <result column="accountCost" property="accountCost" jdbcType="VARCHAR" />
     <result column="withdrawal" property="withdrawal" jdbcType="VARCHAR" />
-    <result column="withdrawalCost" property="withdrawalCost" jdbcType="VARCHAR" />
     <result column="FeeStautus" property="feeStautus" jdbcType="INTEGER" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="submitTime" property="submitTime" jdbcType="TIMESTAMP" />
     <result column="submitSystem" property="submitSystem" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="accountSette" property="accountSette" jdbcType="VARCHAR" />
+    <result column="settleTime" property="settleTime" jdbcType="TIME" />
+    <result column="settlementType" property="settlementType" jdbcType="VARCHAR" />
+    <result column="retain1" property="retain1" jdbcType="VARCHAR" />
+    <result column="retain2" property="retain2" jdbcType="VARCHAR" />
+    <result column="retain3" property="retain3" jdbcType="VARCHAR" />
+    <result column="retain4" property="retain4" jdbcType="VARCHAR" />
+    <result column="retain5" property="retain5" jdbcType="VARCHAR" />
+    <result column="retain6" property="retain6" jdbcType="VARCHAR" />
+    <result column="retain7" property="retain7" jdbcType="VARCHAR" />
+    <result column="retain8" property="retain8" jdbcType="VARCHAR" />
+    <result column="retain9" property="retain9" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -75,8 +87,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, accountId, accountChannel, ChannelProduct, accountFee, accountCost, withdrawal, 
-    withdrawalCost, FeeStautus, createTime, submitTime, submitSystem, status
+    id, withdrawalCost, accountId, accountChannel, ChannelProduct, accountFee, accountCost, 
+    withdrawal, FeeStautus, createTime, submitTime, submitSystem, status, accountSette, 
+    settleTime, settlementType, retain1, retain2, retain3, retain4, retain5, retain6, 
+    retain7, retain8, retain9
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pay.gateway.entity.AccountFeeExample" >
     select
@@ -93,15 +107,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
     select 
     <include refid="Base_Column_List" />
     from manage_account_fee
     where id = #{id,jdbcType=INTEGER}
+      and withdrawalCost = #{withdrawalCost,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="map" >
     delete from manage_account_fee
     where id = #{id,jdbcType=INTEGER}
+      and withdrawalCost = #{withdrawalCost,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.pay.gateway.entity.AccountFeeExample" >
     delete from manage_account_fee
@@ -110,20 +126,31 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pay.gateway.entity.AccountFee" useGeneratedKeys="true" keyProperty="id" >
-    insert into manage_account_fee (accountId, accountChannel, ChannelProduct, 
-      accountFee, accountCost, withdrawal, 
-      withdrawalCost, FeeStautus, createTime, 
-      submitTime, submitSystem, status
+    insert into manage_account_fee (withdrawalCost, accountId, accountChannel, 
+      ChannelProduct, accountFee, accountCost, 
+      withdrawal, FeeStautus, createTime, 
+      submitTime, submitSystem, status, 
+      accountSette, settleTime, settlementType, 
+      retain1, retain2, retain3, 
+      retain4, retain5, retain6, 
+      retain7, retain8, retain9
       )
-    values (#{accountId,jdbcType=VARCHAR}, #{accountChannel,jdbcType=VARCHAR}, #{channelProduct,jdbcType=VARCHAR}, 
-      #{accountFee,jdbcType=VARCHAR}, #{accountCost,jdbcType=VARCHAR}, #{withdrawal,jdbcType=VARCHAR}, 
-      #{withdrawalCost,jdbcType=VARCHAR}, #{feeStautus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{submitTime,jdbcType=TIMESTAMP}, #{submitSystem,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+    values (#{withdrawalCost,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, #{accountChannel,jdbcType=VARCHAR}, 
+      #{channelProduct,jdbcType=VARCHAR}, #{accountFee,jdbcType=VARCHAR}, #{accountCost,jdbcType=VARCHAR}, 
+      #{withdrawal,jdbcType=VARCHAR}, #{feeStautus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{submitTime,jdbcType=TIMESTAMP}, #{submitSystem,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{accountSette,jdbcType=VARCHAR}, #{settleTime,jdbcType=TIME}, #{settlementType,jdbcType=VARCHAR}, 
+      #{retain1,jdbcType=VARCHAR}, #{retain2,jdbcType=VARCHAR}, #{retain3,jdbcType=VARCHAR}, 
+      #{retain4,jdbcType=VARCHAR}, #{retain5,jdbcType=VARCHAR}, #{retain6,jdbcType=VARCHAR}, 
+      #{retain7,jdbcType=VARCHAR}, #{retain8,jdbcType=VARCHAR}, #{retain9,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.pay.gateway.entity.AccountFee" useGeneratedKeys="true" keyProperty="id" >
     insert into manage_account_fee
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="withdrawalCost != null" >
+        withdrawalCost,
+      </if>
       <if test="accountId != null" >
         accountId,
       </if>
@@ -142,9 +169,6 @@
       <if test="withdrawal != null" >
         withdrawal,
       </if>
-      <if test="withdrawalCost != null" >
-        withdrawalCost,
-      </if>
       <if test="feeStautus != null" >
         FeeStautus,
       </if>
@@ -160,8 +184,47 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="accountSette != null" >
+        accountSette,
+      </if>
+      <if test="settleTime != null" >
+        settleTime,
+      </if>
+      <if test="settlementType != null" >
+        settlementType,
+      </if>
+      <if test="retain1 != null" >
+        retain1,
+      </if>
+      <if test="retain2 != null" >
+        retain2,
+      </if>
+      <if test="retain3 != null" >
+        retain3,
+      </if>
+      <if test="retain4 != null" >
+        retain4,
+      </if>
+      <if test="retain5 != null" >
+        retain5,
+      </if>
+      <if test="retain6 != null" >
+        retain6,
+      </if>
+      <if test="retain7 != null" >
+        retain7,
+      </if>
+      <if test="retain8 != null" >
+        retain8,
+      </if>
+      <if test="retain9 != null" >
+        retain9,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="withdrawalCost != null" >
+        #{withdrawalCost,jdbcType=VARCHAR},
+      </if>
       <if test="accountId != null" >
         #{accountId,jdbcType=VARCHAR},
       </if>
@@ -180,9 +243,6 @@
       <if test="withdrawal != null" >
         #{withdrawal,jdbcType=VARCHAR},
       </if>
-      <if test="withdrawalCost != null" >
-        #{withdrawalCost,jdbcType=VARCHAR},
-      </if>
       <if test="feeStautus != null" >
         #{feeStautus,jdbcType=INTEGER},
       </if>
@@ -198,6 +258,42 @@
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
+      <if test="accountSette != null" >
+        #{accountSette,jdbcType=VARCHAR},
+      </if>
+      <if test="settleTime != null" >
+        #{settleTime,jdbcType=TIME},
+      </if>
+      <if test="settlementType != null" >
+        #{settlementType,jdbcType=VARCHAR},
+      </if>
+      <if test="retain1 != null" >
+        #{retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="retain2 != null" >
+        #{retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="retain3 != null" >
+        #{retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="retain4 != null" >
+        #{retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="retain5 != null" >
+        #{retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="retain6 != null" >
+        #{retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="retain7 != null" >
+        #{retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="retain8 != null" >
+        #{retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="retain9 != null" >
+        #{retain9,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.pay.gateway.entity.AccountFeeExample" resultType="java.lang.Integer" >
@@ -211,6 +307,9 @@
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.withdrawalCost != null" >
+        withdrawalCost = #{record.withdrawalCost,jdbcType=VARCHAR},
       </if>
       <if test="record.accountId != null" >
         accountId = #{record.accountId,jdbcType=VARCHAR},
@@ -230,9 +329,6 @@
       <if test="record.withdrawal != null" >
         withdrawal = #{record.withdrawal,jdbcType=VARCHAR},
       </if>
-      <if test="record.withdrawalCost != null" >
-        withdrawalCost = #{record.withdrawalCost,jdbcType=VARCHAR},
-      </if>
       <if test="record.feeStautus != null" >
         FeeStautus = #{record.feeStautus,jdbcType=INTEGER},
       </if>
@@ -248,6 +344,42 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=INTEGER},
       </if>
+      <if test="record.accountSette != null" >
+        accountSette = #{record.accountSette,jdbcType=VARCHAR},
+      </if>
+      <if test="record.settleTime != null" >
+        settleTime = #{record.settleTime,jdbcType=TIME},
+      </if>
+      <if test="record.settlementType != null" >
+        settlementType = #{record.settlementType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain1 != null" >
+        retain1 = #{record.retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain2 != null" >
+        retain2 = #{record.retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain3 != null" >
+        retain3 = #{record.retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain4 != null" >
+        retain4 = #{record.retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain5 != null" >
+        retain5 = #{record.retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain6 != null" >
+        retain6 = #{record.retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain7 != null" >
+        retain7 = #{record.retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain8 != null" >
+        retain8 = #{record.retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retain9 != null" >
+        retain9 = #{record.retain9,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -256,18 +388,30 @@
   <update id="updateByExample" parameterType="map" >
     update manage_account_fee
     set id = #{record.id,jdbcType=INTEGER},
+      withdrawalCost = #{record.withdrawalCost,jdbcType=VARCHAR},
       accountId = #{record.accountId,jdbcType=VARCHAR},
       accountChannel = #{record.accountChannel,jdbcType=VARCHAR},
       ChannelProduct = #{record.channelProduct,jdbcType=VARCHAR},
       accountFee = #{record.accountFee,jdbcType=VARCHAR},
       accountCost = #{record.accountCost,jdbcType=VARCHAR},
       withdrawal = #{record.withdrawal,jdbcType=VARCHAR},
-      withdrawalCost = #{record.withdrawalCost,jdbcType=VARCHAR},
       FeeStautus = #{record.feeStautus,jdbcType=INTEGER},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       submitTime = #{record.submitTime,jdbcType=TIMESTAMP},
       submitSystem = #{record.submitSystem,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER}
+      status = #{record.status,jdbcType=INTEGER},
+      accountSette = #{record.accountSette,jdbcType=VARCHAR},
+      settleTime = #{record.settleTime,jdbcType=TIME},
+      settlementType = #{record.settlementType,jdbcType=VARCHAR},
+      retain1 = #{record.retain1,jdbcType=VARCHAR},
+      retain2 = #{record.retain2,jdbcType=VARCHAR},
+      retain3 = #{record.retain3,jdbcType=VARCHAR},
+      retain4 = #{record.retain4,jdbcType=VARCHAR},
+      retain5 = #{record.retain5,jdbcType=VARCHAR},
+      retain6 = #{record.retain6,jdbcType=VARCHAR},
+      retain7 = #{record.retain7,jdbcType=VARCHAR},
+      retain8 = #{record.retain8,jdbcType=VARCHAR},
+      retain9 = #{record.retain9,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -293,9 +437,6 @@
       <if test="withdrawal != null" >
         withdrawal = #{withdrawal,jdbcType=VARCHAR},
       </if>
-      <if test="withdrawalCost != null" >
-        withdrawalCost = #{withdrawalCost,jdbcType=VARCHAR},
-      </if>
       <if test="feeStautus != null" >
         FeeStautus = #{feeStautus,jdbcType=INTEGER},
       </if>
@@ -311,8 +452,45 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="accountSette != null" >
+        accountSette = #{accountSette,jdbcType=VARCHAR},
+      </if>
+      <if test="settleTime != null" >
+        settleTime = #{settleTime,jdbcType=TIME},
+      </if>
+      <if test="settlementType != null" >
+        settlementType = #{settlementType,jdbcType=VARCHAR},
+      </if>
+      <if test="retain1 != null" >
+        retain1 = #{retain1,jdbcType=VARCHAR},
+      </if>
+      <if test="retain2 != null" >
+        retain2 = #{retain2,jdbcType=VARCHAR},
+      </if>
+      <if test="retain3 != null" >
+        retain3 = #{retain3,jdbcType=VARCHAR},
+      </if>
+      <if test="retain4 != null" >
+        retain4 = #{retain4,jdbcType=VARCHAR},
+      </if>
+      <if test="retain5 != null" >
+        retain5 = #{retain5,jdbcType=VARCHAR},
+      </if>
+      <if test="retain6 != null" >
+        retain6 = #{retain6,jdbcType=VARCHAR},
+      </if>
+      <if test="retain7 != null" >
+        retain7 = #{retain7,jdbcType=VARCHAR},
+      </if>
+      <if test="retain8 != null" >
+        retain8 = #{retain8,jdbcType=VARCHAR},
+      </if>
+      <if test="retain9 != null" >
+        retain9 = #{retain9,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
+      and withdrawalCost = #{withdrawalCost,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.pay.gateway.entity.AccountFee" >
     update manage_account_fee
@@ -322,12 +500,24 @@
       accountFee = #{accountFee,jdbcType=VARCHAR},
       accountCost = #{accountCost,jdbcType=VARCHAR},
       withdrawal = #{withdrawal,jdbcType=VARCHAR},
-      withdrawalCost = #{withdrawalCost,jdbcType=VARCHAR},
       FeeStautus = #{feeStautus,jdbcType=INTEGER},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       submitTime = #{submitTime,jdbcType=TIMESTAMP},
       submitSystem = #{submitSystem,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER}
+      status = #{status,jdbcType=INTEGER},
+      accountSette = #{accountSette,jdbcType=VARCHAR},
+      settleTime = #{settleTime,jdbcType=TIME},
+      settlementType = #{settlementType,jdbcType=VARCHAR},
+      retain1 = #{retain1,jdbcType=VARCHAR},
+      retain2 = #{retain2,jdbcType=VARCHAR},
+      retain3 = #{retain3,jdbcType=VARCHAR},
+      retain4 = #{retain4,jdbcType=VARCHAR},
+      retain5 = #{retain5,jdbcType=VARCHAR},
+      retain6 = #{retain6,jdbcType=VARCHAR},
+      retain7 = #{retain7,jdbcType=VARCHAR},
+      retain8 = #{retain8,jdbcType=VARCHAR},
+      retain9 = #{retain9,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
+      and withdrawalCost = #{withdrawalCost,jdbcType=VARCHAR}
   </update>
 </mapper>

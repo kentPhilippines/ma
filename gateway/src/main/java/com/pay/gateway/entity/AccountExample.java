@@ -985,12 +985,18 @@ public class AccountExample {
             addCriterion("status is not null");
             return (Criteria) this;
         }
-
-        public Criteria andStatusEqualTo(Integer value) {
-            addCriterion("status =", value, "status");
+        public Criteria andFreezeT1EqualTo(BigDecimal freezeT1) {
+            addCriterion("freezeT1 =", freezeT1, "freezeT1");
             return (Criteria) this;
         }
-
+        public Criteria andFreezeD1EqualTo(BigDecimal value) {
+        	addCriterion("freezeD1 =", value, "freezeD1");
+        	return (Criteria) this;
+        }
+        public Criteria andStatusEqualTo(Integer value) {
+        	addCriterion("status =", value, "status");
+        	return (Criteria) this;
+        }
         public Criteria andStatusNotEqualTo(Integer value) {
             addCriterion("status <>", value, "status");
             return (Criteria) this;
@@ -1000,7 +1006,7 @@ public class AccountExample {
             addCriterion("status >", value, "status");
             return (Criteria) this;
         }
-
+        
         public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
             addCriterion("status >=", value, "status");
             return (Criteria) this;

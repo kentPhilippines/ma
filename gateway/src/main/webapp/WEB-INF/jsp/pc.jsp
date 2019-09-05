@@ -15,7 +15,6 @@
 body {
 	background: #fff;
 }
-
 .container {
 	position: relative;
 	width: 1200px;
@@ -26,41 +25,34 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-
 .aliLogo, .openBtn {
 	display: none;
 }
-
 .orderNo {
 	margin: 0;
 	font-size: 20px;
 	color: #303030;
 }
-
 .orderNo .orderMobile {
 	display: none;
 }
-
 .qrcode {
 	display: block;
 	width: 200px;
 	height: 200px;
 	margin: 0 auto;
 }
-
 .price {
 	margin: 0 0 10px;
 	font-size: 20px;
 	color: #1F1F1F;
 	font-weight: 400;
 }
-
 .info {
 	margin: 0;
 	font-size: 22px;
 	color: #252525;
 }
-
 @media ( max-width : 768px) {
 	.pc {
 		display: none;

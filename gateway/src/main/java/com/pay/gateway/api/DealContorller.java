@@ -147,6 +147,7 @@ public class DealContorller {
 			orderAll.setRetain1(orderid);
 			orderAll.setRetain2(accountFee.getId().toString());
 			orderAll.setRetain3(notifyurl);//回调
+			orderAll.setRetain4(accountFee.getId().toString());
 			Boolean flag = orderServiceImpl.addOrderAll(orderAll);
 			if(!flag) {
 				log.info("------------------------------【14005:订单生成异常】------------------------------");

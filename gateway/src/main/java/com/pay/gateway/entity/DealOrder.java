@@ -10,7 +10,6 @@ import com.pay.gateway.entity.base.BaseEntity;
 /**
  * <p>交易订单实体</p>
  * @author K
- *
  */
 public class DealOrder extends BaseEntity{
     private String orderId;//订单号
@@ -26,9 +25,9 @@ public class DealOrder extends BaseEntity{
     private Integer dealType;//交易类型
     private String dealCardId;//交易卡片   这个字段自幼在我们自己的渠道的时候才会有值
     private String dealChannel;//交易渠道
-    private String retain1;
-    private String retain2;
-    private String retain3;
+    private String retain1;//订单回调地址
+    private String retain2;//訂單使用費率ID
+    private String retain3;//是否發送通知 //  YES 已發送    NO 未發送
     private String retain4;
     private String retain5;
     private String retain6;

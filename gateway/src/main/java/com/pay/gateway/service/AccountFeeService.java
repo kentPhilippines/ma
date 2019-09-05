@@ -24,4 +24,11 @@ public interface AccountFeeService {
 	 */
 	List<AccountFee> findAccountFeeBy(String appid, String channelNo, String payType, Integer feeStatus1);
 
+	/**
+	 * <p>根據費率的數據Id查找費率</p>
+	 * @param valueOf
+	 * @return
+	 */
+	AccountFee findAccountFeeByFeeId(Integer valueOf);
+
 }

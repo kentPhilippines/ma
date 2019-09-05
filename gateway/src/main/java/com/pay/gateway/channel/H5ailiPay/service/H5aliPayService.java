@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pay.gateway.api.DealContorller;
 import com.pay.gateway.channel.H5ailiPay.util.BankUtil;
@@ -30,9 +31,10 @@ public class H5aliPayService extends PayOrderService{
 	Logger log = LoggerFactory.getLogger(H5aliPayService.class);
 	@Autowired
 	BankCardService bankCardServiceImpl;
-	@Resource(name = "BankUtil")
+	@Resource
 	BankUtil bankUtil;
 	@Override
+	@Transactional
 	public ResultDeal deal(Deal deal, Account account, AccountFee accountFee, OrderAll orderAll) {
 		log.info("===========【H5本地支付宝处理类】======");
 		ResultDeal result = new ResultDeal();

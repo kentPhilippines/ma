@@ -30,7 +30,7 @@ import cn.hutool.core.util.StrUtil;
  * <p>项目银行卡管理</p>
  * @author K
  */
-@Service(value = "BankUtil")
+@Service
 public class BankUtil {
 	Logger log = LoggerFactory.getLogger(BankUtil.class);
 	 @Autowired
@@ -46,7 +46,7 @@ public class BankUtil {
 	 * <p>通过关键数据确认收款银行卡</p>
 	 * @param bankList			所有目前可以使用的银行卡
 	 * @param amount			当前交易金额
-	 * @param bankPhone			银行卡绑定的手机号
+	 * @param orderNo			交易订单号(全局)
 	 * @return
 	 */
 	public BankCard findDealBankCard(List<BankCard> bankList,BigDecimal amount , String orderNo) {
@@ -71,11 +71,11 @@ public class BankUtil {
 				bank.setDealAmount(amount);
 				return bank;
 			}
-			//如果发现没有银行卡可以使用则获取所有的银行卡正在使用的银行卡
+			//如果发现没有银行卡可以使用则，获取所有的银行卡正在使用的银行卡
 			map.put(bank.getBankPhone(), bankListuse);
 		}
 		/**
-		 * ######获取目前正在使用的所有银行卡他们在5分钟内使用的次数(list集合长度就是银行卡5分钟使用的次数)的最小次数######使用这张卡
+		 * ######获取目前正在使用的所有银行卡他们在4分钟内使用的次数(list集合长度就是银行卡4分钟使用的次数)的最小次数######使用这张卡
 		 */
 		int size = 0;
 		String keys = null; //计算之后这个值就是我要替换的数据key 也就是银行卡
@@ -95,7 +95,7 @@ public class BankUtil {
 			};
 		}
 		/**
-		 * ######获取目前正在使用的所有银行卡他们在5分钟内使用的次数(list集合长度就是银行卡5分钟使用的次数)的最小次数######使用这张卡
+		 * ######获取目前正在使用的所有银行卡他们在4分钟内使用的次数(list集合长度就是银行卡4分钟使用的次数)的最小次数######使用这张卡
 		 */
 		/**
 		 * ##这里有可能发生下标越界
@@ -141,7 +141,7 @@ public class BankUtil {
 	 * @param bankPhone	银行卡绑定手机号
 	 * @return
 	 */
-	public String findOrderBankCard(List<BankCard> bankList,BigDecimal amount , String bankPhone) {
+	public String findOrderBankCard(BigDecimal amount , String bankPhone) {
 		String key = bankPhone + amount.toString() ;
 		String orderId = (String) bankUtil.redisUtil.get(key);
 		 bankUtil.redisUtil.del(key);

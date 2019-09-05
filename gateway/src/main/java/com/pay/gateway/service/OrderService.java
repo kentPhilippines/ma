@@ -1,5 +1,6 @@
 package com.pay.gateway.service;
 
+import com.pay.gateway.entity.BankCard;
 import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.entity.OrderAll;
 
@@ -33,6 +34,27 @@ public interface OrderService {
 	 * @param amount
 	 * @return
 	 */
-	boolean createOrder(String order, String amount);
+	BankCard createOrder(String order, String amount);
+
+	/**
+	 * <p>根據全局訂單修改交易訂單狀態</p>
+	 * @param orderIdAll		全局訂單號
+	 * @return
+	 */
+	boolean updataOrderStatusByAssociatedId(String orderIdAll);
+
+	/**
+	 * <p>根據全局訂單查找交易訂單詳情</p>
+	 * @param orderIdAll
+	 * @return
+	 */
+	DealOrder findOrderByOrderAll(String orderIdAll);
+
+	/**
+	 * <p>根據訂單號修改訂單通知狀態為YES</p>
+	 * @param orderNo		訂單號
+	 * @return
+	 */
+	boolean updataNotifyYesByNo(String orderNo);
 
 }

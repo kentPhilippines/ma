@@ -41,5 +41,13 @@ public class AccountServiceImpl implements AccountService {
 			return CollUtil.getFirst(selectByExample);
 		return null;
 	}
+	@Override
+	public boolean updataAccountByAcoountId(Account account) {
+		AccountExample example = new AccountExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andAccountIdEqualTo(account.getAccountId());
+		int updateByExample = accountDao.updateByExample(account, example);
+		return updateByExample > 0 && updateByExample < 2;
+	}
 
 }

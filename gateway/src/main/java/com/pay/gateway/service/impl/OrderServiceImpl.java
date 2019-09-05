@@ -6,16 +6,24 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pay.gateway.channel.H5ailiPay.util.BankUtil;
+import com.pay.gateway.config.common.Common;
 import com.pay.gateway.config.service.PayOrderService;
 import com.pay.gateway.entity.Account;
 import com.pay.gateway.entity.AccountFee;
 import com.pay.gateway.entity.AccountFeeExample;
+import com.pay.gateway.entity.BankCard;
+import com.pay.gateway.entity.BankCardExample;
 import com.pay.gateway.entity.DealOrder;
+import com.pay.gateway.entity.DealOrderExample;
 import com.pay.gateway.entity.OrderAll;
 import com.pay.gateway.entity.OrderAllExample;
 import com.pay.gateway.entity.OrderAllExample.Criteria;
@@ -23,6 +31,7 @@ import com.pay.gateway.entity.dealEntity.Deal;
 import com.pay.gateway.entity.dealEntity.ResultDeal;
 import com.pay.gateway.mapper.AccountFeeMapper;
 import com.pay.gateway.mapper.AccountMapper;
+import com.pay.gateway.mapper.BankCardMapper;
 import com.pay.gateway.mapper.DealOrderMapper;
 import com.pay.gateway.mapper.OrderAllMapper;
 import com.pay.gateway.service.OrderService;
@@ -39,6 +48,10 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 	AccountFeeMapper accountFeeDao;
 	@Autowired
 	AccountMapper accountDao;
+	@Resource
+	BankCardMapper  BankCardDao;
+	@Resource
+	BankUtil bankUtil;
 	@Override
 	public OrderAll findOrderByTradeId(String appid, String orderid) {
 		OrderAllExample example = new OrderAllExample();
@@ -65,7 +78,7 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		return null;
 	}
 	@Override
-	public boolean createOrder(String order, String amount) {
+	public BankCard createOrder(String order, String amount) {
 		log.info("=========【订单生成抽象实现类开始执行】============");
 		OrderAllExample example = new OrderAllExample();
 		Criteria criteria = example.createCriteria();
@@ -86,10 +99,52 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		this.orderAll = orderAll;
 		this.accountFee = accountFee ;
 		this.notfty = orderAll.getRetain3();
+		List<BankCard> bankList = getBankList();
+		BankCard findDealBankCard = bankUtil.findDealBankCard(bankList, this.amount, orderAll.getOrderId());
+		this.dealCardId  =  findDealBankCard.getBankCard();                      
+		this.accountFeeId = orderAll.getRetain4();
 		if(dealOrder()) {
 			log.info("===============【交易订单成生成功】==================");
-			return true;
+			return null;
 		}
-		return false;
+		return findDealBankCard;
+	}
+	List<BankCard> getBankList(){
+		BankCardExample example = new BankCardExample();
+		com.pay.gateway.entity.BankCardExample.Criteria criteriaB = example.createCriteria();
+		List<BankCard> selectByExample = BankCardDao.selectByExample(example);
+		return selectByExample;
+	}
+	@Override
+	public boolean updataOrderStatusByAssociatedId(String orderIdAll) {
+		DealOrder record = new DealOrder();
+		DealOrderExample example = new DealOrderExample();
+		com.pay.gateway.entity.DealOrderExample.Criteria criteriaDealOrder = example.createCriteria();
+		criteriaDealOrder.andAssociatedIdEqualTo(orderIdAll);
+		record.setOrderStatus(Common.ORDERDEASTATUS_SU);
+		record.setCreateTime(null);
+		int updateByExampleSelective = dealOrderDao.updateByExampleSelective(record,  example);
+		return updateByExampleSelective > 0 && updateByExampleSelective <2 ;
+	}
+	@Override
+	public DealOrder findOrderByOrderAll(String orderIdAll) {
+		DealOrderExample example = new DealOrderExample();
+		com.pay.gateway.entity.DealOrderExample.Criteria criteriaDealOrder = example.createCriteria();
+		criteriaDealOrder.andAssociatedIdEqualTo(orderIdAll);
+		List<DealOrder> selectByExample = dealOrderDao.selectByExample(example);
+		if(CollUtil.isNotEmpty(selectByExample))
+			return CollUtil.getFirst(selectByExample);
+		return null;
+	}
+	@Override
+	public boolean updataNotifyYesByNo(String orderNo) {
+		DealOrder record = new DealOrder();
+		DealOrderExample example = new DealOrderExample();
+		com.pay.gateway.entity.DealOrderExample.Criteria criteriaDealOrder = example.createCriteria();
+		record.setRetain3("YES");
+		record.setCreateTime(null);
+		criteriaDealOrder.andOrderIdEqualTo(orderNo);
+		int updateByExample = dealOrderDao.updateByExample(record, example);
+		return updateByExample > 0 && updateByExample < 2;
 	}
 }

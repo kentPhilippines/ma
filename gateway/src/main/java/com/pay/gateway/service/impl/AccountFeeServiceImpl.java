@@ -10,6 +10,8 @@ import com.pay.gateway.entity.AccountFeeExample;
 import com.pay.gateway.entity.AccountFeeExample.Criteria;
 import com.pay.gateway.mapper.AccountFeeMapper;
 import com.pay.gateway.service.AccountFeeService;
+
+import cn.hutool.core.collection.CollUtil;
 @Service
 public class AccountFeeServiceImpl implements AccountFeeService{
 	@Autowired
@@ -33,5 +35,15 @@ public class AccountFeeServiceImpl implements AccountFeeService{
 		criteria.andChannelProductEqualTo(payType);
 		List<AccountFee> selectByExample = accountFeeDao.selectByExample(example);
 		return selectByExample;
+	}
+	@Override
+	public AccountFee findAccountFeeByFeeId(Integer valueOf) {
+		AccountFeeExample example = new AccountFeeExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andIdEqualTo(valueOf);
+		List<AccountFee> selectByExample = accountFeeDao.selectByExample(example);
+		if(CollUtil.isNotEmpty(selectByExample))
+			return CollUtil.getFirst(selectByExample);
+		return null;
 	}
 }

@@ -6,7 +6,7 @@ import com.pay.gateway.entity.AccountInfo;
 public interface AccountService {
 
 	/**
-	 * <p>根据用户状态查询用户信息</p>
+	 * <p>根据用户id用户信息</p>
 	 * @param appid
 	 * @return
 	 */
@@ -18,5 +18,12 @@ public interface AccountService {
 	 * @return
 	 */
 	AccountInfo findAccountInfoByAppId(String appid);
+
+	/**
+	 * <p>交易完成之後修改賬戶的數據</p>
+	 * @param account
+	 * @return
+	 */
+	boolean updataAccountByAcoountId(Account account);
 
 }

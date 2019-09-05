@@ -2,6 +2,8 @@ package com.pay.gateway.mapper;
 
 import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.entity.DealOrderExample;
+import com.pay.gateway.entity.DealOrderExample.Criteria;
+
 import java.util.Date;
 import java.util.List;
 
@@ -36,4 +38,5 @@ public interface DealOrderMapper {
     int updateByPrimaryKeyWithBLOBs(DealOrder record);
 
     int updateByPrimaryKey(DealOrder record);
+
 }
