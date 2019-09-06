@@ -43,11 +43,17 @@ public class PayContorller {
 		 log.info("================【页面展示：金额："+amount+"，订单号："+order+"】===============");
 		 String[] split = amount.split(",");
 		 amount = split[0];
-		 QRCodeUtil.encode(
+		 /* QRCodeUtil.encode(
 				"alipays://platformapi/startapp?appId=20000067&url="+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount,
 				"C:/Users/ADMIN/Pictures/Feedback/{5F6E618A-0465-4906-B660-E1115B4E2DEC}/Capture001.png", 
 				imgpath,
-				true,order);
+				true,order);*/
+		QRCodeUtil.encode(
+				 "alipays://platformapi/startapp?appId=20000067&url=www.baodu.com",
+				 "C:/Users/ADMIN/Pictures/Feedback/{5F6E618A-0465-4906-B660-E1115B4E2DEC}/Capture001.png",
+				 imgpath,
+				 false,order
+				 );
 		m.addAttribute("order", order);
 		m.addAttribute("amount", amount);
 		 log.info("================【页面展示：金额："+amount+"，订单号："+order+"】===============");
@@ -82,7 +88,7 @@ public class PayContorller {
 		log.info("=========【全局訂單:order="+order+"，全局訂單金額：amount="+amount+"，正在生成訂單】============");
 		BankCard bankCard = orderServiceImpl.createOrder(order,amount);
 		if(ObjectUtil.isNotNull(bankCard)) {
-			return JsonResult.buildSuccessResult();
+			return JsonResult.buildSuccessResult(bankCard);
 		}
 		log.info("=========【交易订单生成失败】============");
 		return null;

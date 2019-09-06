@@ -391,4 +391,16 @@
       freezeD1 = #{freezeD1,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updataByAccountMoney"  parameterType="String">
+  	UPDATE manage_account SET
+	cashBalance = cashBalance + freezeD1,
+	freezeBalance = freezeBalance - freezeD1,
+	freezeD1 = 0
+	<if test="isAll != null and isAll != ''">
+	,
+  	cashBalance = cashBalance + freezeT1 ,
+  	freezeBalance = freezeBalance - freezeT1,
+	freezeT1 = 0
+	</if>
+  </update>
 </mapper>

@@ -39,6 +39,7 @@ import com.pay.gateway.service.ChannelService;
 import com.pay.gateway.service.OrderService;
 import com.pay.gateway.util.DealNumber;
 import com.pay.gateway.util.IpUtil;
+import com.pay.gateway.util.RequestUtil;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateField;
@@ -70,11 +71,14 @@ public class DealContorller {
 	OrderService orderServiceImpl;
 	@Autowired
 	H5aliPayService H5aliPayServiceImpl;
+	@Autowired
+	RequestUtil requestUtil;
+	
 	Logger log = LoggerFactory.getLogger(DealContorller.class);
 	@RequestMapping("/payH5Ali")
 	@Transactional
 	public void payH5Ali(Deal deal ,HttpServletRequest request, HttpServletResponse response) throws IOException {
-		
+		//requestUtil.validationAll(request, response);
 		log.info("------------------------------【进入支付宝H5模式交易处理】------------------------------");
 		 String appid = request.getParameter("appid");
 		String orderid = request.getParameter("orderid");

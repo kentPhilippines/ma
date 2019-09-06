@@ -61,10 +61,26 @@ public final class Common {
 	 * <p>银行卡类别</p>
 	 * 银行类别0收款卡,1中转卡,2出款卡,3冻结卡,4测试卡 
 	 */
-	public static final Integer BANKCARDTYPE_DEAL = 1;//收款卡
-	public static final Integer BANKCARDTYPE_WIT = 2;//收款卡
+	/**
+	 * <p>收款卡</p>
+	 */
+	public static final Integer BANKCARDTYPE_DEAL =0;//收款卡
+	/**
+	 * <p>中轉卡</p>
+	 */
+	public static final Integer BANKCARDTYPE_TRANSFER = 1;//中轉卡
+	/**
+	 * <p>出款卡</p>
+	 */
+	public static final Integer BANKCARDTYPE_WIT = 2;//出款卡
+	/**
+	 * <p>凍結卡</p>
+	 */
 	public static final Integer BANKCARDTYPE_FREEZR = 3;//冻结卡
-	public static final Integer BANKCARDTYPE_TEST = 4;//收款卡
+	/**
+	 * <p>測試卡</p>
+	 */
+	public static final Integer BANKCARDTYPE_TEST = 4;//測試卡
 	
 	
 	
@@ -72,15 +88,53 @@ public final class Common {
 	 * <p>全局订单类型</p>
 	 * 订单类型:1交易,5代付
 	 */
-	public static final Integer BANKORDERALL_DEAL = 1;//收款卡
-	public static final Integer BANKORDERALL_WIT = 5;//收款卡
+	/**
+	 * <p>交易類型全局訂單</p>
+	 */
+	public static final Integer BANKORDERALL_DEAL = 1;//交易
+	/**
+	 * <p>代付類型全局訂單</p>
+	 */
+	public static final Integer BANKORDERALL_WIT = 5;//代付
 	
 	/**
 	 * <p>凍結類型</p>
 	 */
+	/**
+	 * <p>資金凍結類型 D1</p>
+	 */
 	public static final String FREEZE_D1 = "D1";//D1類型凍結  工作日情況下到下一日日切時間后結算
+	/**
+	 * <p>資金凍結類型 T1</p>
+	 */
 	public static final String FREEZE_T1 = "T1";//T1類型凍結 非工作情況下  到下一日工作日日切時間結算凍結資金
-	
-	
-
+	/**
+	 * <p>流水訂單處理狀態</p>
+	 * <p>自然處理</p>
+	 */
+	public static final Integer RUN_STATUS_1 = 1;//1自然處理
+	/**
+	 * <p>流水訂單處理狀態</p>
+	 * <p>人工處理</p>
+	 */
+	public static final Integer RUN_STATUS_2 = 2;//2人工處理
+	/**
+	 * <p>流水訂單類型</p>
+	 */
+	public static final Integer RUN_TYPE_DEAL = 1;//交易
+	public static final Integer RUN_SYSTEM_ADD_MONEY = 2;//系統加錢
+	public static final Integer RUN_DEAL_FEE = 3;//交易手續費
+	public static final Integer RUN_SYSTEM_DELETE_MONEY = 4;//系統減款
+	public static final Integer RUN_WITHDRAWALS_PAY = 5;//代付
+	public static final Integer RUN_WITHDRAWALS_PAY_FEE = 6;//代付手續費
+	public static final Integer RUN_FREEZE = 7;//凍結
+	public static final Integer RUN_UN_FREEZE = 8;//解凍
+	/**
+	 * <p>工作日</p>
+	 */
+	public static final Integer DAY_ALL_WORK = 0;//工作日
+	/**
+	 * <p>非工作日</p>
+	 */
+	public static final Integer DAY_ALL_NOTWORK = 1;//非工作日
 }

@@ -1,0 +1,432 @@
+body{
+    font-family:"Microsoft YaHei",Arial;
+    height: 140%;
+    overflow-x:hidden;
+    overflow-y:auto;
+    background-color: #f7f7f7;
+}
+a{
+    text-decoration: none;
+}
+.header{
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    background: #170707;
+}
+.header p{
+    font-size: 1.2rem;
+    line-height: 60px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+}
+.mod-ct {
+    width: 60%;
+    padding: 0 135px;
+    margin: 0 auto;
+    margin-top: 100px;
+    color: #333;
+    border: 1px solid #e5e5e5;
+    border-top: none;
+    position: relative;
+}
+.content{
+    width: 60%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.content .order-content {
+    width: 100%;
+    padding: 10px;
+    line-height: 25px;
+    /*height: 32px;*/
+    margin: 0 auto;
+    color: #333;
+}
+.content .payType {
+    width: 500px;
+    height: 230px;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.content .detail {
+    width: 530px;
+    margin-left: auto;
+    margin-right: auto;
+    /*position: relative;*/
+}
+.content .detail .btnContent {
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: red;
+}
+.copayBtn {
+    display: inline-block;
+    margin-top: 5px;
+    border: 1px solid black;
+    border-radius: 15px;
+    width: 70px;
+    height: 25px;
+    color: green;
+    font-size: 16px;
+    line-height: 25px;
+    margin-right: 20px;
+    text-align: center;
+    float: right;
+}
+.openAlipay {
+    display: block;
+    width: 240px;
+    height: 40px;
+    color: white;
+    line-height: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #0d8ee9;
+    border-radius: 10px;
+    text-align: center;
+}
+.tips {
+    color: red;
+    font-size: 16px;
+}
+.content .import-info {
+    font-size: 16px;
+    text-align: left;
+    line-height: 28px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+.import-info .import-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+dd {
+    display: block;
+    margin-inline-start: 40px;
+}
+.mod-ct .detail .dec {
+    display: inline-block;
+    width: 22px;
+    height: 45px;
+    background: url('../img/alipay-pay.png') 0 -55px no-repeat;
+    position: absolute;
+    top: 350px;
+}
+.mod-ct .detail .dec-left {
+    background-position: 0 -55px;
+    left: -1px;
+}
+.mod-ct .detail .dec-right {
+    background-position: -25px -55px;
+    right: -1px;
+}
+.detail .ico-scan {
+    float: left;
+    display: inline-block;
+    width: 57px;
+    height: 57px;
+    background: url("../img/alipay-pay.png") 0 0 no-repeat;
+    vertical-align: middle;
+    margin-right: 7px
+}
+.detail .tip-text {
+    text-align: left;
+    padding-top: 10px;
+}
+.detail .tip-text p{
+    line-height: 18px;
+}
+.detail .tip-text .forward_url {
+    color: grey;
+}
+.footer{
+    /*position: absolute;*/
+    margin-bottom: 30px;
+    width: 100%;
+    height: 100px;
+    bottom: 80px;
+}
+@media only screen and (min-width:320px) and (max-width:414px) {
+    .mod-ct {
+        width: 100%;
+        padding: 0;
+        margin: 0 auto;
+        margin-top: 5px;
+        color: #333;
+        border: 1px solid #e5e5e5;
+        border-top: none;
+        position: relative;
+    }
+    .content {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: white;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+    .content .order-content {
+        width: 100%;
+        padding: 10px;
+        height: 100%;
+        margin: 0 auto;
+        color: #333;
+    }
+    .content .order-content .content-title {
+        display: inline-block;
+        line-height: 34px;
+        float: left;
+    }
+    .mod-ct .detail .dec-right {
+        background-position: -25px -55px;
+        right: -0.2rem;
+    }
+    .content .amount{
+        display: inline-block;
+        padding: 0.2rem;
+    }
+    .content .detail {
+        width: 18rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .detail .tip-text p{
+        line-height: 1rem;
+    }
+    .footer{
+        margin-top: 1rem;
+    }
+    .footer .belowTip {
+        margin-bottom: 10px;
+        line-height: 1.2rem;
+        margin-top: 10px;
+        text-align: center;
+    }
+}
+.footer .overTip,
+.footer .belowTip {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+@media only screen and (min-width:375px) and (max-width:768px) {
+    .mod-ct {
+        width: 100%;
+        padding: 0;
+        margin: 0 auto;
+        margin-top: 5px;
+        color: #333;
+        border-top: none;
+        position: relative;
+    }
+    .content {
+        width: 100%;
+        /*height: 520px;*/
+        padding-bottom: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: white;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+    .content .mod-ct {
+        width: 100%;
+        padding: 0;
+        height: 100%;
+        padding-bottom: 7rem;
+        margin: 0 auto;
+        margin-top: 5px;
+        background: #fff url(../img/wave.png) top center repeat-x;
+        text-align: center;
+        color: #333;
+        border: 1px solid #e5e5e5;
+        border-top: none;
+    }
+    .mod-ct .detail .dec-left {
+        background-position: 0 -55px;
+        left: -0.2rem;
+    }
+    .mod-ct .detail .dec-right {
+        background-position: -25px -55px;
+        right: -0.2rem;
+    }
+    .footer{
+        /*position: absolute;*/
+        /*margin-top: 2rem;*/
+        /*width: 100%;*/
+        /*height: 3rem;*/
+        /*bottom: 3.5rem;*/
+        margin-bottom: 3rem;
+    }
+}
+@media only screen and (min-height:812px) {
+    .footer{
+        /*position: absolute;*/
+        /*margin-top: 2rem;*/
+        /*width: 100%;*/
+        /*height: 3rem;*/
+        /*bottom: 8.5rem;*/
+        margin-bottom: 9rem;
+    }
+}
+@media only screen and (min-width:768px) and (max-width:1024px) {
+    .content .detail {
+        width: 15rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .detail .tip-text p{
+        line-height: 0.65rem;
+        font-size: 0.65rem;
+    }
+    .footer{
+        /*position: absolute;*/
+        margin-top: 1rem;
+        width: 100%;
+        height: 3rem;
+        bottom: 5.5rem;
+    }
+}
+.foot {
+    text-align: center;
+    margin: 30px auto;
+    color: #888888;
+    font-size: 12px;
+    line-height: 20px;
+    font-family: "simsun";
+}
+
+#content {
+    width: 100%;
+    height: 10rem;
+    position: absolute;
+    top: 65%;
+    margin-top: -50%;
+}
+#content p {
+    font-size: 1.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+}
+#cardName {
+    font-size: 1.4rem;
+}
+#content .copyName{
+    position: absolute;
+    border: 1px solid white;
+    background: #32a5e9;
+    color: white;
+    line-height: 2rem;
+    font-size: 1.2rem;
+    border-radius: 0.3rem;
+    width: 8rem;
+    height: 2rem;
+    text-align: center;
+    margin-top: 0.1rem;
+    bottom: 2rem;
+    left: 50%;
+    margin-left: -4rem;
+}
+
+/*@media only screen and (min-width: 320px) {*/
+/*.payType i{*/
+/*display: inline-block;*/
+/*width: 3.0rem;*/
+/*height: 3.0rem;*/
+/*}*/
+/*.payType span{*/
+/*position: absolute;*/
+/*top: 1rem;*/
+/*}*/
+/*}*/
+/*自定义弹框相关*/
+#hbg {
+    width: 100%;
+    position: absolute;
+    background: #000;
+    z-index: 998;
+    /* 设置层级，主要是为了遮住页面内的其他内容 */
+    top: 0;
+    left: 0;
+    height: 100vh;
+    /* 随便填，超过整屏高度就行，后面由js控制 */
+    opacity: 0.6/* ie8及以下浏览器看不到效果，我也懒的给你写filter，换其他的现代浏览器吧 */
+}
+
+#alertM {
+    position: absolute;
+    /* 绝对定位，为了以后控制方便 */
+    top: 13rem;
+    background: #fff;
+    z-index: 999;
+    /* 层级，当然要比背景高1啦，要不你怎么看见 */
+    width: 15rem;
+    height: auto;
+    left: 2.5rem;
+    border-radius: 0.5rem;
+    /* 随便填，后面由js控制 */
+    /*border: 1px #ccc solid*/
+}
+
+#alertT {
+    margin: 4px;
+    padding: 0 16px;
+    background: #0398e1;
+    color: #fff;
+    border: 1px #16a8fc solid;
+}
+
+#alertP {
+    padding: 0.6rem;
+    line-height: 1.4rem;
+    color: red;
+}
+
+#alertR {
+    font-size: 24px;
+    float: right;
+    /* 右浮动 */
+    margin: -32px 8px 0 0;
+    /* 使用负值margin 调高 */
+    padding: 4px;
+    color: #72d5fb;
+    font-weight: bold;
+}
+
+#alertR:hover {
+    color: #fff;
+}
+
+#alertBtns {
+    text-align: center;
+}
+
+#alertBtns a {
+    width: 5rem;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    color: #000;
+    background: #EEE;
+    display: inline-block;
+    height: 1.5rem;
+    line-height: 1.6rem;
+    border-radius: 0.3rem;
+}
+
+#alertBtns a:hover {
+    background: #ccc;
+    border: 1px #ddd solid;
+}
+
+#alertBtns a:active {
+    background: #bbb;
+    border: 1px #aaa solid;
+}

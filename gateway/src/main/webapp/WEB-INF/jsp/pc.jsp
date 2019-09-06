@@ -103,7 +103,7 @@ body {
 }
 </style>
 <script>
-	/* var newTab = 0;
+	 var newTab = 0;
 	function openWindow() {
 		if (newTab) {
 			newTab = 0;
@@ -120,7 +120,7 @@ body {
 							'');
 		}
 	}
-	function openUC() {
+	/*	function openUC() {
 		if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
 			window
 					.open(

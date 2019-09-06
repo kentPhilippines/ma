@@ -4,143 +4,85 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class RunningOrder {
-    private Integer id;
+import com.pay.gateway.entity.base.BaseEntity;
 
-    private Date createTime;
-
-    private String orderRunId;
-
-    private String orderId;
-
-    private Integer runStatus;
-
-    private Integer runType;
-
-    private String orderAccount;
-
-    private String runOrderAmount;
-
-    private String orderGenerationIp;
-
-    private String cardRunD;
-
-    private String cardNameRunD;
-
-    private String cardRunW;
-
-    private String cardNameRunW;
-
-    private Date submitTime;
-
-    private String submitSystem;
-
-    private Integer status;
-
+/**
+ * <p>流水訂單數據</p>
+ * @author K
+ */
+public class RunningOrder extends BaseEntity{
+    private String orderRunId;//流水訂單號
+    private String orderId;//關聯訂單號
+    private Integer runStatus;//流水状态:1自然处理,2人工处理
+    private Integer runType;//流水类型:1交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费,7冻结,8解冻
+    private String orderAccount;//订单关联商户账号
+    private String runOrderAmount;//流水金额
+    private String orderGenerationIp;//流水生成IP(客户端ip或者是下游商户id)
+    private String cardRunD;//流水关联出账 账户
+    private String cardNameRunD;//流水关联出账 账户名
+    private String cardRunW;//流水关联到账 账户
+    private String cardNameRunW;//流水关联到账 账户名
     private String retain1;
-
     private String retain2;
-
     private String retain3;
-
     private String retain4;
-
     private String retain5;
-
     private String retain6;
-
     private String retain7;
-
     private String retain8;
-
     private String retain9;
-
-    private String dealDescribe;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
+    private String dealDescribe;//流水描述
     public String getOrderRunId() {
         return orderRunId;
     }
-
     public void setOrderRunId(String orderRunId) {
         this.orderRunId = orderRunId == null ? null : orderRunId.trim();
     }
-
     public String getOrderId() {
         return orderId;
     }
-
     public void setOrderId(String orderId) {
         this.orderId = orderId == null ? null : orderId.trim();
     }
-
     public Integer getRunStatus() {
         return runStatus;
     }
-
     public void setRunStatus(Integer runStatus) {
         this.runStatus = runStatus;
     }
-
     public Integer getRunType() {
         return runType;
     }
-
     public void setRunType(Integer runType) {
         this.runType = runType;
     }
-
     public String getOrderAccount() {
         return orderAccount;
     }
-
     public void setOrderAccount(String orderAccount) {
         this.orderAccount = orderAccount == null ? null : orderAccount.trim();
     }
-
     public String getRunOrderAmount() {
         return runOrderAmount;
     }
-
     public void setRunOrderAmount(String runOrderAmount) {
         this.runOrderAmount = runOrderAmount == null ? null : runOrderAmount.trim();
     }
-
     public String getOrderGenerationIp() {
         return orderGenerationIp;
     }
-
     public void setOrderGenerationIp(String orderGenerationIp) {
         this.orderGenerationIp = orderGenerationIp == null ? null : orderGenerationIp.trim();
     }
-
     public String getCardRunD() {
         return cardRunD;
     }
-
     public void setCardRunD(String cardRunD) {
         this.cardRunD = cardRunD == null ? null : cardRunD.trim();
     }
-
     public String getCardNameRunD() {
         return cardNameRunD;
     }
-
     public void setCardNameRunD(String cardNameRunD) {
         this.cardNameRunD = cardNameRunD == null ? null : cardNameRunD.trim();
     }
@@ -148,47 +90,18 @@ public class RunningOrder {
     public String getCardRunW() {
         return cardRunW;
     }
-
     public void setCardRunW(String cardRunW) {
         this.cardRunW = cardRunW == null ? null : cardRunW.trim();
     }
-
     public String getCardNameRunW() {
         return cardNameRunW;
     }
-
     public void setCardNameRunW(String cardNameRunW) {
         this.cardNameRunW = cardNameRunW == null ? null : cardNameRunW.trim();
     }
-
-    public Date getSubmitTime() {
-        return submitTime;
-    }
-
-    public void setSubmitTime(Date submitTime) {
-        this.submitTime = submitTime;
-    }
-
-    public String getSubmitSystem() {
-        return submitSystem;
-    }
-
-    public void setSubmitSystem(String submitSystem) {
-        this.submitSystem = submitSystem == null ? null : submitSystem.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
     public String getRetain1() {
         return retain1;
     }
-
     public void setRetain1(String retain1) {
         this.retain1 = retain1 == null ? null : retain1.trim();
     }

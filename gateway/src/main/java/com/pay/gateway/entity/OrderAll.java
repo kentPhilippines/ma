@@ -1,21 +1,20 @@
 package com.pay.gateway.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.pay.gateway.entity.base.BaseEntity;
 
 public class OrderAll extends BaseEntity{
-    private String orderId;
-    private Integer orderType;
-    private String orderAccount;
-    private String orderAmount;
-    private String orderIp;
-    private String retain1;
-    private String retain2;
-    private String retain3;
-    private String retain4;
+    private String orderId;//全局訂單
+    private Integer orderType;//订单类型:1交易,5代付
+    private String orderAccount;//订单关联商户账号
+    private String orderAmount;//订单金额(原始金额)
+    private String orderIp;//订单生成IP(源头ip)
+    private String retain1;//银行卡交易外部订单号
+    private String retain2;//使用费率编号
+    private String retain3;//订单回调地址
+    private String retain4;//使用費率數據id
     private String retain5;
     private String retain6;
     private String retain7;

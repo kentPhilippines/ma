@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.pay.gateway.channel.H5ailiPay.util.BankUtil;
+import com.pay.gateway.config.exception.OtherErrors;
 import com.pay.gateway.entity.Account;
 import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.service.AccountService;
@@ -72,6 +73,7 @@ public class NotfiyContorller {
 		 boolean flag = orderUtil.updataOrderStatus(orderIdAll);//修改訂單狀態並生成對應的流水
 		 //發給下游通知回調
 		 notifyUtil.sendMsg(orderIdAll, flag);
-
+		 if(!flag)
+			 throw new OtherErrors("交易回調發成異常");
 	 }
 }

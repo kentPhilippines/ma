@@ -26,4 +26,10 @@ public interface AccountService {
 	 */
 	boolean updataAccountByAcoountId(Account account);
 
+	
+	/**
+	 * <p>修改賬戶凍結金額為可取現金額</p>
+	 */
+	void updataAccountAmount();
+
 }

@@ -68,7 +68,6 @@ public class QRCodeUtil {
 			return image;
 		}
 		// 插入图片
-		QRCodeUtil.insertImage(image, imgPath, needCompress);
 		return image;
 	}
  
