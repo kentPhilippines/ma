@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,22 +34,24 @@ public class H5aliPayService extends PayOrderService{
 	BankCardService bankCardServiceImpl;
 	@Resource
 	BankUtil bankUtil;
+	 @Value("${deal.url.path}")
+	 private String dealurl;
 	@Override
 	@Transactional
 	public ResultDeal deal(Deal deal, Account account, AccountFee accountFee, OrderAll orderAll) {
-		log.info("===========【H5本地支付宝处理类】======");
+		log.info("===========【本地支付宝处理类】======");
 		ResultDeal result = new ResultDeal();
 		List<BankCard> findBankCardAll = bankCardServiceImpl.findBankCardAll();
 		BigDecimal amount = bankUtil.findDealAmount(new BigDecimal(orderAll.getOrderAmount()));
 		log.info("===========【缓存取到页面金额："+amount+"======");
 		//加密
 		String param = "order="+orderAll.getOrderId();
-		
 		param += "|amount="+amount;
 		param += "|systemTime="+System.currentTimeMillis();
-		result.setReturnUrl("/api/startOrder?order="+orderAll.getOrderId()+"&amount="+amount);
+		result.setReturnUrl(dealurl+"/api/startOrder?order="+orderAll.getOrderId()+"&amount="+amount);
 		log.info("===========【转发的get请求路径："+result.getReturnUrl()+"======");
 		result.setCod(Common.RESPONSE_STATUS_SU);
+		result.setMsg(Common.RESPONSE_STATUS_SU_MSG);
  		return result;
 	}
 	

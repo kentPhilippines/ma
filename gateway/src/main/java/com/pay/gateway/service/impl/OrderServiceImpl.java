@@ -13,9 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pay.gateway.channel.H5ailiPay.util.BankUtil;
 import com.pay.gateway.config.common.Common;
+import com.pay.gateway.config.exception.OtherErrors;
 import com.pay.gateway.config.service.PayOrderService;
 import com.pay.gateway.entity.Account;
 import com.pay.gateway.entity.AccountFee;
@@ -37,6 +39,7 @@ import com.pay.gateway.mapper.OrderAllMapper;
 import com.pay.gateway.service.OrderService;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 @Service
 public class OrderServiceImpl extends PayOrderService implements OrderService  {
 	Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
@@ -78,6 +81,7 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		return null;
 	}
 	@Override
+	@Transactional
 	public BankCard createOrder(String order, String amount) {
 		log.info("=========【订单生成抽象实现类开始执行】============");
 		OrderAllExample example = new OrderAllExample();
@@ -101,17 +105,24 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		this.notfty = orderAll.getRetain3();
 		List<BankCard> bankList = getBankList();
 		BankCard findDealBankCard = bankUtil.findDealBankCard(bankList, this.amount, orderAll.getOrderId());
+		if(ObjectUtil.isNull(findDealBankCard)) 
+			throw new OtherErrors("未获取到银行卡");
 		this.dealCardId  =  findDealBankCard.getBankCard();                      
 		this.accountFeeId = orderAll.getRetain4();
 		if(dealOrder()) {
 			log.info("===============【交易订单成生成功】==================");
-			return null;
 		}
-		return findDealBankCard;
+		if(ObjectUtil.isNull(findDealBankCard)) {
+			log.info("===============【银行卡获取失败】==================");
+			return findDealBankCard;
+		}else {
+			return findDealBankCard;
+		}
 	}
 	List<BankCard> getBankList(){
 		BankCardExample example = new BankCardExample();
 		com.pay.gateway.entity.BankCardExample.Criteria criteriaB = example.createCriteria();
+		criteriaB.andStatusEqualTo(1);
 		List<BankCard> selectByExample = BankCardDao.selectByExample(example);
 		return selectByExample;
 	}
@@ -146,5 +157,12 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		criteriaDealOrder.andOrderIdEqualTo(orderNo);
 		int updateByExample = dealOrderDao.updateByExample(record, example);
 		return updateByExample > 0 && updateByExample < 2;
+	}
+	/**
+	 * <p>修改4分钟之前未收到回调的订单的状态</p>
+	 */
+	@Override
+	public void updataOrderStatus(Integer second) {
+		dealOrderDao.updataOrderStatus(second);
 	}
 }

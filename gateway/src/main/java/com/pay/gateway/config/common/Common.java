@@ -11,16 +11,20 @@ public final class Common {
 	public static final Integer FEE_STATUS1 = 1;//1启用2停用3自动切换
 	public static final Integer FEE_STATUS2 = 2;//1启用2停用3自动切换
 	public static final Integer FEE_STATUS3 = 3;//1启用2停用3自动切换
-	
-	
+
 	
 	/**
 	 * 交易返回信息Key 
 	 */
 	public static final String RESULTDEAL = "resultDeal";//账户未登录错误
 	
-	
-	
+	/**
+	 * <p>是否开通交易</p>
+	 */
+	public static final Integer IS_DEAL_NO = 1;//1启用2停用3自动切换
+	public static final Integer IS_DEAL_OFF = 0;//1启用2停用3自动切换
+	public static final Integer IS_DPAY_OFF = 0;//1启用2停用3自动切换
+	public static final Integer IS_DPAY_NO = 0;//1启用2停用3自动切换
 	
 	/**
 	 * <p>订单生成表头</p>
@@ -137,4 +141,54 @@ public final class Common {
 	 * <p>非工作日</p>
 	 */
 	public static final Integer DAY_ALL_NOTWORK = 1;//非工作日
+	
+	
+	
+	
+	
+	
+	
+	public static final String COD_15034 = "15034";//必传参数为空
+	public static final String MSG_15034 = "必传参数为空";//必传参数为空
+	public static final String COD_14006 = "14006";//必传参数为空
+	public static final String MSG_14006 = "外部商户订单号重复";//必传参数为空
+	public static final String COD_14001 = "14001";//必传参数为空
+	public static final String MSG_14001 = "当前交易额度超过该账号最大交易额度";//必传参数为空
+	public static final String COD_14002 = "14002";//必传参数为空
+	public static final String MSG_14002 = "当前交易额度小于该账号最小交易额度";//必传参数为空
+	public static final String COD_14003 = "14003";//必传参数为空
+	public static final String MSG_14003 = "当日交易累计已超过该账号最大交易额度";//必传参数为空
+	public static final String COD_15001 = "15001";//必传参数为空
+	public static final String MSG_15001 = "当前商户账户费率未配置或费率状态未开通";//必传参数为空
+	public static final String COD_14005 = "14005";//必传参数为空
+	public static final String MSG_14005 = "全局订单生成异常";//必传参数为空
+	public static final String COD_14004 = "14004";//必传参数为空
+	public static final String MSG_14004 = "交易失败";//必传参数为空
+	public static final String COD_15030 = "15030";//必传参数为空
+	public static final String MSG_15030 = "字符编码未设置";//必传参数为空
+	public static final String COD_15031 = "15031";//必传参数为空
+	public static final String MSG_15031 = "字符编码错误，请设置为UTF-8";//必传参数为空
+	public static final String COD_15020 = "15020";//必传参数为空
+	public static final String MSG_15020 = "用户不存在";//必传参数为空
+	public static final String COD_15033 = "15033";//必传参数为空
+	public static final String MSG_15033 = "请求过期";//必传参数为空
+	public static final String COD_15032 = "15032";//必传参数为空
+	public static final String MSG_15032 = "时间格式错误";//必传参数为空
+	public static final String COD_15010 = "15010";//必传参数为空
+	public static final String MSG_15010 = "验签失败";//必传参数为空
+	public static final String COD_15002 = "15002";//必传参数为空
+	public static final String MSG_15002 = "用户未开通交易服务";//必传参数为空
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

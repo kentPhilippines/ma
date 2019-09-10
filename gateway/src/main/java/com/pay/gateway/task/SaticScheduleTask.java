@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.pay.gateway.api.DealContorller;
+import com.pay.gateway.channel.H5ailiPay.util.BankUtil;
 import com.pay.gateway.service.AccountService;
 import com.pay.gateway.service.OrderService;
 
@@ -24,16 +25,18 @@ public class SaticScheduleTask {
 	
 	@Autowired
 	AccountService accountServiceImpl;
-	
-	
+	@Autowired
+	BankUtil bankUtil;
 	/**
 	 * <p>定時任務</p>
 	 * <li>1,修改賬戶每日資金凍結</li>
 	 * <li>2,重新發送賬戶回調通知</li>
+	 * <li>3,修改订单为失败  4分钟之前的订单修改为失败</li>
 	 */
 	 	@Scheduled(cron = "0/5 * * * * ?")
 	    private void orderNotify() {
-	        System.err.println("执行静态定时任务时间: " + LocalDateTime.now());
+	 		Integer second = bankUtil.second ; 
+	 		orderServiceImpl.updataOrderStatus(second);
 	    }
 	 	
 	 	/**

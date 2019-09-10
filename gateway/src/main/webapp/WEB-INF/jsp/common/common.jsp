@@ -17,4 +17,3 @@
 	<script type="text/javascript" src="${ctx}/static/js/layui/lay/modules/layer.js"></script>
 	<script type="text/javascript" src="${ctx}/static/js/layui/lay/modules/layedit.js"></script>
 	<script type="text/javascript" src="${ctx}/static/js/layui/lay/modules/laydate.js"></script> --%>
-	<link href="${ctx}/static/js/layui/css/layui.css" rel="stylesheet" type="text/css"/>

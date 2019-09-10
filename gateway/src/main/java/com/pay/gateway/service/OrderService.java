@@ -56,5 +56,9 @@ public interface OrderService {
 	 * @return
 	 */
 	boolean updataNotifyYesByNo(String orderNo);
+	/**
+	 * <p>修改未收到回调的订单状态</p>
+	 */
+	void updataOrderStatus(Integer second);
 
 }

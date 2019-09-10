@@ -161,7 +161,7 @@ body {
 			</font></span><span class="pc"><font color=red>请在5分钟内完成支付</br>切勿重复支付
 			</font></span>
 		</p>
-		<img class="qrcode" src="${ctx}/image/${order}.jpg"/>
+		<img class="qrcode" src="${ctx}/${order}.jpg"/>
 		<p class="price">
 			</br>${amount}
 		</p>

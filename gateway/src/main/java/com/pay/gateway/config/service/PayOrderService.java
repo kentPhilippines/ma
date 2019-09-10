@@ -63,7 +63,7 @@ public abstract class PayOrderService implements PayService{
 			dealOrder.setDealCardId(dealCardId);
 		dealOrder.setDealChannel(dealChannel);
 		dealOrder.setRetain1(notfty);
-		log.info("---【订单填充玩不后的数据："+dealOrder.toString()+"】------");
+		log.info("---【订单填充后的数据："+dealOrder.toString()+"】------");
 		Boolean  falg = OrderServiceImpl.addDealOrder(dealOrder);
 		return falg;
 	}

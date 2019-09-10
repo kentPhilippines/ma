@@ -56,12 +56,31 @@ public class Account extends BaseEntity{
 	 *	<p>凍結D1賬戶</p>
 	 */
     private BigDecimal freezeD1;
-    
-    
-    
-    
-
-    public BigDecimal getFreezeT1() {
+    /**
+     * <p>是否开通交易服务</p>
+     * <p>1开通</p>
+     * <p>0暂停</p>
+     */
+    private Integer isDeal;
+    /**
+     * <p>是否开通代付服务</p>
+     * <p>1开通</p>
+     * <p>0暂停</p>
+     */
+    private Integer isDpay;
+    public Integer getIsDpay() {
+		return isDpay;
+	}
+	public void setIsDpay(Integer isDpay) {
+		this.isDpay = isDpay;
+	}
+	public Integer getIsDeal() {
+		return isDeal;
+	}
+	public void setIsDeal(Integer isDeal) {
+		this.isDeal = isDeal;
+	}
+	public BigDecimal getFreezeT1() {
 		return freezeT1;
 	}
 	public void setFreezeT1(BigDecimal freezeT1) {

@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pay.gateway.channel.H5ailiPay.service.H5aliPayService;
 import com.pay.gateway.config.common.Common;
@@ -36,6 +37,7 @@ public class BankUtil {
 	 @Autowired
 	 RedisUtil redisUtil;
      private static BankUtil bankUtil;
+     public final Integer  second = 300;
      //初始化 ②
      @PostConstruct 
      public void init() {      
@@ -49,7 +51,8 @@ public class BankUtil {
 	 * @param orderNo			交易订单号(全局)
 	 * @return
 	 */
-	public BankCard findDealBankCard(List<BankCard> bankList,BigDecimal amount , String orderNo) {
+     @Transactional
+	public synchronized BankCard findDealBankCard(List<BankCard> bankList,BigDecimal amount , String orderNo) {
 		/**
 		 * <p>银行卡选择逻辑</p>
 		 * <li>1,优先选择目前可以使用的</li>
@@ -62,16 +65,19 @@ public class BankUtil {
 		Map<String,List> map = new HashMap<String,List>();
 		List<String> listk = new ArrayList();
 		for(BankCard bank : bankList) {
-			List<Object> bankListuse =  bankUtil.redisUtil.lGet(bank.getBankPhone(),0,-1);//获取当前该银行卡下所有的正在使用的银行卡的配置情况
-			if(CollUtil.isEmpty(bankListuse)) {
+			String object = (String) bankUtil.redisUtil.get(bank.getBankPhone());//获取当前该银行卡下所有的正在使用的银行卡的配置情况
+			String object2 = (String) bankUtil.redisUtil.get(bank.getBankPhone()+amount);
+			if(StrUtil.isBlank(object) || StrUtil.isBlank(object2)) {
 				//存入缓存并返回可以使用的银行卡
-				 bankUtil.redisUtil.set(bank.getBankPhone()+amount.toString(),orderNo,240);//4分钟过期时间
+				bankUtil.redisUtil.set(bank.getBankPhone()+amount.toString(),orderNo,second);//4分钟过期时间
 				listk.add(bank.getBankPhone()+amount.toString());
-				 bankUtil.redisUtil.lSet(bank.getBankPhone(), listk);
+				String join = CollUtil.join(listk, ",");
+				bankUtil.redisUtil.set(bank.getBankPhone(), join);
 				bank.setDealAmount(amount);
 				return bank;
 			}
 			//如果发现没有银行卡可以使用则，获取所有的银行卡正在使用的银行卡
+			ArrayList<String> bankListuse = CollUtil.newArrayList(object.toString());
 			map.put(bank.getBankPhone(), bankListuse);
 		}
 		/**
@@ -100,31 +106,52 @@ public class BankUtil {
 		/**
 		 * ##这里有可能发生下标越界
 		 */
-		List<Object> listKeys = map.get(keys);//获取这个银行卡的使用记录key
+		List<Object> listKeys = map.get(keys);//获取这个银行卡的使用记录key   获取使用最少的银行卡号 拿到这个卡号下面的所有的使用记录
+		List keysL = new ArrayList();
 		for(Object bankKey: listKeys) {//bankKey 就是具体的银行卡使用记录的  key
-			Object object =  bankUtil.redisUtil.get(bankKey.toString());
-			if(ObjectUtil.isNull(object)) {//说明当前缓存内的银行卡使用记录 已过期
-				  Iterator<Object> it = listKeys.iterator();
-			        while(it.hasNext()){
-			            String str = (String)it.next();
-			            if(object.equals(str)){
-			                it.remove();
-			            }        
-			        }
+			String[] split = bankKey.toString().split(",");
+			for(String ketss : split) {
+				Object object =  bankUtil.redisUtil.get(ketss.toString());//使用记录
+				if(ObjectUtil.isNotNull(object)) {//说明当前缓存内的银行卡使用记录 已过期 删除使用记录汇总
+					keysL.add(ketss);//所有目前正在使用的key
+				}
 			}
 		}
 		 bankUtil.redisUtil.deleteKey(keys);//删除Key 以及数据
-		 bankUtil.redisUtil.lSet(keys,listKeys);//跟新数据
+		 String join = CollUtil.join(keysL, ",");
+		 bankUtil.redisUtil.set(keys,join);//更新数据
+		 log.info("==============【正在使用银行卡号："+keysL.toString()+"】=====================");
+		 if(CollUtil.isEmpty(keysL)) {//当前没有正在使用的银行卡的时候
+			 Collections.shuffle(bankList);
+				for(BankCard bank : bankList) {
+					if(ObjectUtil.isNotNull(bank) ) {
+						//存入缓存并返回可以使用的银行卡
+						bankUtil.redisUtil.set(bank.getBankPhone()+amount.toString(),orderNo,second);//4分钟过期时间
+						listk.add(bank.getBankPhone()+amount.toString());
+						String join1 = CollUtil.join(listk, ",");
+						bankUtil.redisUtil.set(bank.getBankPhone(), join1);
+						bank.setDealAmount(amount);
+						return bank;
+					}
+				}
+		 }
 		//现在集合里面的就是目前该银行卡所有的正在使用的记录
 		List amountList = new ArrayList();
 		String phoneK = null;
-		for(Object k: listKeys) {
-			phoneK = StrUtil.subPre(k.toString(),11);//理论上是电话号码-且都是一样的数据
+		for(Object k: keysL) {
+			phoneK = StrUtil.subPre(k.toString(),12);//理论上是电话号码-且都是一样的数据
 			String amountK = StrUtil.subSuf(k.toString(),12);//金额
 			amountList.add(new BigDecimal(amountK));
 		}
 		BigDecimal amount2 = getAmount(amountList,amount);//得到钱数
-		 bankUtil.redisUtil.set(phoneK+amount2.toString(),orderNo,240);//4分钟过期时间
+		bankUtil.redisUtil.set(phoneK+amount2.toString(),orderNo,second);//4分钟过期时间
+		List<String> listk1 = new ArrayList();
+		Object object = bankUtil.redisUtil.get(phoneK);
+		ArrayList<String> newArrayList = CollUtil.newArrayList(object.toString());
+		newArrayList.add(phoneK+amount2.toString());
+		bankUtil.redisUtil.deleteKey(phoneK);//删除Key 以及数据
+		String join1 = CollUtil.join(newArrayList, ",");
+		bankUtil.redisUtil.set(phoneK,join1);//更新数据
 		for(BankCard bankCardR : bankList) {
 			if(bankCardR.getBankPhone().equals(phoneK)) {
 				bankCardR.setDealAmount(amount2);
@@ -133,7 +160,6 @@ public class BankUtil {
 		}
 		return null;
 	}
-	
 	/**
 	 * <p>获取银行卡和金额所对应的订单</p>
 	 * @param bankList	 所有在缓存中的银行卡   目前这个金额和卡片是包括订单号的
@@ -149,18 +175,18 @@ public class BankUtil {
 	}
 	private BigDecimal getAmount(List amountList ,BigDecimal  amount) {
 		if(amountList.contains(amount)) {//出现金额相同的情况的时候  生成不一样的金额
-			amount.add(new BigDecimal("0.01"));//递增的钱数
+			amount = amount.add(new BigDecimal("0.01"));//递增的钱数
 			return getAmount(amountList,amount);
 		}
 		return amount;
 	}
-	public BigDecimal findDealAmount(BigDecimal amount ) {
+	public synchronized BigDecimal findDealAmount(BigDecimal amount ) {
 		List<Object> amountList =  bankUtil.redisUtil.lGet("Amount",0,-1);//获取该字段下所有的集合
 		log.info("--------【现有金额列表,正在使用金额列表："+amountList.toString()+"】-----------");
 		if(CollUtil.isNotEmpty(amountList)) {
 			if(amountList.contains(amount.toString())) {//集合包含这个数据
-				amount = amount.add(new BigDecimal("0.01"));//递增的钱数
-				return findDealAmount(amount);
+				BigDecimal amount1 = amount.add(new BigDecimal("0.01"));//递增的钱数
+				return findDealAmount(amount1);
 			}
 		}//集合不包含
 		List<String> list = new ArrayList<String>();
@@ -175,7 +201,7 @@ public class BankUtil {
 		for(String a: list) {
 			bankUtil.redisUtil.lSet("Amount",a);//跟新数据
 		}
-		bankUtil.redisUtil.set(amount.toString(),amount.toString(),240);//4分钟过期时间
+		bankUtil.redisUtil.set(amount.toString(),amount.toString(),second);//4分钟过期时间
 		return amount;
 	}
 	/**
@@ -185,4 +211,14 @@ public class BankUtil {
 	public void deleteDealAmount(BigDecimal amount ) {
 		bankUtil.redisUtil.deleteKey(amount.toString());//删除Key 以及数据
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

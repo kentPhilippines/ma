@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pay.gateway.api.DealContorller;
 import com.pay.gateway.channel.H5ailiPay.util.QRCodeUtil;
@@ -25,6 +26,8 @@ import cn.hutool.core.util.ObjectUtil;
 @Controller
 @RequestMapping("/api")
 public class PayContorller {
+	private final String privateKey = "MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAu0wb+QnOIwVPMj3hs1Q6pFuLLdQFdc9baTRMPw6X+x3Lhmrk16AGep6ggcvFKEAWyZmyg33gmgZwJMGoWj1utQIDAQABAkB9lv5W0p1X3FKLhPUX043y8bN0ymvS4HUSKVBLJBUC+4GUpH4ng/4NkA3hYoa91AJfK/kQ7PTuTNIbdzUzLkntAiEA/uQS8RMT41P/ZUQofiDDgUGRuFgL+vsOgR387QextfMCIQC8HL3wlkZfwvcVKDuQ5OEICpzc8Ci2ZfTEogPnrluqtwIhAL620CVo7NyPIO0YTmPxB9dSxEF2P6CO8I9TbMe9lg5ZAiEAhGV+UcySr2ebW6q7cdmFgJFnoiDtpqLPyW12biPLpLUCIDU0PmBhO3nomUgNdUwyQESFPBKh0T9Y0w3Dh1x8mb/F\r\n" ; 
+	private final String publicKey ="MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALtMG/kJziMFTzI94bNUOqRbiy3UBXXPW2k0TD8Ol/sdy4Zq5NegBnqeoIHLxShAFsmZsoN94JoGcCTBqFo9brUCAwEAAQ==\r\n"; //new String(Base64.encodeBase64(keyPair.getPublic().getEncoded()));
 	 @Value("${deal.url.path}")
 	 private String dealurl;
 	 @Value("${tomcat.imgpath.path}")
@@ -36,29 +39,24 @@ public class PayContorller {
 	 * <p>跳转到PC二维码页面</p>
 	 * @return
 	 */
-	 @GetMapping("/startOrder")
+	@GetMapping("/startOrder")
 	public String startOrder(String order ,String amount,Model m,HttpServletRequest request) throws Exception {
 		 String serverName = request.getServerName();
 		 int serverPort = request.getServerPort();
 		 log.info("================【页面展示：金额："+amount+"，订单号："+order+"】===============");
 		 String[] split = amount.split(",");
 		 amount = split[0];
-		 /* QRCodeUtil.encode(
+		 /**
+		  * <p>生成二维码到本地</p>
+		  */
+		  QRCodeUtil.encode(
 				"alipays://platformapi/startapp?appId=20000067&url="+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount,
-				"C:/Users/ADMIN/Pictures/Feedback/{5F6E618A-0465-4906-B660-E1115B4E2DEC}/Capture001.png", 
 				imgpath,
-				true,order);*/
-		QRCodeUtil.encode(
-				 "alipays://platformapi/startapp?appId=20000067&url=www.baodu.com",
-				 "C:/Users/ADMIN/Pictures/Feedback/{5F6E618A-0465-4906-B660-E1115B4E2DEC}/Capture001.png",
-				 imgpath,
-				 false,order
-				 );
+				true,order);
 		m.addAttribute("order", order);
 		m.addAttribute("amount", amount);
 		 log.info("================【页面展示：金额："+amount+"，订单号："+order+"】===============");
 		return "/pc";
-		
 	}
 	/**
 	 * <p>生成支付宝类的连接跳转</p>
@@ -67,11 +65,12 @@ public class PayContorller {
 	 * @param m
 	 * 這裏要查找銀行卡來生成支付寳的跳轉鏈接
 	 */
-	@PostMapping("/payAli")
+	@GetMapping("/payAli")
 	public String payAli(@RequestParam("order")String order ,@RequestParam("amount")String amount,Model m) {
+		log.info("================【飞行页面转发】===============");
 		m.addAttribute("order", order);//订单号
 		m.addAttribute("amount", amount);//金额
-		return "/zhifubao";
+		return "/alipay";
 	}
 	
 	
@@ -82,6 +81,7 @@ public class PayContorller {
 	 * @param m
 	 * @return
 	 */
+	@ResponseBody
 	@PostMapping("/createOrder")
 	@Transactional
 	public JsonResult createOrder(@RequestParam("order")String order ,@RequestParam("amount")String amount,Model m) {

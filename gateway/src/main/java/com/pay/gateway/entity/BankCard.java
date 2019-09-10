@@ -18,7 +18,7 @@ public class BankCard extends BaseEntity{
     private String bankPhone;//绑定手机号
     private String cardholderId;//持卡人身份证
     private String retain1;//銀行卡交易額度
-    private String retain2;
+    private String retain2;//银行卡简写（英文）
     private String retain3;
     private String retain4;
     private String retain5;

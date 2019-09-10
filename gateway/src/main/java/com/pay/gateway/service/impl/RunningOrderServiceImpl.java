@@ -29,6 +29,7 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		runBean.setOrderAccount(dealOrder.getOrderAccount());
 		runBean.setRunOrderAmount(dealOrder.getActualAmount().toString());
 		runBean.setOrderGenerationIp(dealOrder.getOrderGenerationIp());
+		runBean.setDealDescribe("用户正常交易流水");
 		runBean.setCardRunD(dealOrder.getOrderAccount());
 		runBean.setCardRunW("SYS");//系統賬戶簡稱
 		runBean.setCardNameRunW(StrUtil.isNotBlank(dealOrder.getDealCardId())?dealOrder.getDealCardId():"");
@@ -45,6 +46,7 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		runBean.setOrderAccount(dealOrder.getOrderAccount());
 		runBean.setRunOrderAmount(dealOrder.getDealFee().toString());
 		runBean.setOrderGenerationIp(dealOrder.getOrderGenerationIp());
+		runBean.setDealDescribe("用户正常交易流水手续费");
 		runBean.setCardRunD(dealOrder.getOrderAccount());
 		runBean.setCardRunW("SYS");//系統賬戶簡稱
 		runBean.setCardNameRunW(StrUtil.isNotBlank(dealOrder.getDealCardId())?dealOrder.getDealCardId():"");

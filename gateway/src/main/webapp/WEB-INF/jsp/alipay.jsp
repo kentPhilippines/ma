@@ -14,14 +14,13 @@
 <meta name="format-detection" content="telephone=no,email=no">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
-<link rel="stylesheet" type="text/css"
-	href="/static/test_a2b/css/h5cashier.css" media="all">
-<link rel="stylesheet" href="/static/test_a2b/css/antui.css">
-<link rel="stylesheet" type="text/css"
-	href="/static/test_a2b/css/alitrans.css">
-<script charset="utf-8" src="/static/test_a2b/js/axios.min.js"></script>
-<script src="/static/test_a2b/js/jquery.min.js"></script>
-<script src="/static/test_a2b/js/alipayjsapi.inc.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/static/css/h5cashier.css" media="all">
+<link rel="stylesheet" href="${ctx}/static/css/antui.css">
+<link rel="stylesheet" type="text/css" href="${ctx}/static/css/alitrans.css">
+<script charset="utf-8" src="${ctx}/static/js/axios.min.js"></script>
+<script src="${ctx}/static/jquery/jquery.min.js"></script>
+<script src="${ctx}/static/js/alipayjsapi.inc.min.js"></script>
+<script src="${ctx}/static/js/layui/layui.all.js"></script> 
 <style>
 body {
 	font-weight: 500;
@@ -129,7 +128,7 @@ body {
 }
 </style>
 <link rel="stylesheet"
-	href="https://open.cpay.life/static/test_a2b/js/theme/default/layer.css?v=3.1.1"
+	href="${ctx}/static/js/layui/css/layui.css"
 	id="layuicss-layer">
 <style type="text/css">
 #__vconsole {
@@ -783,30 +782,52 @@ body {
 					style="-webkit-flex: initial; -webkit-box-flex: initial;">
 					<div
 						style="font-size: 0.3rem; outline: none; background: transparent; border: none; outline: medium; height: auto; color: #0ae;">
-						¥ <span id="money">99.93</span>
+						¥ <span id="money"></span>
 					</div>
 				</div>
 			</div>
 			<p style="color: green">如图：</p>
 			<div style="text-align: center">
-				<img src="/static/test_a2b/images/20190725115531.jpg" alt=""
-					width="350px">
+				<img src="${ctx}/${order}" alt=""
+					width="350px"/>
 			</div>
 		</div>
 	</div>
 	<!--需要替换的数据-->
 	<form name="payForm">
-		<input type="hidden" name="bankAccount" value="李伟东"> <input
-			type="hidden" name="cardNo" value="6217713101801243"> <input
-			type="hidden" name="bankName" value="中信银行"> <input
-			type="hidden" name="bankMark" value="CITIC"> <input
-			type="hidden" name="amount" value="99.93">
+		<input type="hidden" name="bankAccount" value=" "> 
+		<input type="hidden" name="cardNo" value=" "> 
+		<input type="hidden" name="bankName" value=""> 
+		<input type="hidden" name="bankMark" value=" "> 
+		<input type="hidden" name="amount" value=" ">
 	</form>
-	<script src="/static/test_a2b/js/layer.js"></script>
-	<link id="layuicss-layer" rel="stylesheet"
-		href="/static/test_a2b/css/layer.css" media="all">
-	<script src="/static/test_a2b/js/vconsole.min.js"></script>
+	<script src="${ctx}/static/js/vconsole.min.js"></script>
 	<script>
+	$(function(){
+		  $.ajax({
+              url: '${ctx}/api/createOrder',
+              data: {order:'${order}',amount:'${amount}'},
+              contentType: "application/x-www-form-urlencoded; charset=utf-8",
+              type:'post',
+              dataType:"json",
+              async:  true,
+              success: function (data) {
+            	  if(data && data.success){
+            		  $("[name = bankAccount]").val(data.result.cardholder);
+            		  $("[name = cardNo]").val(data.result.bankCard);
+            		  $("[name = bankName]").val(data.result.bankName);
+            		  $("[name = bankMark]").val(data.result.retain2);
+            		  $("[name = amount]").val(data.result.dealAmount);
+            		  $("#money").html(data.result.dealAmount);
+      				return;
+      			}else if(data && !data.success){
+      				return;
+      			}
+              },
+              error: function (err) {
+              }
+          })
+	})
 		$(function() {
 			function pushHistory() {
 				var state = {

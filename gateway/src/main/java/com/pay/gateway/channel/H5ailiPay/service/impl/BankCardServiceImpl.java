@@ -43,6 +43,7 @@ public class BankCardServiceImpl implements BankCardService {
 		if(limitAmount.compareTo(bankAmount) == -1){//交易纍計大於交易額度的時候
 			bank.setStatus(0);
 		}
+		bank.setCreateTime(null);
 		int updateByExample = bankCardDao.updateByExample(bank, example);
 		return updateByExample > 1 && updateByExample < 2;
 	}

@@ -49,7 +49,7 @@ public class QRCodeUtil {
 	 * @return		返回二维码图片
 	 * @throws Exception
 	 */
-	private static BufferedImage createImage(String content, String imgPath, boolean needCompress) throws Exception {
+	private static BufferedImage createImage(String content, boolean needCompress) throws Exception {
 		Hashtable hints = new Hashtable();
 		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 		hints.put(EncodeHintType.CHARACTER_SET, CHARSET);
@@ -63,9 +63,6 @@ public class QRCodeUtil {
 			for (int y = 0; y < height; y++) {
 				image.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
 			}
-		}
-		if (imgPath == null || "".equals(imgPath)) {
-			return image;
 		}
 		// 插入图片
 		return image;
@@ -120,8 +117,8 @@ public class QRCodeUtil {
 	 * @param needCompress
 	 * @throws Exception
 	 */
-	public static void encode(String content, String imgPath, String destPath, boolean needCompress,String fileName) throws Exception {
-		BufferedImage image = QRCodeUtil.createImage(content, imgPath, needCompress);
+	public static void encode(String content,  String destPath, boolean needCompress,String fileName) throws Exception {
+		BufferedImage image = QRCodeUtil.createImage(content, needCompress);
 		mkdirs(destPath);
 		String file = fileName + ".jpg";//生成随机文件名
 		ImageIO.write(image, FORMAT_NAME, new File(destPath + "/" + file));
@@ -137,14 +134,14 @@ public class QRCodeUtil {
 	}
  
  
-	public static void encode(String content, String imgPath, OutputStream output, boolean needCompress)
+	public static void encode(String content, OutputStream output, boolean needCompress)
 			throws Exception {
-		BufferedImage image = QRCodeUtil.createImage(content, imgPath, needCompress);
+		BufferedImage image = QRCodeUtil.createImage(content, needCompress);
 		ImageIO.write(image, FORMAT_NAME, output);
 	}
  
 	public static void encode(String content, OutputStream output) throws Exception {
-		QRCodeUtil.encode(content, null, output, false);
+		QRCodeUtil.encode(content, output, false);
 	}
  
 	

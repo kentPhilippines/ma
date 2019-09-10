@@ -635,4 +635,11 @@
     where id = #{id,jdbcType=INTEGER}
       and createTime = #{createTime,jdbcType=TIMESTAMP}
   </update>
+  <update id="updataOrderStatus" parameterType="int">
+	  UPDATE manage_deal_order SET orderStatus = 3 WHERE orderId IN 
+		(SELECT orderId  FROM (
+		SELECT orderId  FROM manage_deal_order  WHERE createTime <![CDATA[ < ]]>   SUBDATE(NOW(),INTERVAL #{second} SECOND)
+		AND orderStatus = 1
+		) AS orderList)
+  </update>
 </mapper>

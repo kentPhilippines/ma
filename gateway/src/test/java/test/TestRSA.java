@@ -158,8 +158,13 @@ public class TestRSA {
         try {
             // 生成密钥对
             KeyPair keyPair = getKeyPair();
-            String privateKey = new String(Base64.encodeBase64(keyPair.getPrivate().getEncoded()));
-            String publicKey = new String(Base64.encodeBase64(keyPair.getPublic().getEncoded()));
+            String publicKey = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJH3Vff5y8BAOcIKfg/7Zl1wsiOKG5JeFaxxrMrrPMRNvhEVyhWjI01wlXjc4qnUD9A8EQxsDGNZPZd8UQN1++cCAwEAAQ==";
+            		
+            		
+            		//new String(Base64.encodeBase64(keyPair.getPrivate().getEncoded()));
+            String privateKey = "MIIBVgIBADANBgkqhkiG9w0BAQEFAASCAUAwggE8AgEAAkEAkfdV9/nLwEA5wgp+D/tmXXCyI4obkl4VrHGsyus8xE2+ERXKFaMjTXCVeNziqdQP0DwRDGwMY1k9l3xRA3X75wIDAQABAkAkQUDTJPJcwBcYgS6qnZDhaJp2hVkv07qiaGG4zRD82Mpk25NjciNBcut8kUQmNvu4Niz75Z2b3C/RHsUbGXghAiEAyCFegfQ1ABf0ZcCleA5d/Djo7boNOJXyK5sByfpvjikCIQC6twmHXhR76g6OZxYIcvZ4ga+34B80Z38bFlL8pFVbjwIhALEcjvX1OD539KtkPUwtctG3T7SrVe4BDYu3p3KndrhZAiEAg7tr76PC1AI4ruOwOdnSZwcokJSBr5ltphDEEBdpWaUCIQCLA6/qQgpQUsW9GCAIQOwmLuNK1QJ11LTbMYsB0K0How==";
+            
+            		//new String(Base64.encodeBase64(keyPair.getPublic().getEncoded()));
             System.out.println("私钥:" + privateKey);
             System.out.println("公钥:" + publicKey);
             // RSA加密

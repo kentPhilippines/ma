@@ -18,7 +18,6 @@ public interface AccountService {
 	 * @return
 	 */
 	AccountInfo findAccountInfoByAppId(String appid);
-
 	/**
 	 * <p>交易完成之後修改賬戶的數據</p>
 	 * @param account
@@ -31,5 +30,4 @@ public interface AccountService {
 	 * <p>修改賬戶凍結金額為可取現金額</p>
 	 */
 	void updataAccountAmount();
-
 }

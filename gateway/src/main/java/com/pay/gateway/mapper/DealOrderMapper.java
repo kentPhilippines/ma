@@ -38,5 +38,7 @@ public interface DealOrderMapper {
     int updateByPrimaryKeyWithBLOBs(DealOrder record);
 
     int updateByPrimaryKey(DealOrder record);
+    
+	int updataOrderStatus(Integer second);
 
 }
