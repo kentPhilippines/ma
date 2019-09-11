@@ -23,7 +23,7 @@ public class DealOrder extends BaseEntity{
     private String externalOrderId;//订单外部商户号
     private String orderGenerationIp;//订单外部ip
     private Integer dealType;//交易类型
-    private String dealCardId;//交易卡片   这个字段自幼在我们自己的渠道的时候才会有值
+    private String dealCardId;//交易卡片   这个字段只有在我们自己的渠道的时候才会有值
     private String dealChannel;//交易渠道
     private String retain1;//订单回调地址
     private String retain2;//訂單使用費率ID

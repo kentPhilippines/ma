@@ -178,17 +178,19 @@ public final class Common {
 	public static final String MSG_15010 = "验签失败";//必传参数为空
 	public static final String COD_15002 = "15002";//必传参数为空
 	public static final String MSG_15002 = "用户未开通交易服务";//必传参数为空
+	/**
+	 * <p>银行卡流水分类</p>
+	 */
+	public static final Integer BANKCARD_RUN_DEAL = 1;//商户交易
+	public static final Integer BANKCARD_RUN_BENEFIT = 3;//账户入款分润
+	public static final Integer BANKCARD_RUN_DPAY = 2;//卡商回款
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * <p>缓存里面银行卡唯一标识+金额的位数切割</p>
+	 */
+	public static final Integer BANKCARD_AMOUNT_BUMBER = 12;//
 	
 }

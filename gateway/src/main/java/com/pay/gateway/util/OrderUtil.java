@@ -2,10 +2,13 @@ package com.pay.gateway.util;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pay.gateway.api.DealContorller;
 import com.pay.gateway.channel.H5ailiPay.service.BankCardService;
 import com.pay.gateway.config.common.Common;
 import com.pay.gateway.entity.Account;
@@ -30,6 +33,7 @@ public class OrderUtil {
 	AccountFeeService accountFeeServiceImpl;
 	@Autowired
 	BankCardService BankCardServiceImpl;
+	Logger log = LoggerFactory.getLogger(OrderUtil.class);
 	/**
 	 * <p>根據全局訂單號修改相應的流水和賬變記錄</p>
 	 * <li>這個是儅交易成功我方收到其他系統的匯款時候調用的方法</li>
@@ -37,7 +41,8 @@ public class OrderUtil {
 	 * @param orderIdAll
 	 */
 	@Transactional
-	public boolean updataOrderStatus(String orderIdAll) {
+	public synchronized boolean updataOrderStatus(String orderIdAll) {
+		log.info("|---------【进入订单修改核心处理类，捕获全局订单编号："+orderIdAll+"】");
 		 //修改訂單狀態
 		 boolean flag = orderServiceImpl.updataOrderStatusByAssociatedId(orderIdAll);
 		 DealOrder dealOrder = orderServiceImpl.findOrderByOrderAll(orderIdAll);
@@ -61,7 +66,8 @@ public class OrderUtil {
 	 * @param dealOrder				當前用戶成交訂單
 	 * @return
 	 */
-	private boolean updataAccountRunAmount(Account account, AccountFee accountFee, DealOrder dealOrder) {
+	private synchronized boolean updataAccountRunAmount(Account account, AccountFee accountFee, DealOrder dealOrder) {
+		log.info("|---------【进入个人账户资金变动核心处理类，当前处理账户为："+account.getAccountId()+"】");
 		/**
 		 * ################################
 		 * 修改個人賬戶邏輯
@@ -129,8 +135,9 @@ public class OrderUtil {
 		 bank.setBankCard(dealCardId);
 		 bank.setBankAmount(dealAmount);//卡上的餘額因該是交易金額
 		 boolean flag = BankCardServiceImpl.updataAmountByBankCardId(bank);
+		 boolean addBankRun = BankCardServiceImpl.addBankRun(bank,actualAmount,account.getAccountId(),dealOrder.getOrderId());
 		 boolean acc = accountServiceImpl.updataAccountByAcoountId(account);
-		 if(flag && acc) {
+		 if(flag && acc && addBankRun) {
 			 return true;
 		 }
 		return false;

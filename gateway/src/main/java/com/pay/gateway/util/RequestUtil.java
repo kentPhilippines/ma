@@ -41,7 +41,7 @@ public class RequestUtil {
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unlikely-arg-type")
-	public void validationAll(HttpServletRequest request, HttpServletResponse response,	ResultDeal resultDeal) throws IOException {
+	public boolean validationAll(HttpServletRequest request, HttpServletResponse response,	ResultDeal resultDeal) throws IOException {
 		
 		 log.info("|-----------------【进入项目拦截器】-----------------------");
 		 log.info("访问URL：" + request.getRequestURL());
@@ -51,14 +51,14 @@ public class RequestUtil {
 			 resultDeal.setCod(Common.COD_15030);
 			 resultDeal.setMsg(Common.MSG_15030);
 			 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-			 return;
+			 return false;
 		 }
 		 if(!Common.CODING.equalsIgnoreCase(request.getCharacterEncoding())) {
 			 log.info("|--------------【15031 :字符编码错误】----------------");
 			 resultDeal.setCod(Common.COD_15031);
 			 resultDeal.setMsg(Common.MSG_15031);
 			 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-			 return;
+			 return false;
 		 }
 		 String appid = request.getParameter("appid");
 		 if(StrUtil.isBlank(appid)) {
@@ -66,7 +66,7 @@ public class RequestUtil {
 				 resultDeal.setCod(Common.COD_15034);
 				 resultDeal.setMsg(Common.MSG_15034);
 				 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-				return;
+				return false;
 		 }
 		 Account account = accountServiceImpl.findAccountByAppId(appid);
 		 if(ObjectUtil.isNull(account)) {
@@ -74,7 +74,7 @@ public class RequestUtil {
 			 resultDeal.setCod(Common.COD_15020);
 			 resultDeal.setMsg(Common.MSG_15020);
 			 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-			 return;
+			 return false;
 		 }
 		 
 		 Integer isDeal = account.getIsDeal();
@@ -83,27 +83,27 @@ public class RequestUtil {
 			 resultDeal.setCod(Common.COD_15002);
 			 resultDeal.setMsg(Common.MSG_15002);
 			 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-			 return;
+			 return false;
 		 }
 		 String applydate = request.getParameter("applydate");
 		 DateFormat formatter = new SimpleDateFormat(Common.DATATYPE);
 		 Date date;
 		try {
 			date = formatter.parse(applydate);
-			boolean expired = DateUtil.isExpired(date,DateField.SECOND,30,new Date());//请求10秒过期
+			boolean expired = DateUtil.isExpired(date,DateField.SECOND,60000000,new Date());//请求10秒过期
 			if(!expired) {
 				 log.info("|--------------【15033 ：请求过期】----------------");
 				 resultDeal.setCod(Common.COD_15033);
 				 resultDeal.setMsg(Common.MSG_15033);
 				 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-				 return;
+				 return false;
 			}
 		} catch (ParseException e1) {
 			 log.info("|--------------【15032 ：时间格式错误】----------------");
 			 resultDeal.setCod(Common.COD_15032);
 			 resultDeal.setMsg(Common.MSG_15032);
 			 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-			 return;
+			 return false;
 		}
 		 AccountInfo accountInfo = accountServiceImpl.findAccountInfoByAppId(appid);
 		 if(ObjectUtil.isNull(accountInfo)) {
@@ -111,7 +111,7 @@ public class RequestUtil {
 			 resultDeal.setCod(Common.COD_15020);
 			 resultDeal.setMsg(Common.MSG_15020);
 			 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-			 return;
+			 return false;
 		 }
 		 log.info("|--------------【用户开始验签】----------------");
 		 String appKey = accountInfo.getAppKey();
@@ -126,15 +126,16 @@ public class RequestUtil {
 				 resultDeal.setCod(Common.COD_15010);
 				 resultDeal.setMsg(Common.MSG_15010);
 				 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-				 return;
+				 return false;
 			}
 		} catch (Exception e) {
 			 log.info("|--------------【验签异常】----------------");
 			 resultDeal.setCod(Common.COD_15010);
 			 resultDeal.setMsg(Common.MSG_15010);
 			 response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
-			 return;
+			 return false;
 		}
+		 return true ;
 	}
 	private boolean verify(HttpServletRequest request, String appDesKey, String rsasign)throws Exception {
 		String appid = request.getParameter("appid");
@@ -143,9 +144,9 @@ public class RequestUtil {
 		String applydate = request.getParameter("applydate");
 		String amount = request.getParameter("amount");
 		String sign = "appid"+appid + "orderid"+orderid + "amount"+amount + appDesKey;
-		
-		
 		sign =  md5(sign);
+		log.info("|--------------【进入验签核心方法】----------------");
+		log.info("|--------------【我方验签结果："+sign+"，请求方签名结果："+rsasign+"】----------------");
 		if(sign.equals(rsasign)) {
 			return true;
 		}

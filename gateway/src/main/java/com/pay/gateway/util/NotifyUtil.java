@@ -59,8 +59,8 @@ public class NotifyUtil {
 		msg.put("externalOrderId", externalOrderId);
 		msg.put("body",flag?"交易成功":"交易失敗");
 		msg.put("sign", sign);
-		log.info("============【發送通知的參數情況："+msg.toString()+"】================");
-		log.info("============【發送通知的地址："+url.toString()+"】================");
+		log.info("============【发送通知的參數情況："+msg.toString()+"】================");
+		log.info("============【发送通知的地址："+url.toString()+"】================");
 		send(url,msg);
 	}
 	
@@ -76,7 +76,7 @@ public class NotifyUtil {
 		if("suss".equalsIgnoreCase(submitPost)) {//修改訂單通知
 			boolean flag = orderServiceImpl.updataNotifyYesByNo(orderNo);
 			if(flag)
-				log.info("============【發送通成功，訂單發送通知狀態已修改為YES：orderNo："+orderNo+"】================");
+				log.info("============【发送通知成功，订单发送通知状态已修改为YES：orderNo："+orderNo+"】================");
 		}
 		
 	}

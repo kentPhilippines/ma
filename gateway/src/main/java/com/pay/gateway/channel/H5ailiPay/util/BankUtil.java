@@ -37,13 +37,16 @@ public class BankUtil {
 	 @Autowired
 	 RedisUtil redisUtil;
      private static BankUtil bankUtil;
-     public final Integer  second = 300;
+     private final Integer  second = 300;
      //初始化 ②
      @PostConstruct 
      public void init() {      
     	 bankUtil = this;
     	 bankUtil.redisUtil = this.redisUtil;
       }
+	public Integer getSecond() {
+		return second;
+	}
 	/**
 	 * <p>通过关键数据确认收款银行卡</p>
 	 * @param bankList			所有目前可以使用的银行卡
@@ -139,8 +142,8 @@ public class BankUtil {
 		List amountList = new ArrayList();
 		String phoneK = null;
 		for(Object k: keysL) {
-			phoneK = StrUtil.subPre(k.toString(),12);//理论上是电话号码-且都是一样的数据
-			String amountK = StrUtil.subSuf(k.toString(),12);//金额
+			phoneK = StrUtil.subPre(k.toString(),Common.BANKCARD_AMOUNT_BUMBER);//理论上是电话号码-且都是一样的数据
+			String amountK = StrUtil.subSuf(k.toString(),Common.BANKCARD_AMOUNT_BUMBER);//金额
 			amountList.add(new BigDecimal(amountK));
 		}
 		BigDecimal amount2 = getAmount(amountList,amount);//得到钱数

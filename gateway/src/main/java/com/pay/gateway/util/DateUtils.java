@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 
 import cn.hutool.core.util.ObjectUtil;
 
@@ -128,7 +127,6 @@ public class DateUtils {
 		try {
 			return format.parse(date);
 		} catch (ParseException e) {
-			Logger.getLogger("DateUtil").warn(e.getMessage(), e);
 			return new Date();
 		}
 	}

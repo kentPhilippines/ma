@@ -128,6 +128,7 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 	}
 	@Override
 	public boolean updataOrderStatusByAssociatedId(String orderIdAll) {
+		log.info("===============【根据全局订单编号修改交易订单为成功，捕获全局订单编号："+orderIdAll+"】==================");
 		DealOrder record = new DealOrder();
 		DealOrderExample example = new DealOrderExample();
 		com.pay.gateway.entity.DealOrderExample.Criteria criteriaDealOrder = example.createCriteria();
@@ -135,7 +136,9 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		record.setOrderStatus(Common.ORDERDEASTATUS_SU);
 		record.setCreateTime(null);
 		int updateByExampleSelective = dealOrderDao.updateByExampleSelective(record,  example);
-		return updateByExampleSelective > 0 && updateByExampleSelective <2 ;
+		boolean flag = updateByExampleSelective > 0 && updateByExampleSelective <2;
+		log.info("===============【修改订单完毕：修改结果为："+flag+"】==================");
+		return flag ;
 	}
 	@Override
 	public DealOrder findOrderByOrderAll(String orderIdAll) {
@@ -164,5 +167,16 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 	@Override
 	public void updataOrderStatus(Integer second) {
 		dealOrderDao.updataOrderStatus(second);
+	}
+	@Override
+	public DealOrder findOrderByOrderId(String orderId) {
+		DealOrder record = new DealOrder();
+		DealOrderExample example = new DealOrderExample();
+		com.pay.gateway.entity.DealOrderExample.Criteria criteriaDealOrder = example.createCriteria();
+		criteriaDealOrder.andOrderIdEqualTo(orderId);
+		List<DealOrder> selectByExample = dealOrderDao.selectByExample(example);
+		if(CollUtil.isNotEmpty(selectByExample))
+			return CollUtil.getFirst(selectByExample);
+		return null;
 	}
 }

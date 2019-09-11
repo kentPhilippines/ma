@@ -5,60 +5,24 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class BankCardRun {
-    private Integer id;
+import com.pay.gateway.entity.base.BaseEntity;
 
-    private Date createTime;
-
-    private String withdrawBankCard;
-
-    private String withdrawAccount;
-
-    private BigDecimal withdrawAmount;
-
-    private String dealBankCard;
-
-    private String dealAccount;
-
-    private BigDecimal dealAmount;
-
-    private Integer runType;
-
-    private Date submitTime;
-
-    private String submitSystem;
-
-    private Integer status;
-
+public class BankCardRun extends BaseEntity{
+    private String withdrawBankCard;//出金银行卡或者账户
+    private String withdrawAccount;//出金本地账户
+    private BigDecimal withdrawAmount;//出金金额
+    private String dealBankCard;//交易银行卡(入金)
+    private String dealAccount;//交易账户本地账户
+    private BigDecimal dealAmount;//交易金额
+    private Integer runType;//流水类型：1商户交易2卡商回款3账户入款分润
     private String retain1;
-
     private String retain2;
-
     private String retain3;
-
     private String retain4;
-
     private String retain5;
-
     private String retain6;
-
     private String retain7;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
     public String getWithdrawBankCard() {
         return withdrawBankCard;
@@ -115,31 +79,6 @@ public class BankCardRun {
     public void setRunType(Integer runType) {
         this.runType = runType;
     }
-
-    public Date getSubmitTime() {
-        return submitTime;
-    }
-
-    public void setSubmitTime(Date submitTime) {
-        this.submitTime = submitTime;
-    }
-
-    public String getSubmitSystem() {
-        return submitSystem;
-    }
-
-    public void setSubmitSystem(String submitSystem) {
-        this.submitSystem = submitSystem == null ? null : submitSystem.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
     public String getRetain1() {
         return retain1;
     }

@@ -1,5 +1,8 @@
 package com.pay.gateway.entity.dealEntity;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * <p>交易回调</p>
  * @author k
@@ -55,4 +58,8 @@ public class ResultDeal {
 	public void setOrder_id(String order_id) {
 		this.order_id = order_id;
 	}
+	@Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 }

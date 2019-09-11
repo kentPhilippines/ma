@@ -61,4 +61,11 @@ public interface OrderService {
 	 */
 	void updataOrderStatus(Integer second);
 
+	/**
+	 * <p>根据订单号查询订单详情</p>
+	 * @param orderId
+	 * @return
+	 */
+	DealOrder findOrderByOrderId(String orderId);
+
 }

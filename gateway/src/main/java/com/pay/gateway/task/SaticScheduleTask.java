@@ -33,14 +33,20 @@ public class SaticScheduleTask {
 	 * <li>2,重新發送賬戶回調通知</li>
 	 * <li>3,修改订单为失败  4分钟之前的订单修改为失败</li>
 	 */
+	
+	
+		/**
+		 * <p>5秒钟修改一次订单状态</p>
+		 
 	 	@Scheduled(cron = "0/5 * * * * ?")
 	    private void orderNotify() {
-	 		Integer second = bankUtil.second ; 
+	 		Integer second = bankUtil.getSecond() ; 
+	 		log.info("=================【修改订单状态为未收到回调，获取时间为: " + second+"【秒】】===============");
 	 		orderServiceImpl.updataOrderStatus(second);
 	    }
-	 	
+	    */
 	 	/**
-	 	 * <p>凌晨6	點修改賬戶凍結餘額</p>
+	 	 * <p>凌晨6	点修改账户冻结余额</p>
 	 	 */
 	 	@Scheduled(cron = "0 0 6 * * ?")
 	 	 private void account() {

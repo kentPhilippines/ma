@@ -54,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
 		AccountExample example = new AccountExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andAccountIdEqualTo(account.getAccountId());
-		int updateByExample = accountDao.updateByExample(account, example);
+		int updateByExample = accountDao.updateByExampleSelective(account, example);
 		return updateByExample > 0 && updateByExample < 2;
 	}
 	@Override

@@ -52,6 +52,7 @@ public class H5aliPayService extends PayOrderService{
 		log.info("===========【转发的get请求路径："+result.getReturnUrl()+"======");
 		result.setCod(Common.RESPONSE_STATUS_SU);
 		result.setMsg(Common.RESPONSE_STATUS_SU_MSG);
+		log.info("支付宝转到银行卡返回的结果集为："+result.toString());
  		return result;
 	}
 	

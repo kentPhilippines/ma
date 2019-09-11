@@ -73,7 +73,7 @@ public class NotfiyContorller {
 		 boolean flag = orderUtil.updataOrderStatus(orderIdAll);//修改訂單狀態並生成對應的流水
 		 //發給下游通知回調
 		 notifyUtil.sendMsg(orderIdAll, flag);
-		 if(!flag)
-			 throw new OtherErrors("交易回調發成異常");
+		 if(!flag)//回滚所有数据
+			 throw new OtherErrors("交易回调发生异常");
 	 }
 }

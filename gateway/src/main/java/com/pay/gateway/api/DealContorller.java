@@ -80,7 +80,9 @@ public class DealContorller {
 	@Transactional
 	public void payH5Ali(Deal deal ,HttpServletRequest request, HttpServletResponse response) throws IOException {
 		ResultDeal resultDeal = new ResultDeal();
-		requestUtil.validationAll(request, response,resultDeal);
+		boolean validationAll = requestUtil.validationAll(request, response,resultDeal);
+		if(!validationAll)  
+			return; 
 		log.info("------------------------------【进入支付宝H5模式交易处理】------------------------------");
 		 String appid = request.getParameter("appid");
 		String orderid = request.getParameter("orderid");
@@ -88,6 +90,7 @@ public class DealContorller {
 		String passcode = request.getParameter("passcode");
 		String callbackurl = request.getParameter("callbackurl");
 		String amount1 = request.getParameter("amount");
+		log.info("-------------【请求参数：appid："+appid+"，orderid："+orderid+"，notifyurl："+notifyurl+"，passcode："+passcode+"，amount："+amount1+"】------------------------------");
 		if(StrUtil.isBlank(appid) || StrUtil.isBlank(orderid) ||StrUtil.isBlank(notifyurl) ||StrUtil.isBlank(passcode)  || StrUtil.isBlank(amount1)) {
 			log.info("------------------------------【必传参数为空】------------------------------");
 			resultDeal.setCod(Common.COD_15034);
@@ -110,14 +113,14 @@ public class DealContorller {
 		BigDecimal amount = new BigDecimal(amount1);
 		amount = amount.divide(new BigDecimal(100));
 		if(amount.compareTo(dayDealAmountMax) == 1) {
-			log.info("------------------------------【14001:当前交易额度超过该账号最大交易额度】------------------------------");
+			log.info("------------------------------【14001:当前交易额度超过该账号最大交易额度，最大交易额度为："+dayDealAmountMax+"，当前交易额为："+amount+"】------------------------------");
 			resultDeal.setCod(Common.COD_14001);
 			resultDeal.setMsg(Common.MSG_14001);
 			response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
 			return;
 		}
 		if(amount.compareTo(dayDealAmountMin) == -1 ) {
-			log.info("------------------------------【14002:当前交易额度小于该账号最小交易额度】------------------------------");
+			log.info("------------------------------【14002:当前交易额度小于该账号最小交易额度 ，最小交易额度为："+dayDealAmountMin+"，当前传入金额为："+amount+"】------------------------------");
 			resultDeal.setCod(Common.COD_14002);
 			resultDeal.setMsg(Common.MSG_14002);
 			response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
@@ -176,9 +179,10 @@ public class DealContorller {
 			log.info("------------------------------【全局订单生成成功，订单详情为："+orderAll.toString()+"】------------------------------");
 			deal.setOrderNo(orderAll.getOrderId());
 			PayService api  = H5aliPayServiceImpl; // (PayService)Class.forName(channel).newInstance();//不同的渠道信息   这里会生成不同是是实现类
-			ResultDeal resultDeal1 = api.deal(deal,account,accountFee,orderAll);
+			resultDeal = api.deal(deal,account,accountFee,orderAll);
+			log.info("状态响应码："+resultDeal.toString());
 			if(!Common.RESPONSE_STATUS_SU.equalsIgnoreCase(resultDeal.getCod())) {
-				log.info("------------------------------【14004:交易失败"+resultDeal1.getMsg()+"】------------------------------");
+				log.info("------------------------------【14004:交易失败"+resultDeal.getMsg()+"】------------------------------");
 				resultDeal.setCod(Common.COD_14004);
 				resultDeal.setMsg(Common.MSG_14004);
 				response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));

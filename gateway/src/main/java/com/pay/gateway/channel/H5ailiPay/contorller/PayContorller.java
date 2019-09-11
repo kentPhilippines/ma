@@ -1,5 +1,8 @@
 package com.pay.gateway.channel.H5ailiPay.contorller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpRequest;
@@ -17,12 +20,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pay.gateway.api.DealContorller;
+import com.pay.gateway.channel.H5ailiPay.service.BankCardService;
 import com.pay.gateway.channel.H5ailiPay.util.QRCodeUtil;
+import com.pay.gateway.config.common.Common;
+import com.pay.gateway.config.redis.RedisUtil;
 import com.pay.gateway.entity.BankCard;
+import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.service.OrderService;
 import com.pay.gateway.util.JsonResult;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 @Controller
 @RequestMapping("/api")
 public class PayContorller {
@@ -32,8 +41,12 @@ public class PayContorller {
 	 private String dealurl;
 	 @Value("${tomcat.imgpath.path}")
 	 private String imgpath;
+	 @Autowired
+	 RedisUtil redisUtil;
 	@Autowired
 	OrderService orderServiceImpl;
+	@Autowired
+	BankCardService bankCardServiceImpl;
 	 Logger log = LoggerFactory.getLogger(PayContorller.class);
 	/**
 	 * <p>跳转到PC二维码页面</p>
@@ -86,6 +99,23 @@ public class PayContorller {
 	@Transactional
 	public JsonResult createOrder(@RequestParam("order")String order ,@RequestParam("amount")String amount,Model m) {
 		log.info("=========【全局訂單:order="+order+"，全局訂單金額：amount="+amount+"，正在生成訂單】============");
+		DealOrder dealOrder = orderServiceImpl.findOrderByOrderAll(order);
+		if(ObjectUtil.isNotNull(dealOrder)) {//当订单存在的时候不在创建直接返回订单相关信息从缓存中获取当前
+			log.info("|------【当前订单已生成，进入金额筛选算法，订单号为："+dealOrder.getOrderId()+"】");
+			BankCard bankcard = bankCardServiceImpl.findBankCardByBankCardId(dealOrder.getDealCardId());
+			String object = (String) redisUtil.get(bankcard.getBankPhone());
+			ArrayList<String> bankListuse = CollUtil.newArrayList(object.toString());//该银行卡目前正在使用的所有的key    key = 银行唯一标识(非卡号) + 交易金额    value = 全局订单号
+			for( String key : bankListuse) {
+				Object object2 = redisUtil.get(key);
+				if(null != object2) {
+					if(dealOrder.getAssociatedId().equals(object2)) {//当 value和全局订单号相等的时候
+						String amountK = StrUtil.subSuf(key.toString(),Common.BANKCARD_AMOUNT_BUMBER);//金额
+						bankcard.setDealAmount(new BigDecimal(amountK));
+						return JsonResult.buildSuccessResult(bankcard);
+					}
+				}
+			}
+		}
 		BankCard bankCard = orderServiceImpl.createOrder(order,amount);
 		if(ObjectUtil.isNotNull(bankCard)) {
 			return JsonResult.buildSuccessResult(bankCard);
