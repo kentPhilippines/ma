@@ -307,7 +307,7 @@
         freezeD1 = #{record.freezeD1,jdbcType=DECIMAL},
       </if>
       <if test="record.isDeal != null" >
-        freezeD1 = #{record.isDeal,jdbcType=INTEGER},
+        isDeal = #{record.isDeal,jdbcType=INTEGER},
       </if>
       <if test="record.isDpay != null" >
         isDpay = #{record.isDpay,jdbcType=INTEGER},

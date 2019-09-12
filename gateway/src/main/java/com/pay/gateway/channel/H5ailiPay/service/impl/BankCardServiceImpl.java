@@ -59,7 +59,7 @@ public class BankCardServiceImpl implements BankCardService {
 		}
 		bank.setCreateTime(null);
 		int updateByExample = bankCardDao.updateByExampleSelective(bank, example);
-		return updateByExample > 1 && updateByExample < 2;
+		return updateByExample > 0 && updateByExample < 2;
 	}
 	@Override
 	public boolean addBankRun(final BankCard bank,final BigDecimal actualAmount,final String accountId,final String orderId) {

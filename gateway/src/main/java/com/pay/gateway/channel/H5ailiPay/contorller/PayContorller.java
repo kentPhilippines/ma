@@ -101,19 +101,23 @@ public class PayContorller {
 		log.info("=========【全局訂單:order="+order+"，全局訂單金額：amount="+amount+"，正在生成訂單】============");
 		DealOrder dealOrder = orderServiceImpl.findOrderByOrderAll(order);
 		if(ObjectUtil.isNotNull(dealOrder)) {//当订单存在的时候不在创建直接返回订单相关信息从缓存中获取当前
-			log.info("|------【当前订单已生成，进入金额筛选算法，订单号为："+dealOrder.getOrderId()+"】");
-			BankCard bankcard = bankCardServiceImpl.findBankCardByBankCardId(dealOrder.getDealCardId());
-			String object = (String) redisUtil.get(bankcard.getBankPhone());
-			ArrayList<String> bankListuse = CollUtil.newArrayList(object.toString());//该银行卡目前正在使用的所有的key    key = 银行唯一标识(非卡号) + 交易金额    value = 全局订单号
-			for( String key : bankListuse) {
-				Object object2 = redisUtil.get(key);
-				if(null != object2) {
-					if(dealOrder.getAssociatedId().equals(object2)) {//当 value和全局订单号相等的时候
-						String amountK = StrUtil.subSuf(key.toString(),Common.BANKCARD_AMOUNT_BUMBER);//金额
-						bankcard.setDealAmount(new BigDecimal(amountK));
-						return JsonResult.buildSuccessResult(bankcard);
+			if(Common.ORDERDEASTATUS_T.equals(dealOrder.getOrderStatus())) {
+				log.info("|------【当前订单已生成，进入金额筛选算法，订单号为："+dealOrder.getOrderId()+"】");
+				BankCard bankcard = bankCardServiceImpl.findBankCardByBankCardId(dealOrder.getDealCardId());
+				String object = (String) redisUtil.get(bankcard.getBankPhone());
+				ArrayList<String> bankListuse = CollUtil.newArrayList(object.toString());//该银行卡目前正在使用的所有的key    key = 银行唯一标识(非卡号) + 交易金额    value = 全局订单号
+				for( String key : bankListuse) {
+					Object object2 = redisUtil.get(key);
+					if(null != object2) {
+						if(dealOrder.getAssociatedId().equals(object2)) {//当 value和全局订单号相等的时候
+							String amountK = StrUtil.subSuf(key.toString(),Common.BANKCARD_AMOUNT_BUMBER);//金额
+							bankcard.setDealAmount(new BigDecimal(amountK));
+							return JsonResult.buildSuccessResult(bankcard);
+						}
 					}
 				}
+			}else {
+				return JsonResult.buildFailResult();
 			}
 		}
 		BankCard bankCard = orderServiceImpl.createOrder(order,amount);

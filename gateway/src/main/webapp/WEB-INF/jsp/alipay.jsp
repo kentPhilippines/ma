@@ -303,7 +303,6 @@ body {
 	font-size: 1.15384615em;
 	text-align: center
 }
-
 #__vconsole .vc-logbox .vc-item {
 	margin: 0;
 	padding: .46153846em .61538462em;
@@ -755,9 +754,31 @@ body {
 .vcelm-l.vcelm-noc:before {
 	display: none
 }
+.popWindow {
+        background-color: #9D9D9D;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        filter: alpha(opacity=50);
+        opacity: 0.5;
+        z-index: 1;
+        position: absolute;
+
+    }
+    .load_ts {
+        color: #0C0C0C;
+        display: block;
+        position: fixed;
+        text-align: center;
+        bottom: 46%;
+        font-size: 80px;
+        font-family: 微软雅黑;
+        width: 100%;
+    }
 </style>
 </head>
-<body>
+<body id ="body">
 	<header class="am-header">
 		<h1>
 			<span class="title-main" data-title="支付宝收银台">支付宝收银台</span>
@@ -786,11 +807,11 @@ body {
 					</div>
 				</div>
 			</div>
-			<p style="color: green">如图：</p>
+			 <p style="color: green">如图：</p>
 			<div style="text-align: center">
 				<img src="${ctx}/${order}" alt=""
 					width="350px"/>
-			</div>
+			</div>  
 		</div>
 	</div>
 	<!--需要替换的数据-->
@@ -801,6 +822,7 @@ body {
 		<input type="hidden" name="bankMark" value=" "> 
 		<input type="hidden" name="amount" value=" ">
 	</form>
+	<div id="popWindow" class="popWindow" style="display: none;"><h1 class="load_ts">订单失效</h1></div>
 	<script src="${ctx}/static/js/vconsole.min.js"></script>
 	<script>
 	$(function(){
@@ -821,7 +843,9 @@ body {
             		  $("#money").html(data.result.dealAmount);
       				return;
       			}else if(data && !data.success){
+      				$("#popWindow").css("display", "inherit");
       				return;
+      			}else{
       			}
               },
               error: function (err) {

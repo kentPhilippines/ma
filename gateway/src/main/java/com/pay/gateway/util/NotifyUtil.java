@@ -23,6 +23,10 @@ import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.service.AccountService;
 import com.pay.gateway.service.OrderService;
 
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+
 /**
  * <p>給下游商戶發送通知</p>
  * @author K
@@ -52,7 +56,7 @@ public class NotifyUtil {
 		String amount = dealOrder.getDealAmount().toString();
 		String sign = appid + orderNo + amount + externalOrderId + secretKey;
 		sign =  md5(sign);
-		Map<String, String> msg = new HashMap<String, String>();
+		Map<String, Object> msg = new HashMap<String, Object>();
 		msg.put("appid", appid);
 		msg.put("orderNo", orderNo);
 		msg.put("amount", amount);
@@ -69,15 +73,17 @@ public class NotifyUtil {
 	 * @param url			發送通知的地址
 	 * @param msg			發送通知的内容
 	 */
-	private void send( String url, Map<String, String> msg ) {
-		String createParam = createParam(msg);
-		String submitPost = submitPost(url,createParam);
-		String orderNo = msg.get("orderNo");
-		if("suss".equalsIgnoreCase(submitPost)) {//修改訂單通知
-			boolean flag = orderServiceImpl.updataNotifyYesByNo(orderNo);
-			if(flag)
-				log.info("============【发送通知成功，订单发送通知状态已修改为YES：orderNo："+orderNo+"】================");
-		}
+	private void send( String url, Map<String, Object> msg ) {
+		String result= HttpUtil.post(url, msg);
+		log.info("服务器返回结果为："+result.toString());
+		/*
+		 * JSONObject parseObj = JSONUtil.parseObj(result); Object object =
+		 * parseObj.get("return"); Object orderNo = msg.get("orderNo");
+		 * if("suss".equalsIgnoreCase(object.toString())) {//修改訂單通知 boolean flag =
+		 * orderServiceImpl.updataNotifyYesByNo(orderNo.toString()); if(flag)
+		 * log.info("============【发送通知成功，订单发送通知状态已修改为YES：orderNo："+orderNo+
+		 * "】================"); }
+		 */
 		
 	}
 	public  static String md5(String s) {
@@ -89,64 +95,4 @@ public class NotifyUtil {
             throw new RuntimeException(e);
         }
     }
-	public static String submitPost(String url, String params) {
-		StringBuffer responseMessage = null;
-		java.net.HttpURLConnection connection = null;
-		java.net.URL reqUrl = null;
-		OutputStreamWriter reqOut = null;
-		InputStream in = null;
-		BufferedReader br = null;
-		int charCount = -1;
-		try {
-			responseMessage = new StringBuffer(128);
-			reqUrl = new java.net.URL(url);
-			connection = (java.net.HttpURLConnection) reqUrl.openConnection();
-			connection.setReadTimeout(50000);
-			connection.setConnectTimeout(100000);
-			connection.setDoOutput(true);
-			connection.setDoInput(true);
-			connection.setRequestMethod("POST");
-			reqOut = new OutputStreamWriter(connection.getOutputStream(),"UTF-8");
-			reqOut.write(params);
-			reqOut.flush();
-			in = connection.getInputStream();
-			br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-			while ((charCount = br.read()) != -1) {
-				responseMessage.append((char) charCount);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-				if (reqOut != null) {
-					reqOut.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return responseMessage.toString();
-	}
-	public static String createParam(Map<String, String> paramMap) {
-		try {
-			if (paramMap == null || paramMap.isEmpty()) {
-				return null;
-			}
-			Object[] key = paramMap.keySet().toArray();
-			Arrays.sort(key);
-			StringBuffer res = new StringBuffer(128);
-			for (int i = 0; i < key.length; i++) {
-				res.append(key[i] + "=" + paramMap.get(key[i]) + "&");
-			}
-			String rStr = res.substring(0, res.length() - 1);
-			System.out.println("请求接口加密原串 = " + rStr);
-			return rStr ;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 }

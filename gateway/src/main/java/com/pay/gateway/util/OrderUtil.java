@@ -40,15 +40,18 @@ public class OrderUtil {
 	 * <li>這慎重調用</li>
 	 * @param orderIdAll
 	 */
-	@Transactional
 	public synchronized boolean updataOrderStatus(String orderIdAll) {
+		return updataOrderStatus(orderIdAll,Common.RUN_STATUS_1);
+	}
+	@Transactional
+	public synchronized boolean updataOrderStatus(String orderIdAll,Integer runStatus) {
 		log.info("|---------【进入订单修改核心处理类，捕获全局订单编号："+orderIdAll+"】");
 		 //修改訂單狀態
 		 boolean flag = orderServiceImpl.updataOrderStatusByAssociatedId(orderIdAll);
 		 DealOrder dealOrder = orderServiceImpl.findOrderByOrderAll(orderIdAll);
 		 //生成流水 總共會生成2筆流水
-		 boolean runAmount = RunningOrderServiceImpl.createDealRun(dealOrder);//交易流水
-		 boolean runFee = RunningOrderServiceImpl.createDealRunFee(dealOrder);//費率流水
+		 boolean runAmount = RunningOrderServiceImpl.createDealRun(dealOrder,runStatus);//交易流水
+		 boolean runFee = RunningOrderServiceImpl.createDealRunFee(dealOrder,runStatus);//費率流水
 		 if(!(runAmount || runFee)) 
 				return false;
 		 //修改賬戶金額變動
@@ -106,12 +109,15 @@ public class OrderUtil {
 		 BigDecimal actualAmount = dealOrder.getActualAmount();//交易實際到賬金額
 		 //6,計算T1或者D1凍結      實際到賬金額*凍結比例
 		 BigDecimal sette = new BigDecimal(accountSette).divide(new BigDecimal("100"));//凍結比例
-		 BigDecimal freeze = actualAmount.multiply(sette);//實際凍結金額
+		 log.info("冻结比例："+new BigDecimal("1").subtract(sette));
+		 BigDecimal freeze = actualAmount.multiply(new BigDecimal("1").subtract(sette));//實際凍結金額
+		 log.info("冻结金额："+freeze);
 		 //7,計算今日交易金額纍計
 		 sumDealToDayAmount = sumDealToDayAmount.add(dealAmount);
 		 //8,計算交易金額纍計
 		 sumDealAmount = sumDealAmount.add(dealAmount);
 		 //9,計算賬戶餘額 (凍結金額+可提現金額)
+		 log.info("冻结模式："+settlementType);
 		 if(Common.FREEZE_D1.equalsIgnoreCase(settlementType))//當爲D1凍結的時候將凍結資金放入D1凍結賬戶
 			 account.setFreezeD1(freezeD1.add(freeze));
 		 else 
@@ -126,7 +132,9 @@ public class OrderUtil {
 		 account.setCashBalance(cashBalance);
 		 account.setFreezeBalance(freezeBalance);
 		 account.setFreezeD1(freezeD12);
+		 log.info("D1冻结："+freezeD12);
 		 account.setFreezeT1(freezeT12);
+		 log.info("T1冻结："+freezeT12);
 		 account.setSumDealAmount(sumDealAmount);
 		 account.setSumDealToDayAmount(sumDealToDayAmount);
 		 //14,記錄銀行卡交易數據
@@ -136,7 +144,9 @@ public class OrderUtil {
 		 bank.setBankAmount(dealAmount);//卡上的餘額因該是交易金額
 		 boolean flag = BankCardServiceImpl.updataAmountByBankCardId(bank);
 		 boolean addBankRun = BankCardServiceImpl.addBankRun(bank,actualAmount,account.getAccountId(),dealOrder.getOrderId());
+		 log.info("个人账变记录详情："+account.toString());
 		 boolean acc = accountServiceImpl.updataAccountByAcoountId(account);
+		 log.info("修改 银行卡流水的结果为："+addBankRun+"，增加银行卡账变记录："+flag+"，增加账户账变记录的结果："+acc+"");
 		 if(flag && acc && addBankRun) {
 			 return true;
 		 }

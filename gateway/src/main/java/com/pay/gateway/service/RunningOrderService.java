@@ -12,14 +12,16 @@ public interface RunningOrderService {
 	/**
 	 * <p>根據交易訂單信息創建交易流水</p>
 	 * @param dealOrder			交易訂單信息
+	 * @param runType 
 	 * @return
 	 */
-	boolean createDealRun(DealOrder dealOrder);
+	boolean createDealRun(DealOrder dealOrder, Integer runStatus);
 	/**
 	 * <p>根據交易訂單創建手續費流水</p>
 	 * @param dealOrder			交易訂單信息
+	 * @param runType 
 	 * @return
 	 */
-	boolean createDealRunFee(DealOrder dealOrder);
+	boolean createDealRunFee(DealOrder dealOrder, Integer runStatus);
 
 }

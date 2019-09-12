@@ -24,12 +24,12 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 	@Autowired
 	RunningOrderMapper runningOrderDao;
 	@Override
-	public boolean createDealRun(DealOrder dealOrder) {
+	public boolean createDealRun(DealOrder dealOrder, Integer runStatus) {
 		log.info("---------进入交易流水处理类，生成交易流水，流水方式为交易金额，当前交易金额为："+dealOrder.getDealAmount()+"，实际到账金额为："+dealOrder.getActualAmount().toString()+"");
 		RunningOrder runBean  = new RunningOrder();
 		runBean.setOrderRunId(DealNumber.GetRunOrder());
 		runBean.setOrderId(dealOrder.getOrderId());
-		runBean.setRunStatus(Common.RUN_STATUS_1);
+		runBean.setRunStatus(runStatus);
 		runBean.setRunType(Common.RUN_TYPE_DEAL);
 		runBean.setOrderAccount(dealOrder.getOrderAccount());
 		runBean.setRunOrderAmount(dealOrder.getActualAmount().toString());
@@ -48,12 +48,12 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		return flag;
 	}
 	@Override
-	public boolean createDealRunFee(DealOrder dealOrder) {
+	public boolean createDealRunFee(DealOrder dealOrder, Integer runStatus) {
 		log.info("---------进入交易流水处理类，生成交易手续费流水，流水方式为交易手续费，当前交易金额为："+dealOrder.getDealAmount()+"，交易手续费金额为："+dealOrder.getDealFee().toString()+"");
 		RunningOrder runBean  = new RunningOrder();
 		runBean.setOrderRunId(DealNumber.GetRunOrder());
 		runBean.setOrderId(dealOrder.getOrderId());
-		runBean.setRunStatus(Common.RUN_STATUS_1);
+		runBean.setRunStatus(runStatus);
 		runBean.setRunType(Common.RUN_DEAL_FEE);
 		runBean.setOrderAccount(dealOrder.getOrderAccount());
 		runBean.setRunOrderAmount(dealOrder.getDealFee().toString());
@@ -71,5 +71,4 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		}
 		return flag;
 	}
-
 }

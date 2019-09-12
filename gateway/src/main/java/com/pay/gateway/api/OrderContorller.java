@@ -74,7 +74,8 @@ public class OrderContorller {
 		if(ObjectUtil.isNull(dealOrder)) {
 			return JsonResult.buildFailResult("服务器内未查询到有效订单");
 		}
-		boolean updataOrderStatus = orderUtil.updataOrderStatus(dealOrder.getAssociatedId());
+		boolean updataOrderStatus = orderUtil.updataOrderStatus(dealOrder.getAssociatedId(),Common.RUN_STATUS_2);
+		log.info("|-----------接收到后台请求修改订单结果："+updataOrderStatus);
 		notifyUtil.sendMsg(dealOrder.getAssociatedId(), updataOrderStatus);
 		log.info("|-----------接收到后台请求修改订单结果："+updataOrderStatus);
 		if(updataOrderStatus) {

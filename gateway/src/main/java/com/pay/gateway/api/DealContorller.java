@@ -126,8 +126,8 @@ public class DealContorller {
 			response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
 			return;
 		}
-		amount = amount.add(sumDealToDayAmount);
-		if(amount.compareTo(dayDealAmountMin) == -1 ) {
+		BigDecimal amountSum = amount.add(sumDealToDayAmount);
+		if(amountSum.compareTo(dayDealAmountMin) == -1 ) {
 			log.info("------------------------------【14003:当日交易累计已超过该账号最大交易额度，当日累计交易："+sumDealToDayAmount+"，交易额度："+dayDealAmountMax+"，当前交易金额："+amount1+"分】------------------------------");
 			resultDeal.setCod(Common.COD_14002);
 			resultDeal.setMsg("当日交易累计已超过该账号最大交易额度，当日累计交易："+sumDealToDayAmount+"，交易额度："+dayDealAmountMax+"，当前交易金额："+amount1+"分");

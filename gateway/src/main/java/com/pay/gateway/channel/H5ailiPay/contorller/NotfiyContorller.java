@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.pay.gateway.channel.H5ailiPay.util.BankUtil;
+import com.pay.gateway.config.common.Common;
 import com.pay.gateway.config.exception.OtherErrors;
 import com.pay.gateway.entity.Account;
 import com.pay.gateway.entity.DealOrder;
