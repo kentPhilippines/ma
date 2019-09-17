@@ -33,6 +33,7 @@ public final class Common {
 	public static final String ORDERRUN = "RUN";//流水订单
 	public static final String ORDERWIT = "WIT";//代付订单
 	public static final String ORDERALL = "ALL";//所有订单
+	public static final String ORDEREXCE = "EXCE";//所有订单
 	
 	
 	
@@ -193,4 +194,72 @@ public final class Common {
 	 */
 	public static final Integer BANKCARD_AMOUNT_BUMBER = 12;//
 	
+	
+	
+	
+	
+	
+	/**
+	 * <p>异常订单操作类型</p>
+	 */
+	/***
+	 * <p>异常订单程序异常</p>
+	 */
+	public static final Integer EXCEPT_STATUS_SYS = 1;//1程序异常
+	/**
+	 * <p>人工异常</p>
+	 */
+	public static final Integer EXCEPT_STATUS_WORK = 2;//2人工异常
+	/**
+	 * <p>异常类型:1交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费</p>
+	 */
+	public static final Integer EXCEPT_TYPE_DEAL = 1;//交易
+	public static final Integer EXCEPT_TYPE_ADD_AMOUNT = 2;//系统加款
+	public static final Integer EXCEPT_TYPE_DEAL_FEE = 3;//交易手续费
+	public static final Integer EXCEPT_TYPE_DELETE_AMOUNT = 4;//系统扣款
+	public static final Integer EXCEPT_TYPE_DPAY = 5;//代付
+	public static final Integer EXCEPT_TYPE_DPAY_FEE = 6;//代付手续费
+	
+	
+	
+	
+	/**
+	 * <p>提现记录表状态</p>
+	 * <p>//提现状态 1成功2失败3处理中</p>
+	 */
+	/**
+	 * <p>提现成功</p>
+	 */
+	public static final Integer DPAY_STATUS_SU = 1;//提现成功
+	/**
+	 * <p>提现失败</p>
+	 */
+	public static final Integer DPAY_STATUS_ER = 2;//提现失败
+	/**
+	 * <p>提现处理中</p>
+	 */
+	public static final Integer DPAY_STATUS_WI = 3;//提现处理中
+	
+	
+	/**
+	 * <p>代付订单表状态</p>
+	 * 1处理中,2成功,3失败
+	 */
+	public static final Integer WI_DPAY_STATUS_WI = 1;//处理中
+	public static final Integer WI_DPAY_STATUS_SU = 2;//成功
+	public static final Integer WI_DPAY_STATUS_ER = 3;//失败
+	
+	
+	
+	/**
+	 * <p>代付订单类型</p>
+	 */
+	/**
+	 * <p>代付订单：下游代付</p>
+	 */
+	public static final Integer WI_DPAY_TYPE_WI = 1;//下游代付
+	/**
+	 * <p>补充代付</p>
+	 */
+	public static final Integer WI_DPAY_TYPE_ADD_WI = 2;//下游代付
 }

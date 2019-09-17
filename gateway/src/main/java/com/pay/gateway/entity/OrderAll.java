@@ -15,7 +15,7 @@ public class OrderAll extends BaseEntity{
     private String retain2;//使用费率编号
     private String retain3;//订单回调地址
     private String retain4;//使用費率數據id
-    private String retain5;
+    private String retain5;//代付费率
     private String retain6;
     private String retain7;
     private String retain8;

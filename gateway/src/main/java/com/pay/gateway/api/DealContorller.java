@@ -98,7 +98,7 @@ public class DealContorller {
 			response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
 			return;
 		}
-		 Account account = accountServiceImpl.findAccountByAppId(appid);
+		Account account = accountServiceImpl.findAccountByAppId(appid);
 		OrderAll order = orderServiceImpl.findOrderByTradeId(appid,orderid);
 		if(ObjectUtil.isNotNull(order)) {
 			log.info("------------------------------【14004:外部商户订单号重复】------------------------------");

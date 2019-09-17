@@ -2,6 +2,7 @@ package com.pay.gateway.service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pay.gateway.entity.DealOrder;
+import com.pay.gateway.entity.WithdrawalsOrder;
 /**
  * #################################################
  * 當前所有的自然交易流水生產和自然代付流水生成都會是2筆，一筆為金額一筆為手續費
@@ -23,5 +24,19 @@ public interface RunningOrderService {
 	 * @return
 	 */
 	boolean createDealRunFee(DealOrder dealOrder, Integer runStatus);
+	/**
+	 * <p>根据代付订单创建代付流水冻结</p>
+	 * @param order
+	 * @param runStatus
+	 * @return
+	 */
+	boolean createMerchantsRun(WithdrawalsOrder order, Integer runStatus);
+	/**
+	 *	<p>根据代付订单创建代付手续菲冻结</p>
+	 * @param order
+	 * @param runStatus
+	 * @return
+	 */
+	boolean createMerchantsFeeRun(WithdrawalsOrder order, Integer runStatus);
 
 }

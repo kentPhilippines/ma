@@ -179,4 +179,14 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 			return CollUtil.getFirst(selectByExample);
 		return null;
 	}
+	@Override
+	public OrderAll findOrderAllByOrderAll(String orderIdAll) {
+		OrderAllExample example = new OrderAllExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andOrderIdEqualTo(orderIdAll);
+		List<OrderAll> selectByExample = orderAllDao.selectByExample(example);
+		if(CollUtil.isNotEmpty(selectByExample))
+			return CollUtil.getFirst(selectByExample);
+		return null;
+	}
 }

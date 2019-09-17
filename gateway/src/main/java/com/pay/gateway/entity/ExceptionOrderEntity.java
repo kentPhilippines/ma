@@ -4,33 +4,19 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ExceptionOrderEntity {
-    private Integer id;
+import com.pay.gateway.entity.base.BaseEntity;
 
-    private Date createTime;
+public class ExceptionOrderEntity  extends BaseEntity{
+    private String orderExceptId;//异常订单号
+    private String orderId;//关联全局订单号
+    private Integer exceptStatus;//异常订单状态:1程序异常2人工异常
+    private Integer exceptType;//异常类型:1交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费
+    private String orderAccount;//订单关联商户账号
+    private String exceptOrderAmount;//异常订单金额
+    private String orderGenerationIp;//异常订单生成IP(源头ip)
+    private String operation;//异常说明
 
-    private String orderExceptId;
-
-    private String orderId;
-
-    private Integer exceptStatus;
-
-    private Integer exceptType;
-
-    private String orderAccount;
-
-    private String exceptOrderAmount;
-
-    private String orderGenerationIp;
-
-    private String operation;
-
-    private Date submitTime;
-
-    private String submitSystem;
-
-    private Integer status;
-
+    
     private String retain1;
 
     private String retain2;
@@ -51,21 +37,6 @@ public class ExceptionOrderEntity {
 
     private String explain;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
     public String getOrderExceptId() {
         return orderExceptId;
@@ -131,29 +102,6 @@ public class ExceptionOrderEntity {
         this.operation = operation == null ? null : operation.trim();
     }
 
-    public Date getSubmitTime() {
-        return submitTime;
-    }
-
-    public void setSubmitTime(Date submitTime) {
-        this.submitTime = submitTime;
-    }
-
-    public String getSubmitSystem() {
-        return submitSystem;
-    }
-
-    public void setSubmitSystem(String submitSystem) {
-        this.submitSystem = submitSystem == null ? null : submitSystem.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
 
     public String getRetain1() {
         return retain1;

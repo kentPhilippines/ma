@@ -5,42 +5,30 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class WithdrawalsOrder {
-    private Integer id;
+import com.pay.gateway.entity.base.BaseEntity;
 
-    private Date createTime;
+/**
+ * <p>代付订单表</p>
+ * @author ADMIN
+ *
+ */
+public class WithdrawalsOrder extends BaseEntity{
+    private String orderId;//代付订单
+    private String associatedId;//全局关联订单
+    private Integer orderStatus;//订单状态 1处理中,2成功,3失败
+    private BigDecimal withdrawalsAmount;//代付金额
+    private BigDecimal withdrawalsFee;//代付手续费
+    private BigDecimal actualAmount;//实际到账金额
+    private Integer orderType;//订单类型 1下游代付，2补充代付
+    private String orderAccount;//订单关联代付账号
+    private String externalOrderId;//外部订单号(下游商户请求参数,用户数据回调)
+    private String orderGenerationIp;//订单生成IP(客户端ip或者是下游商户id)
+    private String bankCard;//代付银行卡
+    private String cardholder;///代付银行卡持卡人
+    private String dealChannel;//代付渠道
 
-    private String orderId;
 
-    private String associatedId;
 
-    private Integer orderStatus;
-
-    private BigDecimal withdrawalsAmount;
-
-    private BigDecimal withdrawalsFee;
-
-    private BigDecimal actualAmount;
-
-    private Integer orderType;
-
-    private String orderAccount;
-
-    private String externalOrderId;
-
-    private String orderGenerationIp;
-
-    private String bankCard;
-
-    private String cardholder;
-
-    private String dealChannel;
-
-    private Date submitTime;
-
-    private String submitSystem;
-
-    private Integer status;
 
     private String retain1;
 
@@ -60,21 +48,6 @@ public class WithdrawalsOrder {
 
     private String retain9;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
     public String getOrderId() {
         return orderId;
@@ -180,29 +153,6 @@ public class WithdrawalsOrder {
         this.dealChannel = dealChannel == null ? null : dealChannel.trim();
     }
 
-    public Date getSubmitTime() {
-        return submitTime;
-    }
-
-    public void setSubmitTime(Date submitTime) {
-        this.submitTime = submitTime;
-    }
-
-    public String getSubmitSystem() {
-        return submitSystem;
-    }
-
-    public void setSubmitSystem(String submitSystem) {
-        this.submitSystem = submitSystem == null ? null : submitSystem.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
 
     public String getRetain1() {
         return retain1;

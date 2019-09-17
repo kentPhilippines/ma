@@ -82,16 +82,40 @@ public class DealNumber  {
          return Newnumber;//返回的值
     }
 
+    /**
+     * <p>交易订单</p>
+     * @return
+     */
     public static String GetDealOrder(){
     	return GetRandom(Common.ORDERDEAL);
     }
+    /**
+     * <p>代付订单</p>
+     * @return
+     */
     public static String GetWitOrder(){
     	return GetRandom(Common.ORDERWIT);
     }
+    /**
+     * <p>流水订单</p>
+     * @return
+     */
     public static String GetRunOrder(){
     	return GetRandom(Common.ORDERRUN);
     }
+    /**
+     * <p>全局订单</p>
+     * @return
+     */
     public static String GetAllOrder(){
     	return GetRandom(Common.ORDERALL);
     }
+
+    /**
+     * <p>异常订单</p>
+     * @return
+     */
+	public static String GetExceOrder() {
+		return GetRandom(Common.ORDEREXCE);
+	}
 }

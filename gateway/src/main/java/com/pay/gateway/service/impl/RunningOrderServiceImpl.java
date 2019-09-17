@@ -13,6 +13,7 @@ import com.pay.gateway.config.common.Common;
 import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.entity.RunningOrder;
 import com.pay.gateway.entity.RunningOrderExample;
+import com.pay.gateway.entity.WithdrawalsOrder;
 import com.pay.gateway.mapper.RunningOrderMapper;
 import com.pay.gateway.service.RunningOrderService;
 import com.pay.gateway.util.DealNumber;
@@ -70,5 +71,53 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 			log.info("当前流水生成失败，流水金额："+dealOrder.getActualAmount().toString()+"");
 		}
 		return flag;
+	}
+	@Override
+	public boolean createMerchantsRun(WithdrawalsOrder order, Integer runStatus) {
+		log.info("---------进入交易流水处理类，生成交易流水，流水方式为代付冻结，当前代付金额为："+ order.getWithdrawalsAmount()+"，实际到账金额为："+order.getActualAmount().toString()+"");
+		RunningOrder runBean  = new RunningOrder();
+		runBean.setOrderRunId(DealNumber.GetRunOrder());
+		runBean.setOrderId(order.getOrderId());
+		runBean.setRunStatus(runStatus);
+		runBean.setRunType(Common.RUN_FREEZE);
+		runBean.setOrderAccount(order.getOrderAccount());
+		runBean.setRunOrderAmount(order.getActualAmount().toString());
+		runBean.setOrderGenerationIp(order.getOrderGenerationIp());
+		runBean.setDealDescribe("用户代付资金账户冻结");
+		runBean.setCardRunD("SYS");//系統賬戶簡稱
+		runBean.setCardRunW(order.getOrderAccount());
+		int insertSelective = runningOrderDao.insertSelective(runBean);
+		boolean flag = insertSelective > 0 && insertSelective < 2;
+		if(flag) {
+			log.info("当前流水生成成功，流水金额："+order.getActualAmount().toString()+"");
+		}else {
+			log.info("当前流水生成失败，流水金额："+order.getActualAmount().toString()+"");
+		}
+		return flag;
+	}
+	@Override
+	public boolean createMerchantsFeeRun(WithdrawalsOrder order, Integer runStatus) {
+
+		log.info("---------进入交易流水处理类，生成交易流水，流水方式为代付冻结，当前代付金额为："+ order.getWithdrawalsAmount()+"，实际到账金额为："+order.getActualAmount().toString()+"，代付手续费为："+order.getWithdrawalsFee());
+		RunningOrder runBean  = new RunningOrder();
+		runBean.setOrderRunId(DealNumber.GetRunOrder());
+		runBean.setOrderId(order.getOrderId());
+		runBean.setRunStatus(runStatus);
+		runBean.setRunType(Common.RUN_FREEZE);
+		runBean.setOrderAccount(order.getOrderAccount());
+		runBean.setRunOrderAmount(order.getActualAmount().toString());
+		runBean.setOrderGenerationIp(order.getOrderGenerationIp());
+		runBean.setDealDescribe("用户代付手续费资金账户冻结");
+		runBean.setCardRunD("SYS");//系統賬戶簡稱
+		runBean.setCardRunW(order.getOrderAccount());
+		int insertSelective = runningOrderDao.insertSelective(runBean);
+		boolean flag = insertSelective > 0 && insertSelective < 2;
+		if(flag) {
+			log.info("当前流水生成成功，流水金额："+order.getWithdrawalsFee().toString()+"");
+		}else {
+			log.info("当前流水生成失败，流水金额："+order.getWithdrawalsFee().toString()+"");
+		}
+		return flag;
+	
 	}
 }

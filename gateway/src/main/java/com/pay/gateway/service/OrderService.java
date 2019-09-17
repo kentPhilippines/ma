@@ -68,4 +68,11 @@ public interface OrderService {
 	 */
 	DealOrder findOrderByOrderId(String orderId);
 
+	/**
+	 * <p>根据全局订单查询全局订单详细数据</p>
+	 * @param orderIdAll
+	 * @return
+	 */
+	OrderAll findOrderAllByOrderAll(String orderIdAll);
+
 }
