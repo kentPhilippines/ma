@@ -118,4 +118,11 @@ public class DealNumber  {
 	public static String GetExceOrder() {
 		return GetRandom(Common.ORDEREXCE);
 	}
+	/**
+	 * <p>代付记录</p>
+	 * @return
+	 */
+	public static String GetRecordOrder() {
+		return GetRandom(Common.ORDERRECORD);
+	}
 }

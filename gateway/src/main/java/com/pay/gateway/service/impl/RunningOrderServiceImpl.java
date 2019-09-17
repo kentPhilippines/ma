@@ -79,7 +79,7 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		runBean.setOrderRunId(DealNumber.GetRunOrder());
 		runBean.setOrderId(order.getOrderId());
 		runBean.setRunStatus(runStatus);
-		runBean.setRunType(Common.RUN_FREEZE);
+		runBean.setRunType(Common.RUN_DPAY_FREEZE);
 		runBean.setOrderAccount(order.getOrderAccount());
 		runBean.setRunOrderAmount(order.getActualAmount().toString());
 		runBean.setOrderGenerationIp(order.getOrderGenerationIp());
@@ -103,13 +103,13 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		runBean.setOrderRunId(DealNumber.GetRunOrder());
 		runBean.setOrderId(order.getOrderId());
 		runBean.setRunStatus(runStatus);
-		runBean.setRunType(Common.RUN_FREEZE);
+		runBean.setRunType(Common.RUN_DPAY_FEE_FREEZE);
 		runBean.setOrderAccount(order.getOrderAccount());
-		runBean.setRunOrderAmount(order.getActualAmount().toString());
+		runBean.setRunOrderAmount(order.getWithdrawalsFee().toString());
 		runBean.setOrderGenerationIp(order.getOrderGenerationIp());
 		runBean.setDealDescribe("用户代付手续费资金账户冻结");
-		runBean.setCardRunD("SYS");//系統賬戶簡稱
-		runBean.setCardRunW(order.getOrderAccount());
+		runBean.setCardRunD(order.getOrderAccount());//系統賬戶簡稱
+		runBean.setCardRunW("SYS");
 		int insertSelective = runningOrderDao.insertSelective(runBean);
 		boolean flag = insertSelective > 0 && insertSelective < 2;
 		if(flag) {

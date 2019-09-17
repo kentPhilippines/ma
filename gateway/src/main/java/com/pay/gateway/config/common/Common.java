@@ -21,10 +21,10 @@ public final class Common {
 	/**
 	 * <p>是否开通交易</p>
 	 */
-	public static final Integer IS_DEAL_NO = 1;//1启用2停用3自动切换
-	public static final Integer IS_DEAL_OFF = 0;//1启用2停用3自动切换
-	public static final Integer IS_DPAY_OFF = 0;//1启用2停用3自动切换
-	public static final Integer IS_DPAY_NO = 0;//1启用2停用3自动切换
+	public static final Integer IS_DEAL_NO = 1;//1启用2停用 
+	public static final Integer IS_DEAL_OFF = 0;//1启用2停用 
+	public static final Integer IS_DPAY_OFF = 0;//1启用2停用 
+	public static final Integer IS_DPAY_NO = 1;//1启用2停用 
 	
 	/**
 	 * <p>订单生成表头</p>
@@ -34,6 +34,7 @@ public final class Common {
 	public static final String ORDERWIT = "WIT";//代付订单
 	public static final String ORDERALL = "ALL";//所有订单
 	public static final String ORDEREXCE = "EXCE";//所有订单
+	public static final String ORDERRECORD = "REX";//所有订单
 	
 	
 	
@@ -134,6 +135,9 @@ public final class Common {
 	public static final Integer RUN_WITHDRAWALS_PAY_FEE = 6;//代付手續費
 	public static final Integer RUN_FREEZE = 7;//凍結
 	public static final Integer RUN_UN_FREEZE = 8;//解凍
+	public static final Integer RUN_DPAY_FEE_FREEZE = 9;//代付手手续费冻结
+	public static final Integer RUN_DPAY_FREEZE = 10;//代付冻结
+	
 	/**
 	 * <p>工作日</p>
 	 */

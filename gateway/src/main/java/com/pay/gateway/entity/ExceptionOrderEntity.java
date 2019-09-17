@@ -6,17 +6,21 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.pay.gateway.entity.base.BaseEntity;
 
-public class ExceptionOrderEntity  extends BaseEntity{
-    private String orderExceptId;//异常订单号
-    private String orderId;//关联全局订单号
-    private Integer exceptStatus;//异常订单状态:1程序异常2人工异常
-    private Integer exceptType;//异常类型:1交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费
-    private String orderAccount;//订单关联商户账号
-    private String exceptOrderAmount;//异常订单金额
-    private String orderGenerationIp;//异常订单生成IP(源头ip)
-    private String operation;//异常说明
+public class ExceptionOrderEntity extends BaseEntity{
+    private String orderExceptId;//异常订单
+    private String orderId;//全局订单
+    private Integer exceptStatus;//状态
+    private Integer exceptType;//类型
+    private String orderAccount;//账号
+    private String exceptOrderAmount;//金额
+    private String orderGenerationIp;//ip
+    private String operation;//操作人
+    private String explains;//说明
 
     
+    
+    
+
     private String retain1;
 
     private String retain2;
@@ -34,8 +38,6 @@ public class ExceptionOrderEntity  extends BaseEntity{
     private String retain8;
 
     private String retain9;
-
-    private String explain;
 
 
     public String getOrderExceptId() {
@@ -101,6 +103,8 @@ public class ExceptionOrderEntity  extends BaseEntity{
     public void setOperation(String operation) {
         this.operation = operation == null ? null : operation.trim();
     }
+
+
 
 
     public String getRetain1() {
@@ -175,12 +179,12 @@ public class ExceptionOrderEntity  extends BaseEntity{
         this.retain9 = retain9 == null ? null : retain9.trim();
     }
 
-    public String getExplain() {
-        return explain;
+    public String getExplains() {
+        return explains;
     }
 
-    public void setExplain(String explain) {
-        this.explain = explain == null ? null : explain.trim();
+    public void setExplains(String explains) {
+        this.explains = explains == null ? null : explains.trim();
     }
 
     @Override

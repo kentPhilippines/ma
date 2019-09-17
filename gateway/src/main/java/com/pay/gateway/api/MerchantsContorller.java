@@ -33,6 +33,7 @@ import com.pay.gateway.util.MerchantsUtil;
 import com.pay.gateway.util.SendUtil;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.lettuce.core.dynamic.annotation.Param;
 
@@ -103,6 +104,18 @@ public class MerchantsContorller {
 			addExceptionOrder(decryptionParam,orderAll,msg);
 			return JsonResult.buildFailResult(msg);
 		}
+		
+		String withdrawal = accountFee.getWithdrawal();
+		if(StrUtil.isBlank(withdrawal)) {
+			String msg = "代付手续费未开通";
+			addExceptionOrder(decryptionParam,orderAll,msg);
+			return JsonResult.buildFailResult(msg);
+		}
+		if(Common.IS_DPAY_OFF.equals(findAccountByAppId.getIsDpay())) {
+			String msg = "商户号未开通代付服务";
+			addExceptionOrder(decryptionParam,orderAll,msg);
+			return JsonResult.buildFailResult(msg);
+		}
 		/**
 		 * <p>生成提现记录表数据,状态为处理中,审核人为系统审核,</p>
 		 */
@@ -143,6 +156,7 @@ public class MerchantsContorller {
 		order.setOrderType(Common.WI_DPAY_TYPE_WI);
 		order.setOrderGenerationIp(record.getIp());
 		order.setDealChannel(accountFee.getAccountChannel());
+		order.setOrderAccount(orderAll.getOrderAccount());
 		boolean flag = merchantsServiceImpl.addWithdrawalsOrder(order);
 		if(!flag) {
 			 throw new OtherErrors("异常订单生成发生异常");
@@ -160,11 +174,11 @@ public class MerchantsContorller {
 		String ipAddr = decryptionParam.get("ipAddr");
 		ExceptionOrderEntity exceopt = new ExceptionOrderEntity();
 		exceopt.setExceptStatus(Common.EXCEPT_STATUS_SYS);
-		exceopt.setExceptType(Common.EXCEPT_TYPE_DEAL);
+		exceopt.setExceptType(Common.EXCEPT_TYPE_DPAY);
 		exceopt.setOrderExceptId(DealNumber.GetExceOrder());
 		exceopt.setOrderId(orderAll.getOrderId());
 		exceopt.setOrderAccount(accountId);
-		exceopt.setExplain(msg);
+		exceopt.setExplains(msg);
 		exceopt.setOrderGenerationIp(ipAddr);
 		exceopt.setOperation("SYS");
 		exceopt.setExceptOrderAmount(amount);
@@ -194,6 +208,7 @@ public class MerchantsContorller {
 		wr.setNote(msg);
 		wr.setMerchantsStatus(flag?Common.DPAY_STATUS_WI:Common.DPAY_STATUS_ER);
 		wr.setRetain1(backCard);
+		wr.setOrderId(DealNumber.GetRecordOrder());
 		boolean flag1 = merchantsServiceImpl.addWithdrawalsRecord(wr);
 		if(!flag1) {
 			throw new OtherErrors("提现记录订单生成发生异常");

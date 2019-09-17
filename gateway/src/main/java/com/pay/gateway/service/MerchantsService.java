@@ -20,7 +20,7 @@ public interface MerchantsService {
 	boolean addWithdrawalsOrder(WithdrawalsOrder order);
 
 	/**
-	 * <p>根据全局订单修改提现记录表数据未提现失败，原因为流水生成失败</p>
+	 * <p>根据全局订单修改提现记录表数据为提现失败，原因为流水生成失败</p>
 	 * @param orderId
 	 * @param dpayStatusEr
 	 * @return

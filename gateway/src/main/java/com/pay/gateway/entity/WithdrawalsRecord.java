@@ -9,7 +9,7 @@ import com.pay.gateway.entity.base.BaseEntity;
 
 public class WithdrawalsRecord extends BaseEntity{
 	 private String accountId;	//提现商户
-	    private String orderId;		//提现订单号
+	    private String orderId;		//全局订单号
 	    private String associatedId;//关联订单号
 	    private BigDecimal amount;	//提现金额
 	    private String ip;			//提现ip

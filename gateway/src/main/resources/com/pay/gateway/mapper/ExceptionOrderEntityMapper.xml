@@ -26,7 +26,7 @@
     <result column="retain9" property="retain9" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.pay.gateway.entity.ExceptionOrderEntity" extends="BaseResultMap" >
-    <result column="explain" property="explain" jdbcType="LONGVARCHAR" />
+    <result column="explains" property="explains" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -92,7 +92,7 @@
     retain3, retain4, retain5, retain6, retain7, retain8, retain9
   </sql>
   <sql id="Blob_Column_List" >
-    explain
+    explains
   </sql>
   <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.pay.gateway.entity.ExceptionOrderEntityExample" >
     select
@@ -154,7 +154,7 @@
       retain1, retain2, retain3, 
       retain4, retain5, retain6, 
       retain7, retain8, retain9, 
-      explain)
+      explains)
     values (#{createTime,jdbcType=TIMESTAMP}, #{orderExceptId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
       #{exceptStatus,jdbcType=INTEGER}, #{exceptType,jdbcType=INTEGER}, #{orderAccount,jdbcType=VARCHAR}, 
       #{exceptOrderAmount,jdbcType=VARCHAR}, #{orderGenerationIp,jdbcType=VARCHAR}, #{operation,jdbcType=VARCHAR}, 
@@ -162,7 +162,7 @@
       #{retain1,jdbcType=VARCHAR}, #{retain2,jdbcType=VARCHAR}, #{retain3,jdbcType=VARCHAR}, 
       #{retain4,jdbcType=VARCHAR}, #{retain5,jdbcType=VARCHAR}, #{retain6,jdbcType=VARCHAR}, 
       #{retain7,jdbcType=VARCHAR}, #{retain8,jdbcType=VARCHAR}, #{retain9,jdbcType=VARCHAR}, 
-      #{explain,jdbcType=LONGVARCHAR})
+      #{explains,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pay.gateway.entity.ExceptionOrderEntity" useGeneratedKeys="true" keyProperty="id" >
     insert into manage_exception_order
@@ -230,8 +230,8 @@
       <if test="retain9 != null" >
         retain9,
       </if>
-      <if test="explain != null" >
-        explain,
+      <if test="explains != null" >
+        explains,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -298,8 +298,8 @@
       <if test="retain9 != null" >
         #{retain9,jdbcType=VARCHAR},
       </if>
-      <if test="explain != null" >
-        #{explain,jdbcType=LONGVARCHAR},
+      <if test="explains != null" >
+        #{explains,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -378,8 +378,8 @@
       <if test="record.retain9 != null" >
         retain9 = #{record.retain9,jdbcType=VARCHAR},
       </if>
-      <if test="record.explain != null" >
-        explain = #{record.explain,jdbcType=LONGVARCHAR},
+      <if test="record.explains != null" >
+        explains = #{record.explains,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -410,7 +410,7 @@
       retain7 = #{record.retain7,jdbcType=VARCHAR},
       retain8 = #{record.retain8,jdbcType=VARCHAR},
       retain9 = #{record.retain9,jdbcType=VARCHAR},
-      explain = #{record.explain,jdbcType=LONGVARCHAR}
+      explains = #{record.explains,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -506,8 +506,8 @@
       <if test="retain9 != null" >
         retain9 = #{retain9,jdbcType=VARCHAR},
       </if>
-      <if test="explain != null" >
-        explain = #{explain,jdbcType=LONGVARCHAR},
+      <if test="explains != null" >
+        explains = #{explains,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -535,7 +535,7 @@
       retain7 = #{retain7,jdbcType=VARCHAR},
       retain8 = #{retain8,jdbcType=VARCHAR},
       retain9 = #{retain9,jdbcType=VARCHAR},
-      explain = #{explain,jdbcType=LONGVARCHAR}
+      explains = #{explains,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
       and createTime = #{createTime,jdbcType=TIMESTAMP}
   </update>
