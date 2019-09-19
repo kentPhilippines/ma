@@ -109,6 +109,8 @@ public class MerchantsUtil {
 		BigDecimal accountBalance = account.getAccountBalance();
 		accountBalance = accountBalance.subtract(withdrawalsAmount);
 		cashBalance = cashBalance.subtract(withdrawalsAmount);
+		account.setAccountBalance(accountBalance);
+		account.setCashBalance(cashBalance);
 		boolean updataAccountByAcoountId = accountServiceImpl.updataAccountByAcoountId(account);
 		return updataAccountByAcoountId;
 	}

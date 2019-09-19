@@ -76,15 +76,12 @@ public class NotifyUtil {
 	private void send( String url, Map<String, Object> msg ) {
 		String result= HttpUtil.post(url, msg);
 		log.info("服务器返回结果为："+result.toString());
-		/*
-		 * JSONObject parseObj = JSONUtil.parseObj(result); Object object =
-		 * parseObj.get("return"); Object orderNo = msg.get("orderNo");
-		 * if("suss".equalsIgnoreCase(object.toString())) {//修改訂單通知 boolean flag =
-		 * orderServiceImpl.updataNotifyYesByNo(orderNo.toString()); if(flag)
-		 * log.info("============【发送通知成功，订单发送通知状态已修改为YES：orderNo："+orderNo+
-		 * "】================"); }
-		 */
-		
+		 Object orderNo = msg.get("orderNo");
+		if("success".equalsIgnoreCase(result)){
+			boolean updataNotifyYesByNo = orderServiceImpl.updataNotifyYesByNo(orderNo.toString());
+			if(updataNotifyYesByNo)
+			log.info("============【发送通知成功，订单发送通知状态已修改为YES：orderNo："+orderNo+ "】================");
+		}
 	}
 	public  static String md5(String s) {
         try {

@@ -54,8 +54,6 @@ public class SendUtil {
 		return parasMap;
 	}
 	public HashMap<String, String> decryptionParam(HttpServletRequest request) throws Exception{
-		System.out.println("私钥:" + privateKey);
-        System.out.println("公钥:" + publicKey);
         XRsa rsa = new XRsa(publicKey,privateKey);
 		String MD5 = request.getParameter("MD5");//参数加密结果  这是要解密的值
 		String sign = request.getParameter("sign");// 这是 签名之后的值

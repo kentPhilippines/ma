@@ -110,7 +110,7 @@ public class PayContorller {
 					Object object2 = redisUtil.get(key);
 					if(null != object2) {
 						if(dealOrder.getAssociatedId().equals(object2)) {//当 value和全局订单号相等的时候
-							String amountK = StrUtil.subSuf(key.toString(),Common.BANKCARD_AMOUNT_BUMBER);//金额
+							String amountK = StrUtil.subSuf(key.toString(),Common.BANKCARD_AMOUNT_BUMBER-1);//金额
 							bankcard.setDealAmount(new BigDecimal(amountK));
 							return JsonResult.buildSuccessResult(bankcard);
 						}

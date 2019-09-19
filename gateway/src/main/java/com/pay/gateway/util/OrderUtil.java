@@ -124,10 +124,10 @@ public class OrderUtil {
 			 account.setFreezeT1(freezeT1.add(freeze));
 		 BigDecimal freezeD12 = account.getFreezeD1(); 
 		 BigDecimal freezeT12 = account.getFreezeT1();
-		 freezeBalance = freezeBalance.add(freezeT12).add(freezeD12);
+		 freezeBalance = freezeT12.add(freezeD12);
 		 BigDecimal subtract = actualAmount.subtract(freeze);//實際可取現金額
 		 cashBalance = cashBalance.add(subtract);//新建可取現金額
-		 accountBalance = accountBalance.add(cashBalance).add(freezeBalance);
+		 accountBalance = cashBalance.add(freezeBalance);
 		 account.setAccountBalance(accountBalance);
 		 account.setCashBalance(cashBalance);
 		 account.setFreezeBalance(freezeBalance);
@@ -141,8 +141,9 @@ public class OrderUtil {
 		 String dealCardId = dealOrder.getDealCardId();//交易銀行卡
 		 BankCard bank = new BankCard();
 		 bank.setBankCard(dealCardId);
-		 bank.setBankAmount(dealAmount);//卡上的餘額因該是交易金額
+		 bank.setBankAmount(dealAmount);//新增交易金额到银行卡余额上
 		 boolean flag = BankCardServiceImpl.updataAmountByBankCardId(bank);
+		 bank.setBankAmount(dealAmount);//因为改变银行卡余额导致这里银行卡余额会变为银行卡总余额,这里是类的继承关系
 		 boolean addBankRun = BankCardServiceImpl.addBankRun(bank,actualAmount,account.getAccountId(),dealOrder.getOrderId());
 		 log.info("个人账变记录详情："+account.toString());
 		 boolean acc = accountServiceImpl.updataAccountByAcoountId(account);

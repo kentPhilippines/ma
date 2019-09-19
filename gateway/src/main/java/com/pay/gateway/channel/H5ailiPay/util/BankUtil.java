@@ -56,6 +56,10 @@ public class BankUtil {
 	 */
      @Transactional
 	public synchronized BankCard findDealBankCard(List<BankCard> bankList,BigDecimal amount , String orderNo) {
+    	 log.info("可使用银行卡数量："+bankList.size());
+    	 if(bankList.size() == 0) {
+    		 return null ;
+    	 }
 		/**
 		 * <p>银行卡选择逻辑</p>
 		 * <li>1,优先选择目前可以使用的</li>
@@ -64,6 +68,8 @@ public class BankUtil {
 		 * <li>2.3 再次选择的的时候通过金额和过期时间判断银行卡是否可以使用</li>
 		 * 同一个银行卡和金额只要在缓存里面存在的话就不会被选择作为  收款的银行卡
 		 */
+		Collections.shuffle(bankList); // 随机排列
+		Collections.shuffle(bankList); // 随机排列
 		Collections.shuffle(bankList); // 随机排列
 		Map<String,List> map = new HashMap<String,List>();
 		List<String> listk = new ArrayList();

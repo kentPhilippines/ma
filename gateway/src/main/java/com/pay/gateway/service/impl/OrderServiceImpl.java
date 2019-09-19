@@ -109,6 +109,7 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 			throw new OtherErrors("未获取到银行卡");
 		this.dealCardId  =  findDealBankCard.getBankCard();                      
 		this.accountFeeId = orderAll.getRetain4();
+		this.payType = accountFee.getChannelProduct();
 		if(dealOrder()) {
 			log.info("===============【交易订单成生成功】==================");
 		}

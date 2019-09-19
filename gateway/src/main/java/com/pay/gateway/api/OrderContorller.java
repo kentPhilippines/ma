@@ -20,6 +20,7 @@ import com.pay.gateway.config.common.Common;
 import com.pay.gateway.config.exception.OtherErrors;
 import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.service.OrderService;
+import com.pay.gateway.util.IpUtil;
 import com.pay.gateway.util.JsonResult;
 import com.pay.gateway.util.NotifyUtil;
 import com.pay.gateway.util.OrderUtil;
@@ -83,6 +84,10 @@ public class OrderContorller {
 	@Transactional
 	public JsonResult updataOrder(HttpServletRequest request, HttpServletResponse response) {
 		HashMap<String, String> decryptionParam = null;
+		StringBuffer requestURL = request.getRequestURL();
+		log.info("【收到后台调用修改订单请求，具体请求为：】"+requestURL.toString()+"");
+		String ipAddr = IpUtil.getIpAddr(request);
+		log.info("请求方ip地址为："+ipAddr);
 		try {
 			decryptionParam = sendUtil.decryptionParam(request);
 		} catch (Exception e) {

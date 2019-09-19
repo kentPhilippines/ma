@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,12 +37,14 @@ import com.pay.gateway.util.SendUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import cn.hutool.log.Log;
 import io.lettuce.core.dynamic.annotation.Param;
 
 
 @Controller
 @RequestMapping("/merchants")
 public class MerchantsContorller {
+	Logger log = LoggerFactory.getLogger(MerchantsContorller.class);
 	@Autowired
 	SendUtil sendUtil;
 	@Autowired
@@ -64,6 +68,7 @@ public class MerchantsContorller {
 	@ResponseBody
 	@Transactional
 	public JsonResult amount(HttpServletRequest request) {
+		log.info("【进入商户代付验证服务】");
 		HashMap<String, String> decryptionParam;
 		try {
 			decryptionParam = sendUtil.decryptionParam(request);
@@ -81,6 +86,7 @@ public class MerchantsContorller {
 			return JsonResult.buildFailResult("商户号代付费率未分配");
 		}
 		AccountFee accountFee = CollUtil.getFirst(accountFeeList);	
+		log.info("查找代付费率为："+accountFee.toString());
 		OrderAll orderAll =  new OrderAll();
 		orderAll.setOrderId(DealNumber.GetAllOrder());
 		orderAll.setOrderAccount(accountId);
@@ -97,6 +103,8 @@ public class MerchantsContorller {
 		 * <p>验证提现商户号是否有足够的钱</p>
 		 */
 		Account findAccountByAppId = accountServiceImpl.findAccountByAppId(accountId);
+		log.info("查找商户详情为："+findAccountByAppId.toString());
+		log.info("查找商户详情为："+findAccountByAppId.getIsDpay());
 		BigDecimal cashBalance = findAccountByAppId.getCashBalance();
 		BigDecimal cash = new BigDecimal(amount);
 		if(cashBalance.compareTo(cash) == -1){
@@ -104,13 +112,13 @@ public class MerchantsContorller {
 			addExceptionOrder(decryptionParam,orderAll,msg);
 			return JsonResult.buildFailResult(msg);
 		}
-		
 		String withdrawal = accountFee.getWithdrawal();
 		if(StrUtil.isBlank(withdrawal)) {
 			String msg = "代付手续费未开通";
 			addExceptionOrder(decryptionParam,orderAll,msg);
 			return JsonResult.buildFailResult(msg);
 		}
+		
 		if(Common.IS_DPAY_OFF.equals(findAccountByAppId.getIsDpay())) {
 			String msg = "商户号未开通代付服务";
 			addExceptionOrder(decryptionParam,orderAll,msg);
