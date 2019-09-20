@@ -54,6 +54,7 @@ public class PayContorller {
 	 */
 	@GetMapping("/startOrder")
 	public String startOrder(String order ,String amount,Model m,HttpServletRequest request) throws Exception {
+		 log.info("================【进入到第一次页面跳转处理类】===============");
 		 String serverName = request.getServerName();
 		 int serverPort = request.getServerPort();
 		 log.info("================【页面展示：金额："+amount+"，订单号："+order+"】===============");
@@ -63,10 +64,10 @@ public class PayContorller {
 		  * <p>生成二维码到本地</p>
 		  */
 		QRCodeUtil.encode(
-				"alipays://platformapi/startapp?appId=20000067&url="+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount,
+				""+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount,
 				imgpath,
 				true,order);
-		  
+		log.info("================【成功生成二维码：url："+""+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount+"，订单号："+order+"】===============");
 		String url =  "alipays://platformapi/startapp?appId=20000067&url="+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount  ;
 		m.addAttribute("url", url);
 		m.addAttribute("order", order);
