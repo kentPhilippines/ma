@@ -45,7 +45,6 @@ body {
 	width: 70px;
 	height: 98px;
 	margin: auto;
-	background: url("/static/test_a2b/images/alipay.png") no-repeat;
 	background-repeat: no-repeat;
 	background-size: contain;
 }
@@ -808,10 +807,6 @@ body {
 				</div>
 			</div>
 			 <p style="color: green">如图：</p>
-			<div style="text-align: center">
-				<img src="${ctx}/${order}" alt=""
-					width="350px"/>
-			</div>  
 		</div>
 	</div>
 	<!--需要替换的数据-->
