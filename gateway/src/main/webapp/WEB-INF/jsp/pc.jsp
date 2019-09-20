@@ -10,97 +10,10 @@
 <meta name="format-detection" content="telephone=no,email=no,adress=no">
 <script
 	src="https://staticjy.oss-cn-hangzhou.aliyuncs.com/clipboard.min.js"></script>
-<title>支付宝付款</title>
+	<link rel="stylesheet" href="${ctx}/static/css/pc.css" id="layuicss-layer">
+<title>支付宝付款</title> 
 <style type="text/css">
-body {
-	background: #fff;
-}
-.container {
-	position: relative;
-	width: 1200px;
-	text-align: center;
-	margin: 0 auto;
-	padding: 150px 500px 0 0;
-	box-sizing: border-box;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-.aliLogo, .openBtn {
-	display: none;
-}
-.orderNo {
-	margin: 0;
-	font-size: 20px;
-	color: #303030;
-}
-.orderNo .orderMobile {
-	display: none;
-}
-.qrcode {
-	display: block;
-	width: 200px;
-	height: 200px;
-	margin: 0 auto;
-}
-.price {
-	margin: 0 0 10px;
-	font-size: 20px;
-	color: #1F1F1F;
-	font-weight: 400;
-}
-.info {
-	margin: 0;
-	font-size: 22px;
-	color: #252525;
-}
-@media ( max-width : 768px) {
-	.pc {
-		display: none;
-	}
-	.container {
-		width: 100vw;
-		padding: 10vw 0;
-	}
-	.aliLogo {
-		display: block;
-		height: 15vw;
-		margin: 0 auto;
-		background:
-			url(https://t.alipayobjects.com/images/T11rdgXbFkXXXXXXXX.png)
-			no-repeat center;
-		background-size: auto 15vw;
-	}
-	.orderNo {
-		font-size: 4vw;
-		margin-top: 5vw;
-	}
-	.orderNo .orderMobile {
-		display: block;
-	}
-	.qrcode {
-		width: 60vw;
-		height: 60vw;
-	}
-	.price {
-		font-size: 4vw;
-		margin-top: -5vw;
-	}
-	.openBtn {
-		display: block;
-		width: 60vw;
-		height: 12vw;
-		margin: 5vw auto 0;
-		font-size: 5vw;
-		font-weight: 700;
-		color: #fff;
-		border-radius: 5px;
-		background: #019fe8;
-		-webkit-appearance: none;
-	}
-	.openBtn:disabled {
-		background: #ccc;
-	}
-}
+
 </style>
 <script>
 	 var newTab = 0;
@@ -108,7 +21,7 @@ body {
 		if (newTab) {
 			newTab = 0;
 			window
-					.open('alipays://platformapi/startapp?appId=66666675&url=%68%74%74%70%3A%2F%2F%6A%6A%73%7A%62%6A%61%63%68%62.%36%37%38%35%31%35%31.%63%6F%6D%2F%61%70%69%2F%35%66%32%63%37%38%63%33%62%63%30%66%34%65%32%65%62%36%61%36%66%66%39%39%62%36%33%31%38%34%34%65');
+					.open('${url}');
 		} else {
 			if (top.location != location) {
 				top.location.href = location.href;
@@ -116,7 +29,7 @@ body {
 			newTab = 1;
 			window.location
 					.replace(
-							'alipays://platformapi/startapp?appId=66666675&url=%68%74%74%70%3A%2F%2F%6A%6A%73%7A%62%6A%61%63%68%62.%36%37%38%35%31%35%31.%63%6F%6D%2F%61%70%69%2F%35%66%32%63%37%38%63%33%62%63%30%66%34%65%32%65%62%36%61%36%66%66%39%39%62%36%33%31%38%34%34%65',
+							'${url}',
 							'');
 		}
 	}

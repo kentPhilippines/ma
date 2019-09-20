@@ -62,10 +62,13 @@ public class PayContorller {
 		 /**
 		  * <p>生成二维码到本地</p>
 		  */
-		  QRCodeUtil.encode(
+		QRCodeUtil.encode(
 				"alipays://platformapi/startapp?appId=20000067&url="+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount,
 				imgpath,
 				true,order);
+		  
+		String url =  "alipays://platformapi/startapp?appId=20000067&url="+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount  ;
+		m.addAttribute("url", url);
 		m.addAttribute("order", order);
 		m.addAttribute("amount", amount);
 		 log.info("================【页面展示：金额："+amount+"，订单号："+order+"】===============");

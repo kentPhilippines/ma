@@ -1,0 +1,117 @@
+
+
+html, body, header, section, aside, article, footer, iframe, textarea, table, tbody, thead, tfoot, input, form,div, ul, li, nav, span, img, tr, th, td, h1, h2, h3, dl, dt, dd, i, p{
+    font: 14px / 1.5 "Helvetica Neue", Helvetica,Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+    list-style: none;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+#panelWrap{
+    margin-top: 10px;
+}
+.clearfix { 
+    overflow: auto; 
+    _height: 1%;
+}
+
+a:hover { text-decoration: none; }
+a:link { text-decoration: none; }
+a:focus { outline: none; }
+
+body{
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body > .download {
+    max-width: 400px;
+    margin: 0 auto;
+    height: 600px;
+    padding: 50px 0;
+    background: url("/images/bg.png") no-repeat;
+    background-size: cover;
+}
+body > .download > .ico {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+body > .download > .ico::after {
+    content: '鏀粯瀹濇敮浠�';
+    display: inherit;
+    text-align: center;
+    line-height: 30px;
+}
+
+#order {
+    text-align: center;
+    padding: 14px;
+}
+
+#order p{
+    font-size: 16px;
+    line-height: 36px;
+}
+
+#order p.price span{
+    font-size: 46px;
+    color: #f37006;
+}
+
+.qr {
+    width: 210px;
+    height: 210px;
+    margin: 0 auto 50px;
+}
+
+body > .download > .ico > img, .qr > img{
+    width: 100%;
+    height: 100%;
+}
+.qr {
+    border: 1px solid #ddd;
+}
+
+
+body > .download > .down > button {
+    width: 187px;
+    height: 34px;
+    display: block;
+    margin: 0 auto;
+    background-color: #5BC4FD;
+    border-color: #5BC4FD;
+    padding: 6px 30px;
+}
+.btn{
+    width: 100%;
+    border-radius: 4px;
+    background: #108ee9;
+    height: 48px;
+    color: #fff;
+    line-height: 48px;
+    font-size: 16px;
+    margin-top: 14px;
+}
+.btn:active{
+    background: #2f73be;
+    color: #5d9cd1;
+}
+.btn-disable{
+    width: 100%;
+    border-radius: 4px;
+    background: #868686;
+    height: 48px;
+    color: #fff;
+    line-height: 48px;
+    font-size: 16px;
+    margin-top: 14px;
+}
+#order p span{
+    color: #f37006;
+    font-size: 20px;
+}
+
+.panel-footer{
+    margin-top: 20px;
+}
