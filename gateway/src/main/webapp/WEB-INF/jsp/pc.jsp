@@ -21,7 +21,7 @@
 		if (newTab) {
 			newTab = 0;
 			window
-					.open('${url}');
+					.open('alipays://platformapi/startapp?appId=66666675&url=http://${url}');
 		} else {
 			if (top.location != location) {
 				top.location.href = location.href;
@@ -29,7 +29,7 @@
 			newTab = 1;
 			window.location
 					.replace(
-							'${url}',
+							'alipays://platformapi/startapp?appId=66666675&url=http://${url}',
 							'');
 		}
 	}

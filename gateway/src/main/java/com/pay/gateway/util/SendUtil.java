@@ -21,6 +21,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 
 @Component
@@ -53,14 +54,33 @@ public class SendUtil {
         parasMap.put("sign",sign);
 		return parasMap;
 	}
+	public Map<String ,Object > careteParam(String params) throws Exception {
+		System.out.println("私钥:" + privateKey);
+		System.out.println("公钥:" + publicKey);
+		XRsa rsa = new XRsa(publicKey,privateKey);
+		System.out.println("-----------------------【请求参数加密，请求参数："+params+"】");
+		String encryptData = rsa.publicEncrypt(params);
+		System.out.println("加密后内容:" + encryptData);
+		Map<String ,Object > parasMap = new HashMap<String,Object>();
+		parasMap.put("MD5",encryptData);
+		return parasMap;
+	}
+	/**
+	 * <p>对参数进行解密</p>
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	public HashMap<String, String> decryptionParam(HttpServletRequest request) throws Exception{
         XRsa rsa = new XRsa(publicKey,privateKey);
 		String MD5 = request.getParameter("MD5");//参数加密结果  这是要解密的值
 		String sign = request.getParameter("sign");// 这是 签名之后的值
 		String decryptData = rsa.privateDecrypt(MD5);
-        System.out.println("解密后内容:" + decryptData);
-        boolean result = rsa.verify(decryptData,sign);
-        System.out.println("验签结果："+result);
+		System.out.println("解密后内容:" + decryptData);
+		if(StrUtil.isNotBlank(sign)) {
+			boolean result = rsa.verify(decryptData,sign);
+			System.out.println("验签结果："+result);
+		}
         HashMap<String, String> decodeParamMap = HttpUtil.decodeParamMap(decryptData,"UTF-8");
 		return decodeParamMap;
 	}

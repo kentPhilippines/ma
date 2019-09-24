@@ -60,7 +60,7 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		OrderAllExample example = new OrderAllExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andOrderAccountEqualTo(appid);
-		criteria.andOrderIdEqualTo(orderid);
+		criteria.andRetain1EqualTo(orderid);
 		List<OrderAll> selectByExample = orderAllDao.selectByExample(example);
 		if(CollUtil.isNotEmpty(selectByExample))
 			return CollUtil.getFirst(selectByExample);
@@ -75,10 +75,6 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 	public Boolean addDealOrder(DealOrder dealOrder) {
 		int insertSelective = dealOrderDao.insertSelective(dealOrder);
 		return insertSelective > 0 && insertSelective < 2;
-	}
-	@Override
-	public ResultDeal deal(Deal deal, Account account, AccountFee accountFee, OrderAll orderAll) {
-		return null;
 	}
 	@Override
 	@Transactional
@@ -188,6 +184,10 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		List<OrderAll> selectByExample = orderAllDao.selectByExample(example);
 		if(CollUtil.isNotEmpty(selectByExample))
 			return CollUtil.getFirst(selectByExample);
+		return null;
+	}
+	@Override
+	public ResultDeal deal(Deal deal, Account account, AccountFee accountFee, OrderAll orderAll) {
 		return null;
 	}
 }

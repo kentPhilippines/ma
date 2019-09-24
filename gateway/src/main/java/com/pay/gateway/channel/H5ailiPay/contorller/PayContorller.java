@@ -2,6 +2,8 @@ package com.pay.gateway.channel.H5ailiPay.contorller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,15 +30,15 @@ import com.pay.gateway.entity.BankCard;
 import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.service.OrderService;
 import com.pay.gateway.util.JsonResult;
+import com.pay.gateway.util.SendUtil;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
 @Controller
 @RequestMapping("/api")
 public class PayContorller {
-	private final String privateKey = "MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAu0wb+QnOIwVPMj3hs1Q6pFuLLdQFdc9baTRMPw6X+x3Lhmrk16AGep6ggcvFKEAWyZmyg33gmgZwJMGoWj1utQIDAQABAkB9lv5W0p1X3FKLhPUX043y8bN0ymvS4HUSKVBLJBUC+4GUpH4ng/4NkA3hYoa91AJfK/kQ7PTuTNIbdzUzLkntAiEA/uQS8RMT41P/ZUQofiDDgUGRuFgL+vsOgR387QextfMCIQC8HL3wlkZfwvcVKDuQ5OEICpzc8Ci2ZfTEogPnrluqtwIhAL620CVo7NyPIO0YTmPxB9dSxEF2P6CO8I9TbMe9lg5ZAiEAhGV+UcySr2ebW6q7cdmFgJFnoiDtpqLPyW12biPLpLUCIDU0PmBhO3nomUgNdUwyQESFPBKh0T9Y0w3Dh1x8mb/F\r\n" ; 
-	private final String publicKey ="MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALtMG/kJziMFTzI94bNUOqRbiy3UBXXPW2k0TD8Ol/sdy4Zq5NegBnqeoIHLxShAFsmZsoN94JoGcCTBqFo9brUCAwEAAQ==\r\n"; //new String(Base64.encodeBase64(keyPair.getPublic().getEncoded()));
 	 @Value("${deal.url.path}")
 	 private String dealurl;
 	 @Value("${tomcat.imgpath.path}")
@@ -47,28 +49,37 @@ public class PayContorller {
 	OrderService orderServiceImpl;
 	@Autowired
 	BankCardService bankCardServiceImpl;
+	@Autowired
+	SendUtil sendUtil;
 	 Logger log = LoggerFactory.getLogger(PayContorller.class);
 	/**
 	 * <p>跳转到PC二维码页面</p>
 	 * @return
 	 */
 	@GetMapping("/startOrder")
-	public String startOrder(String order ,String amount,Model m,HttpServletRequest request) throws Exception {
-		 log.info("================【进入到第一次页面跳转处理类】===============");
+	public String startOrder(Model m,HttpServletRequest request) throws Exception {
+		HashMap<String,String> decryptionParam = sendUtil.decryptionParam(request);
+		String order = decryptionParam.get("order");
+		String amount = decryptionParam.get("amount");
+		log.info("================【进入到第一次页面跳转处理类】===============");
 		 String serverName = request.getServerName();
 		 int serverPort = request.getServerPort();
+		 
 		 log.info("================【页面展示：金额："+amount+"，订单号："+order+"】===============");
 		 String[] split = amount.split(",");
 		 amount = split[0];
 		 /**
 		  * <p>生成二维码到本地</p>
 		  */
+		 Map<String, Object> careteParam = sendUtil.careteParam("order="+order+"&amount="+amount);
+		 String params = HttpUtil.toParams(careteParam);
 		QRCodeUtil.encode(
-				""+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount,
+				"http://"+serverName+":"+serverPort+"/api/payAli"+"?"+params,
 				imgpath,
 				true,order);
-		log.info("================【成功生成二维码：url："+""+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount+"，订单号："+order+"】===============");
-		String url =  "alipays://platformapi/startapp?appId=20000067&url="+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount  ;
+		log.info("================【成功生成二维码：url："+"http://"+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount+"，订单号："+order+"】===============");
+		String url =  ""+serverName+":"+serverPort+"/api/payAli"+"?"+params ;
+		redisUtil.set(order, amount, 240);
 		m.addAttribute("url", url);
 		m.addAttribute("order", order);
 		m.addAttribute("amount", amount);
@@ -81,12 +92,20 @@ public class PayContorller {
 	 * @param amount
 	 * @param m
 	 * 這裏要查找銀行卡來生成支付寳的跳轉鏈接
+	 * @throws Exception 
 	 */
 	@GetMapping("/payAli")
-	public String payAli(@RequestParam("order")String order ,@RequestParam("amount")String amount,Model m) {
+	public String payAli(HttpServletRequest request, Model m) throws Exception {
+		HashMap<String,String> decryptionParam = sendUtil.decryptionParam(request);
+		String order = decryptionParam.get("order");
+		String amount = decryptionParam.get("amount");
+		log.info("参数解密金额："+amount);
+		log.info("参数解密订单："+order);
 		log.info("================【飞行页面转发】===============");
+		Object object = redisUtil.get(order);
+		log.info("【金额："+object+"，订单："+order+"】");
 		m.addAttribute("order", order);//订单号
-		m.addAttribute("amount", amount);//金额
+		m.addAttribute("amount", object);//金额
 		return "/alipay";
 	}
 	
@@ -101,7 +120,10 @@ public class PayContorller {
 	@ResponseBody
 	@PostMapping("/createOrder")
 	@Transactional
-	public JsonResult createOrder(@RequestParam("order")String order ,@RequestParam("amount")String amount,Model m) {
+	public JsonResult createOrder(String order ,Model m) {
+		Object amount = redisUtil.get(order);
+		if(ObjectUtil.isNull(amount))
+			return JsonResult.buildFailResult();
 		log.info("=========【全局訂單:order="+order+"，全局訂單金額：amount="+amount+"，正在生成訂單】============");
 		DealOrder dealOrder = orderServiceImpl.findOrderByOrderAll(order);
 		if(ObjectUtil.isNotNull(dealOrder)) {//当订单存在的时候不在创建直接返回订单相关信息从缓存中获取当前
@@ -124,7 +146,7 @@ public class PayContorller {
 				return JsonResult.buildFailResult();
 			}
 		}
-		BankCard bankCard = orderServiceImpl.createOrder(order,amount);
+		BankCard bankCard = orderServiceImpl.createOrder(order,amount.toString());
 		if(ObjectUtil.isNotNull(bankCard)) {
 			return JsonResult.buildSuccessResult(bankCard);
 		}

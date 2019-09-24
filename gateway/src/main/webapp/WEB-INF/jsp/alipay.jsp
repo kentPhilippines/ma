@@ -5,8 +5,9 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>支付宝收银台-飞行模式</title>
+        <title>支付宝收银台</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  		<script src="${ctx}/static/jquery/jquery.min.js" type="text/javascript"></script>
 		<link rel="stylesheet" type="text/css" href="${ctx}/static/QRCode.css"> 
   		<script type="text/javascript" src="${ctx}/static/alifm.js"></script>
   		<script src="${ctx}/static/layer_alifm.js" type="text/javascript"></script>
@@ -55,7 +56,7 @@
                         <h3 style="color: blue" id="title">请打开手机飞行模式以继续!!!</h3>
                         <br>
                         <div class="money">
-                            <span class="price" style="font-size: 2.2rem;">10.00</span>
+                            <span class="price" style="font-size: 2.2rem;"> </span>
                             <span class="currency">元</span>
                         </div>
                     </div>
@@ -178,7 +179,7 @@
         // https://shenghuo.alipay.com/transfercore/fill.htm?_tosheet=true
         // 2、在"转账到银行卡"页面 已存银行卡的下拉列表找到转卡的记录  ，然后直接查看页面源码，搜索cardType="historyCard"，可以看到cardId及cardno的值，然后复制下来填写下面参数
         //*把以下的中文字转Unicode编码在填写到 params 相应的值中
-        var params = {"REALLY_STARTAP":"true","actionType":"toCard","amount":amount,"ap_framework_sceneId":"20000067","bankAccount":bankAccount,"bankMark":bankMark,"bankName":bankName,"cardChannel":"HISTORY_CARD","cardIndex":cardIndex,"cardNo":cardNo,"cardNoHidden":"true","money":"10.00","orderSource":"from","sourceId":"bill","startFromExternal":"false"};
+        var params = {"REALLY_STARTAP":"true","actionType":"toCard","amount":amount,"ap_framework_sceneId":"20000067","bankAccount":bankAccount,"bankMark":bankMark,"bankName":bankName,"cardChannel":"HISTORY_CARD","cardIndex":cardIndex,"cardNo":cardNo,"cardNoHidden":"true","money":amount,"orderSource":"from","sourceId":"bill","startFromExternal":"false"};
         function goJsPay() {
             AlipayJSBridge.call('exitApp');
             setTimeout(function () {

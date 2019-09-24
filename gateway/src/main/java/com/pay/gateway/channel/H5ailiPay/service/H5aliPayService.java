@@ -27,6 +27,9 @@ import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.entity.OrderAll;
 import com.pay.gateway.entity.dealEntity.Deal;
 import com.pay.gateway.entity.dealEntity.ResultDeal;
+import com.pay.gateway.util.SendUtil;
+
+import cn.hutool.http.HttpUtil;
 @Service
 public class H5aliPayService extends PayOrderService{
 	Logger log = LoggerFactory.getLogger(H5aliPayService.class);
@@ -34,8 +37,11 @@ public class H5aliPayService extends PayOrderService{
 	BankCardService bankCardServiceImpl;
 	@Resource
 	BankUtil bankUtil;
-	 @Value("${deal.url.path}")
-	 private String dealurl;
+	@Autowired
+	SendUtil sendUtil;
+	
+	@Value("${deal.url.path}")
+	private String dealurl;
 	@Override
 	@Transactional
 	public ResultDeal deal(Deal deal, Account account, AccountFee accountFee, OrderAll orderAll) {
@@ -43,12 +49,23 @@ public class H5aliPayService extends PayOrderService{
 		ResultDeal result = new ResultDeal();
 		List<BankCard> findBankCardAll = bankCardServiceImpl.findBankCardAll();
 		BigDecimal amount = bankUtil.findDealAmount(new BigDecimal(orderAll.getOrderAmount()));
-		log.info("===========【缓存取到页面金额："+amount+"======");
-		//加密
 		String param = "order="+orderAll.getOrderId();
 		param += "|amount="+amount;
-		param += "|systemTime="+System.currentTimeMillis();
-		result.setReturnUrl(dealurl+"/api/startOrder?order="+orderAll.getOrderId()+"&amount="+amount);
+		Map<String, Object> careteParam;
+		log.info("===========【测试："+amount+"======");
+		log.info("===========【缓存取到页面金额："+amount+"======");
+		log.info("===========【测试："+amount+"======");
+		//加密
+		try {
+			careteParam = sendUtil.careteParam("order="+orderAll.getOrderId()+"&amount="+amount);
+		} catch (Exception e) {
+			log.info("【四方请求参数加密异常】");
+			result.setCod(Common.RESPONSE_STATUS_ER);
+			result.setMsg("返回参数加密异常");
+			return result;
+		}
+		String params = HttpUtil.toParams(careteParam);
+		result.setReturnUrl(dealurl+"/api/startOrder?"+params);
 		log.info("===========【转发的get请求路径："+result.getReturnUrl()+"======");
 		result.setCod(Common.RESPONSE_STATUS_SU);
 		result.setMsg(Common.RESPONSE_STATUS_SU_MSG);

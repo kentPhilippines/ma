@@ -78,7 +78,7 @@ public class DealContorller {
 	Logger log = LoggerFactory.getLogger(DealContorller.class);
 	@RequestMapping("/payH5Ali")
 	@Transactional
-	public void payH5Ali(Deal deal ,HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void payH5Ali(Deal deal ,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ResultDeal resultDeal = new ResultDeal();
 		boolean validationAll = requestUtil.validationAll(request, response,resultDeal);
 		if(!validationAll)  
