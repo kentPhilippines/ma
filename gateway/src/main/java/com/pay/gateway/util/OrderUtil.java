@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pay.gateway.api.DealContorller;
+import com.pay.gateway.api.MyDealContorller;
 import com.pay.gateway.channel.H5ailiPay.service.BankCardService;
 import com.pay.gateway.config.common.Common;
 import com.pay.gateway.entity.Account;

@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.pay.gateway.api.DealContorller;
+import com.pay.gateway.api.MyDealContorller;
 import com.pay.gateway.channel.H5ailiPay.util.BankUtil;
 import com.pay.gateway.service.AccountService;
 import com.pay.gateway.service.OrderService;
@@ -38,13 +38,12 @@ public class SaticScheduleTask {
 		/**
 		 * <p>5秒钟修改一次订单状态</p>
 		    */
-	 	@Scheduled(cron = "0/5 * * * * ?")
-	    private void orderNotify() {
-	 		Integer second = bankUtil.getSecond() ; 
-	 		log.info("=================【修改订单状态为未收到回调，获取时间为: " + second+"【秒】】===============");
-	 		orderServiceImpl.updataOrderStatus(second);
-	    }
-	 
+	/*
+	 * @Scheduled(cron = "0/5 * * * * ?") private void orderNotify() { Integer
+	 * second = bankUtil.getSecond() ;
+	 * log.info("=================【修改订单状态为未收到回调，获取时间为: " +
+	 * second+"【秒】】==============="); orderServiceImpl.updataOrderStatus(second); }
+	 */
 	 	/**
 	 	 * <p>凌晨6	点修改账户冻结余额</p>
 	 	 */

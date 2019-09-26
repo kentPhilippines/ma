@@ -11,13 +11,6 @@ public final class Common {
 	public static final Integer FEE_STATUS1 = 1;//1启用2停用3自动切换
 	public static final Integer FEE_STATUS2 = 2;//1启用2停用3自动切换
 	public static final Integer FEE_STATUS3 = 3;//1启用2停用3自动切换
-
-	
-	/**
-	 * 交易返回信息Key 
-	 */
-	public static final String RESULTDEAL = "resultDeal";//账户未登录错误
-	
 	/**
 	 * <p>是否开通交易</p>
 	 */

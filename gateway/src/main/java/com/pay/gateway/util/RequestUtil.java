@@ -42,8 +42,8 @@ public class RequestUtil {
 	 */
 	@SuppressWarnings("unlikely-arg-type")
 	public boolean validationAll(HttpServletRequest request, HttpServletResponse response,	ResultDeal resultDeal) throws IOException {
-		
 		 log.info("|-----------------【进入项目拦截器】-----------------------");
+		 log.info("|-----------------【基本数据拦截】-----------------------");
 		 log.info("访问URL：" + request.getRequestURL());
 		 log.info("请求参数字符编码: " + request.getCharacterEncoding());
 		 if(StrUtil.isBlank(request.getCharacterEncoding())) { 
@@ -161,8 +161,6 @@ public class RequestUtil {
             throw new RuntimeException(e);
         }
     }
-	
-	
 	
 	
 }

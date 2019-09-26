@@ -68,7 +68,18 @@ public class Account extends BaseEntity{
      * <p>0暂停</p>
      */
     private Integer isDpay;
-    public Integer getIsDpay() {
+    
+    /**
+     * <p>日累计最大交易额度</p>
+     */
+    private BigDecimal maxDeal;
+    public BigDecimal getMaxDeal() {
+		return maxDeal;
+	}
+	public void setMaxDeal(BigDecimal maxDeal) {
+		this.maxDeal = maxDeal;
+	}
+	public Integer getIsDpay() {
 		return isDpay;
 	}
 	public void setIsDpay(Integer isDpay) {

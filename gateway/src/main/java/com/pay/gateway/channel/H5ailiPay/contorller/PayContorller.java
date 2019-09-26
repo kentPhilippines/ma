@@ -1,7 +1,10 @@
 package com.pay.gateway.channel.H5ailiPay.contorller;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.pay.gateway.api.DealContorller;
+import com.pay.gateway.api.MyDealContorller;
 import com.pay.gateway.channel.H5ailiPay.service.BankCardService;
 import com.pay.gateway.channel.H5ailiPay.util.QRCodeUtil;
 import com.pay.gateway.config.common.Common;
@@ -33,6 +36,8 @@ import com.pay.gateway.util.JsonResult;
 import com.pay.gateway.util.SendUtil;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
@@ -61,6 +66,16 @@ public class PayContorller {
 		HashMap<String,String> decryptionParam = sendUtil.decryptionParam(request);
 		String order = decryptionParam.get("order");
 		String amount = decryptionParam.get("amount");
+		String data = decryptionParam.get("data");
+		DateFormat formatter = new SimpleDateFormat(Common.DATATYPE);
+		Date date;
+		date = formatter.parse(data);
+		log.info("================【请求时间戳为："+data+"】===============");
+		boolean expired = DateUtil.isExpired(date,DateField.SECOND,300,new Date());//请求300秒过期
+		if(!expired) {
+			log.info("================【订单过期】===============");
+			return "/orderEr";
+		}
 		log.info("================【进入到第一次页面跳转处理类】===============");
 		 String serverName = request.getServerName();
 		 int serverPort = request.getServerPort();
@@ -122,6 +137,7 @@ public class PayContorller {
 	@Transactional
 	public JsonResult createOrder(String order ,Model m) {
 		Object amount = redisUtil.get(order);
+		log.info("【缓存金额获取为："+amount+"】");
 		if(ObjectUtil.isNull(amount))
 			return JsonResult.buildFailResult();
 		log.info("=========【全局訂單:order="+order+"，全局訂單金額：amount="+amount+"，正在生成訂單】============");
@@ -145,10 +161,13 @@ public class PayContorller {
 			}else {
 				return JsonResult.buildFailResult();
 			}
-		}
-		BankCard bankCard = orderServiceImpl.createOrder(order,amount.toString());
-		if(ObjectUtil.isNotNull(bankCard)) {
-			return JsonResult.buildSuccessResult(bankCard);
+		}else {
+			BankCard bankCard = orderServiceImpl.createOrder(order,amount.toString());
+			if(ObjectUtil.isNotNull(bankCard)) {
+				return JsonResult.buildSuccessResult(bankCard);
+			}
+			log.info("=========【交易订单生成失败】============");
+			return null;
 		}
 		log.info("=========【交易订单生成失败】============");
 		return null;

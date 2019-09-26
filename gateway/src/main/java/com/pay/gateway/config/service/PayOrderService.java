@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.pay.gateway.api.DealContorller;
+import com.pay.gateway.api.MyDealContorller;
 import com.pay.gateway.config.common.Common;
 import com.pay.gateway.entity.Account;
 import com.pay.gateway.entity.AccountFee;

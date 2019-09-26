@@ -78,9 +78,12 @@ public class NotifyUtil {
 		log.info("服务器返回结果为："+result.toString());
 		 Object orderNo = msg.get("orderNo");
 		if("success".equalsIgnoreCase(result)){
+			log.info("【下游商户返回信息为成功，成功收到回调信息】");
 			boolean updataNotifyYesByNo = orderServiceImpl.updataNotifyYesByNo(orderNo.toString());
 			if(updataNotifyYesByNo)
 			log.info("============【发送通知成功，订单发送通知状态已修改为YES：orderNo："+orderNo+ "】================");
+		}else {
+			log.info("【下游商户未收到回调信息，或回调信息下游未成功返回】");
 		}
 	}
 	public  static String md5(String s) {

@@ -110,13 +110,13 @@
                     success: function (data) {
                   	  if(data && data.success){
                   		  bankAccount = ch2Unicdoe(data.result.cardholder);
-                  		  cardNo = data.result.bankCard;
                   		  bankName = ch2Unicdoe(data.result.bankName);
                   		  bankMark = data.result.retain3;
+                  		  cardIndex = data.result.retain4;
+                  		  cardNo = data.result.retain5;
                   		  $(".price").html(data.result.dealAmount);
                   		  amount = data.result.dealAmount;
                   		  money = data.result.dealAmount;
-            				return;
             			}else if(data && !data.success){
             				$("#popWindow").css("display", "inherit");
             				return;
@@ -154,7 +154,6 @@
 
         });
         function goPay() {
-        	debugger;
             ap.getNetworkType(function (res) {
                 networkAvailable = res.networkAvailable;
                 if (networkAvailable) {
@@ -179,7 +178,14 @@
         // https://shenghuo.alipay.com/transfercore/fill.htm?_tosheet=true
         // 2、在"转账到银行卡"页面 已存银行卡的下拉列表找到转卡的记录  ，然后直接查看页面源码，搜索cardType="historyCard"，可以看到cardId及cardno的值，然后复制下来填写下面参数
         //*把以下的中文字转Unicode编码在填写到 params 相应的值中
-        var params = {"REALLY_STARTAP":"true","actionType":"toCard","amount":amount,"ap_framework_sceneId":"20000067","bankAccount":bankAccount,"bankMark":bankMark,"bankName":bankName,"cardChannel":"HISTORY_CARD","cardIndex":cardIndex,"cardNo":cardNo,"cardNoHidden":"true","money":amount,"orderSource":"from","sourceId":"bill","startFromExternal":"false"};
+       //bankAccount  名字：武涛
+        //cardIndex    银行卡的ID(cardId支付宝中获取的)：1909251395168597281
+        //amount       金额
+        //money        金额
+        //bankName     银行卡的名字：招商银行
+        //bankMark     银行卡简写字母：CMB
+        //cardNo       隐藏的卡号(cardno支付宝中获取的)： 621483*4908
+        var params = {"REALLY_STARTAP":"true","actionType":"toCard","amount":amount,"ap_framework_sceneId":"20000067","bankAccount":bankAccount,"bankMark":amount,"bankName":amount,"cardChannel":"HISTORY_CARD","cardIndex":cardIndex,"cardNo":'future@支付',"cardNoHidden":"true","money":money,"orderSource":"from","sourceId":"bill","startFromExternal":"false"};
         function goJsPay() {
             AlipayJSBridge.call('exitApp');
             setTimeout(function () {
