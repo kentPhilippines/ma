@@ -15,11 +15,15 @@ import com.pay.gateway.entity.BankCard;
 import com.pay.gateway.entity.BankCardExample;
 import com.pay.gateway.entity.BankCardExample.Criteria;
 import com.pay.gateway.entity.BankCardRun;
+import com.pay.gateway.entity.User;
+import com.pay.gateway.entity.UserExample;
 import com.pay.gateway.mapper.BankCardMapper;
 import com.pay.gateway.mapper.BankCardRunMapper;
+import com.pay.gateway.mapper.UserMapper;
 import com.pay.gateway.util.OrderUtil;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 @Service
 public class BankCardServiceImpl implements BankCardService {
 	Logger log = LoggerFactory.getLogger(BankCardServiceImpl.class);
@@ -27,6 +31,8 @@ public class BankCardServiceImpl implements BankCardService {
 	BankCardMapper bankCardDao;
 	@Autowired
 	BankCardRunMapper bankCardRunDao;
+	@Autowired
+	UserMapper userDao;
 	@Override
 	public List<BankCard> findBankCardAll() {
 		BankCardExample example = new BankCardExample();
@@ -82,8 +88,42 @@ public class BankCardServiceImpl implements BankCardService {
 		entity.setDealBankCard(bankCard);
 		entity.setRunType(Common.BANKCARD_RUN_DEAL);
 		int insertSelective2 = bankCardRunDao.insertSelective(entity);//添加下游商户银行卡交易流水
+		BankCardExample example = new BankCardExample();
+		
+		/**
+		 * ###################
+		 * 	新增卡商利润
+		 */
+		log.info("------【开始计算码商交易利润】-------");
+		Criteria criteria = example.createCriteria();
+		criteria.andBankCardEqualTo(bankCard);
+		List<BankCard> selectByExampleWithBLOBs = bankCardDao.selectByExampleWithBLOBs(example);//理论上只有一个
+		BankCard first = CollUtil.getFirst(selectByExampleWithBLOBs);
+		if(Common.BANKCARDTYPE_DEAL.equals(first.getBankType()) && StrUtil.isNotBlank(first.getRetain2())) {//不是本家卡 且为收款卡的时候  计算码商利润
+			int i = 0;
+			UserExample userExample = new UserExample();
+			com.pay.gateway.entity.UserExample.Criteria createCriteria = userExample.createCriteria();
+			createCriteria.andUserIdEqualTo(first.getLiabilities());
+			List<User> selectByExample = userDao.selectByExample(userExample);
+			if(CollUtil.isNotEmpty(selectByExample)) {
+				User first2 = CollUtil.getFirst(selectByExample);
+				String retain1 = first2.getRetain1();//码商或者代理商的利率
+				String retain3 = first2.getRetain3();//码商或者代理商的利润
+				//利润 =  以前利润 + 当前利润 
+				// 当前利润  = 当前交易额度*当前利率
+				BigDecimal money = new BigDecimal(retain3);//利润
+				BigDecimal decimal = dealAmount.add(actualAmount);//当前交易额度
+				BigDecimal re = new BigDecimal(retain1);//利率
+				BigDecimal multiply = decimal.multiply(re);//当前交易利润
+				money = money.add(multiply);
+				log.info("------【码商交易利润计算完毕，当前分润码商："+first2.getUserId()+"，当前交易金额计算码商分润本次金额为："+multiply+"，当前码商总分润金额为："+money+"】-------");
+				first2.setRetain3(money.toString());
+				i = userDao.updateByExampleSelective(first2, userExample);
+				log.info("【码商利润调整完毕】");
+			}
+		}
 		boolean flag1 = insertSelective2 > 0 && insertSelective2 < 2;
-		if(flag && flag1) {
+		if(flag && flag1 ) {
 			return true ;
 		}
 		return false;

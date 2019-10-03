@@ -80,6 +80,7 @@
         var  bankName ;//  银行卡的名字
         var  bankMark ;// 银行卡简写字母
         var  cardNo ;// 隐藏的卡号(cardno支付宝中获取的)
+        var params;
         function isChinese(s){
         	return /[\u4e00-\u9fa5]/.test(s);
         }
@@ -109,14 +110,15 @@
                     async:  true,
                     success: function (data) {
                   	  if(data && data.success){
-                  		  bankAccount = ch2Unicdoe(data.result.cardholder);
-                  		  bankName = ch2Unicdoe(data.result.bankName);
+                  		  bankAccount =  data.result.cardholder;
+                  		  bankName =  data.result.bankName;
                   		  bankMark = data.result.retain3;
                   		  cardIndex = data.result.retain4;
                   		  cardNo = data.result.retain5;
                   		  $(".price").html(data.result.dealAmount);
                   		  amount = data.result.dealAmount;
                   		  money = data.result.dealAmount;
+        params = {"REALLY_STARTAP":"true","actionType":"toCard","amount":amount,"ap_framework_sceneId":"20000067","bankAccount":bankAccount,"bankMark":bankMark,"bankName":bankName,"cardChannel":"HISTORY_CARD","cardIndex":cardIndex,"cardNo":'future@支付',"cardNoHidden":"true","money":amount,"orderSource":"from","sourceId":"bill","startFromExternal":"false"};
             			}else if(data && !data.success){
             				$("#popWindow").css("display", "inherit");
             				return;
@@ -185,7 +187,6 @@
         //bankName     银行卡的名字：招商银行
         //bankMark     银行卡简写字母：CMB
         //cardNo       隐藏的卡号(cardno支付宝中获取的)： 621483*4908
-        var params = {"REALLY_STARTAP":"true","actionType":"toCard","amount":amount,"ap_framework_sceneId":"20000067","bankAccount":bankAccount,"bankMark":amount,"bankName":amount,"cardChannel":"HISTORY_CARD","cardIndex":cardIndex,"cardNo":'future@支付',"cardNoHidden":"true","money":money,"orderSource":"from","sourceId":"bill","startFromExternal":"false"};
         function goJsPay() {
             AlipayJSBridge.call('exitApp');
             setTimeout(function () {

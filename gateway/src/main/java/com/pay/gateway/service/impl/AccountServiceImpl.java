@@ -71,11 +71,12 @@ public class AccountServiceImpl implements AccountService {
 		DayAll day = new DayAll();
 		if(CollUtil.isNotEmpty(selectByExample)) {
 			day = CollUtil.getFirst(selectByExample);
-		if(ObjectUtil.isNull(day.getReqdayType())) {//查詢不到今天是否為工作時間時
-			day.setReqdayType(Common.DAY_ALL_WORK);//就儅今天為工作日
+			if(ObjectUtil.isNull(day.getReqdayType())) {//查詢不到今天是否為工作時間時
+				day.setReqdayType(Common.DAY_ALL_WORK);//就儅今天為工作日
+			}
 		}
 		int updataByAccountMoney  ; 
-		if(day.getReqdayType().equals(Common.DAY_ALL_WORK)) {//工作日  清空T1 和  D1的數據,
+		if(Common.DAY_ALL_WORK.equals(day.getReqdayType())) {//工作日  清空T1 和  D1的數據,
 			 updataByAccountMoney = accountDao.updataByAccountMoney("YES");
 		}else{//非工作日   清空D1數據
 			 updataByAccountMoney = accountDao.updataByAccountMoney(null);
@@ -84,4 +85,3 @@ public class AccountServiceImpl implements AccountService {
 		//記錄日志
 		}
 	}
-}

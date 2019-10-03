@@ -33,8 +33,6 @@ public class SaticScheduleTask {
 	 * <li>2,重新發送賬戶回調通知</li>
 	 * <li>3,修改订单为失败  4分钟之前的订单修改为失败</li>
 	 */
-	
-	
 		/**
 		 * <p>5秒钟修改一次订单状态</p>
 		    */

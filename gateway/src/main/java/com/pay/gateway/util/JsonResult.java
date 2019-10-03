@@ -8,6 +8,22 @@ public class JsonResult {
 	private boolean success; // 请求操作是否成功
 	private String message; // 提示信息
 	private Object result; // 要传递到前端的结果
+	private int code;//状态码
+	
+	public int getCode() {
+		return code;
+	}
+	public void setCode(int code) {
+		this.code = code;
+	}
+	
+	public JsonResult(boolean success, String message, Object result, int code) {
+		super();
+		this.success = success;
+		this.message = message;
+		this.result = result;
+		this.code = code;
+	}
 	/**
 	 * <p>返回结果为成功,无返回提示,无结果集</p>
 	 * <li>boolean success : true // 请求操作成功</li>
@@ -72,6 +88,9 @@ public class JsonResult {
 	 */
 	public static JsonResult buildFailResult(String message) {
 		return new JsonResult(false, message, null);
+	}
+	public static JsonResult buildFailResult(String message,int code) {
+		return new JsonResult(false, message, null,code);
 	}
 
 	public boolean isSuccess() {

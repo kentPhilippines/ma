@@ -1,5 +1,6 @@
 package com.pay.gateway.api;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 import javax.annotation.Resource;
@@ -11,11 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pay.gateway.channel.H5ailiPay.util.BankUtil;
 import com.pay.gateway.config.common.Common;
 import com.pay.gateway.config.exception.OtherErrors;
 import com.pay.gateway.entity.DealOrder;
@@ -40,6 +41,8 @@ public class OrderContorller {
 	NotifyUtil notifyUtil;
 	@Autowired
 	OrderService orderServiceImpl;
+	@Resource
+	BankUtil bankUtil;
 	@Autowired
 	SendUtil sendUtil;
 	/**
@@ -112,6 +115,43 @@ public class OrderContorller {
 			 throw new OtherErrors("交易回调发生异常");
 		return JsonResult.buildFailResult("修改失败");
 	}
+	
+	
+	
+	/**
+	 * <p>给回调接口未作处理</p>
+	 * <p>暂时无用</p>
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@PostMapping("/mms")	
+	@ResponseBody
+	@Transactional
+	public JsonResult mms(HttpServletRequest request, HttpServletResponse response) { 
+		log.info("【收到回调服务短信回调通知】");
+		String money = request.getParameter("amount");
+		String deviceid = request.getParameter("bankPhone");
+		log.info("【获取金额为："+money+"】");
+		log.info("【获取物理介质唯一标识为："+deviceid+"】");
+		String key = deviceid + money;
+		log.info("【组合当前唯一KEY为："+key+"】");
+		String orderIdAll = bankUtil.findOrderBankCard(new BigDecimal(money),deviceid);//获取全局订单	根据全局订单查询  交易订单
+		log.info("=============【獲得全局訂單編號，并開始修改交易訂單狀態，全局訂單編號："+orderIdAll+"】============");
+		boolean flag = orderUtil.updataOrderStatus(orderIdAll);//修改訂單狀態並生成對應的流水
+		//發給下游通知回調
+		notifyUtil.sendMsg(orderIdAll, flag);
+		if(!flag)//回滚所有数据
+			 throw new OtherErrors("交易回调发生异常");
+		String message = "回调成功";
+		String result =  orderIdAll;
+		return JsonResult.buildSuccessResult(message, result);
+	}
+	
+	
+	
+	
+	
 	
 	
 	

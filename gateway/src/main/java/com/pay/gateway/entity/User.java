@@ -39,11 +39,11 @@ public class User {
 
     private Integer status;
 
-    private String retain1;
+    private String retain1;//码商或者代理商的利润
 
     private String retain2;
 
-    private String retain3;
+    private String retain3;//记录码商和代理商的分润
 
     private String retain4;
 

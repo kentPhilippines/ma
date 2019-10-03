@@ -35,7 +35,7 @@ public class OrderUtil {
 	BankCardService BankCardServiceImpl;
 	Logger log = LoggerFactory.getLogger(OrderUtil.class);
 	/**
-	 * <p>根據全局訂單號修改相應的流水和賬變記錄</p>
+	 * <p>根据全局订单号修改相应的流水和账变记录</p>
 	 * <li>這個是儅交易成功我方收到其他系統的匯款時候調用的方法</li>
 	 * <li>這慎重調用</li>
 	 * @param orderIdAll

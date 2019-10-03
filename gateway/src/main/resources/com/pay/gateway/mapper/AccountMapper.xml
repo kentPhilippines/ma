@@ -449,6 +449,7 @@
   	UPDATE manage_account SET
 	cashBalance = cashBalance + freezeD1,
 	freezeBalance = freezeBalance - freezeD1,
+	SumDealToDayAmount = 0,
 	freezeD1 = 0
 	<if test="isAll != null and isAll != ''">
 	,

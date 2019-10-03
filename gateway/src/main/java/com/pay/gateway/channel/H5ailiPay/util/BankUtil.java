@@ -179,7 +179,7 @@ public class BankUtil {
 	public String findOrderBankCard(BigDecimal amount , String bankPhone) {
 		String key = bankPhone + amount.toString() ;
 		String orderId = (String) bankUtil.redisUtil.get(key);
-		 bankUtil.redisUtil.del(key);
+		 bankUtil.redisUtil.del(key);//该数据4分钟过期时间
 		return orderId;
 	}
 	private BigDecimal getAmount(List amountList ,BigDecimal  amount) {
@@ -189,6 +189,14 @@ public class BankUtil {
 		}
 		return amount;
 	}
+	
+	
+	
+	/**
+	 * <p>该选金额算法需要优化</p>
+	 * @param amount
+	 * @return
+	 */
 	public synchronized BigDecimal findDealAmount(BigDecimal amount ) {
 		List<Object> amountList =  bankUtil.redisUtil.lGet("Amount",0,-1);//获取该字段下所有的集合
 		log.info("--------【现有金额列表,正在使用金额列表："+amountList.toString()+"】-----------");
