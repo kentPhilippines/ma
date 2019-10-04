@@ -94,7 +94,6 @@ public class PayContorller {
 				true,order);
 		log.info("================【成功生成二维码：url："+"http://"+serverName+":"+serverPort+"/api/payAli"+"?order="+order+"&amount="+amount+"，订单号："+order+"】===============");
 		String url =  ""+serverName+":"+serverPort+"/api/payAli"+"?"+params ;
-		redisUtil.set(order, amount, 240);
 		m.addAttribute("url", url);
 		m.addAttribute("order", order);
 		m.addAttribute("amount", amount);
@@ -117,10 +116,9 @@ public class PayContorller {
 		log.info("参数解密金额："+amount);
 		log.info("参数解密订单："+order);
 		log.info("================【飞行页面转发】===============");
-		Object object = redisUtil.get(order);
-		log.info("【金额："+object+"，订单："+order+"】");
+		log.info("【金额："+amount+"，订单："+order+"】");
 		m.addAttribute("order", order);//订单号
-		m.addAttribute("amount", object);//金额
+		m.addAttribute("amount", amount);//金额
 		return "/alipay";
 	}
 	
@@ -135,8 +133,7 @@ public class PayContorller {
 	@ResponseBody
 	@PostMapping("/createOrder")
 	@Transactional
-	public JsonResult createOrder(String order ,Model m) {
-		Object amount = redisUtil.get(order);
+	public JsonResult createOrder(String order ,String amount,Model m) {
 		log.info("【缓存金额获取为："+amount+"】");
 		if(ObjectUtil.isNull(amount))
 			return JsonResult.buildFailResult();

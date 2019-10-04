@@ -116,10 +116,20 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 			return findDealBankCard;
 		}
 	}
+	
+	
+	
+	
+	/**
+	 * <p>银行卡提取</p>
+	 * <p>当前收款卡选取只局限于当前卡片是否满额，当前卡片是否为收款卡两个条件，后期会增加相关算法</p>
+	 * @return
+	 */
 	List<BankCard> getBankList(){
 		BankCardExample example = new BankCardExample();
 		com.pay.gateway.entity.BankCardExample.Criteria criteriaB = example.createCriteria();
 		criteriaB.andStatusEqualTo(1);
+		criteriaB.andBankTypeEqualTo(Common.BANKCARDTYPE_DEAL);
 		List<BankCard> selectByExample = BankCardDao.selectByExample(example);
 		return selectByExample;
 	}

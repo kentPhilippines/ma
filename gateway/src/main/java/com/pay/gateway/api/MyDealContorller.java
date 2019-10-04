@@ -75,7 +75,7 @@ public class MyDealContorller {
 		boolean validationAll = requestUtil.validationAll(request, response,resultDeal);
 		if(!validationAll)  
 			return; 
-		log.info("------------------------------【进入支付宝H5模式交易处理】------------------------------");
+		log.info("--------------【进入支付宝H5模式交易处理】------------------------");
 		 String appid = request.getParameter("appid");
 		String orderid = request.getParameter("orderid");
 		String notifyurl = request.getParameter("notifyurl");

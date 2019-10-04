@@ -39,7 +39,7 @@ public class User {
 
     private Integer status;
 
-    private String retain1;//码商或者代理商的利润
+    private String retain1;//码商或者代理商的利率
 
     private String retain2;
 
@@ -47,7 +47,7 @@ public class User {
 
     private String retain4;
 
-    private String retain5;
+    private String retain5;//代付费率  代理商和码商
 
     private String retain6;
 
