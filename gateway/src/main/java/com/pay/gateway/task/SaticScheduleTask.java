@@ -35,7 +35,7 @@ public class SaticScheduleTask {
 	 */
 		/**
 		 * <p>5秒钟修改一次订单状态</p>
-		    */
+		  
 	 
 	   @Scheduled(cron = "0/5 * * * * ?") 
 	   private void orderNotify() { 
@@ -43,26 +43,14 @@ public class SaticScheduleTask {
 		   log.info("=================【修改订单状态为未收到回调，获取时间为: " +  second+"【秒】】==============="); 
 		   orderServiceImpl.updataOrderStatus(second); 
 	   }
-	  
+	    */
 	 	/**
 	 	 * <p>凌晨6	点修改账户冻结余额</p>
-	 	 */
+	 	 
 	 	@Scheduled(cron = "0 0 6 * * ?")
 	 	 private void account() {
 	 		accountServiceImpl.updataAccountAmount();
 	 		log.info("=================【修改賬戶凍結金額: " + LocalDateTime.now()+"】===============");
 	 	}
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-
+	 	*/
 }
