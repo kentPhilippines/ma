@@ -194,6 +194,7 @@ public class BankUtil {
 	
 	/**
 	 * <p>该选金额算法需要优化</p>
+	 * <p>需求一：尾数不为0</p>
 	 * @param amount
 	 * @return
 	 */
@@ -219,6 +220,11 @@ public class BankUtil {
 			bankUtil.redisUtil.lSet("Amount",a);//跟新数据
 		}
 		bankUtil.redisUtil.set(amount.toString(),amount.toString(),second);//4分钟过期时间
+		String amount1 = amount.toString();
+		boolean endWith = StrUtil.endWith(amount1,'0');
+		if(endWith) {//如果金额以 0 结尾 就  加一分钱
+			amount = amount.add(new BigDecimal("0.01"));
+		}
 		return amount;
 	}
 	/**
