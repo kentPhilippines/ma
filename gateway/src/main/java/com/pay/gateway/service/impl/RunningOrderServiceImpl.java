@@ -45,13 +45,13 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		int insertSelective = runningOrderDao.insertSelective(runBean);
 		boolean flag = insertSelective > 0 && insertSelective < 2;
 		if(flag) {
-			log.info("当前流水生成成功，流水金额："+dealOrder.getActualAmount().toString()+"");
-			log.info("若当前账户存在代理商，则开始计算代理商利润当前账户："+dealOrder.getOrderAccount()+"");
+			log.info("【当前流水生成成功，流水金额："+dealOrder.getActualAmount().toString()+"】");
+			log.info("【若当前账户存在代理商，则开始计算代理商利润当前账户："+dealOrder.getOrderAccount()+"】");
 			User user = userServiceImpl.findUserByuserId(dealOrder.getOrderAccount());
 			if(StrUtil.isBlank(user.getRetain3())) {
-				log.info("当前账户不存在代理商");
+				log.info("【当前账户不存在代理商】");
 			}else {
-				log.info("当前账号存在代理商");
+				log.info("【当前账号存在代理商】");
 				User agent = userServiceImpl.findUserByuserId(user.getRetain3());//代理商
 				String fee = agent.getRetain1();//代理商费率
 				if(StrUtil.isNotBlank(fee)) {
@@ -84,7 +84,7 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 	}
 	@Override
 	public boolean createDealRunFee(DealOrder dealOrder, Integer runStatus) {
-		log.info("---------进入交易流水处理类，生成交易手续费流水，流水方式为交易手续费，当前交易金额为："+dealOrder.getDealAmount()+"，交易手续费金额为："+dealOrder.getDealFee().toString()+"");
+		log.info("---------【进入交易流水处理类，生成交易手续费流水，流水方式为交易手续费，当前交易金额为："+dealOrder.getDealAmount()+"，交易手续费金额为："+dealOrder.getDealFee().toString()+"】");
 		RunningOrder runBean  = new RunningOrder();
 		runBean.setOrderRunId(DealNumber.GetRunOrder());
 		runBean.setOrderId(dealOrder.getOrderId());
@@ -100,15 +100,15 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		int insertSelective = runningOrderDao.insertSelective(runBean);
 		boolean flag = insertSelective > 0 && insertSelective < 2;
 		if(flag) {
-			log.info("当前流水生成成功，流水金额："+dealOrder.getActualAmount().toString()+"");
+			log.info("【当前流水生成成功，流水金额："+dealOrder.getActualAmount().toString()+"】");
 		}else {
-			log.info("当前流水生成失败，流水金额："+dealOrder.getActualAmount().toString()+"");
+			log.info("【当前流水生成失败，流水金额："+dealOrder.getActualAmount().toString()+"】");
 		}
 		return flag;
 	}
 	@Override
 	public boolean createMerchantsRun(WithdrawalsOrder order, Integer runStatus) {
-		log.info("---------进入交易流水处理类，生成交易流水，流水方式为代付冻结，当前代付金额为："+ order.getWithdrawalsAmount()+"，实际到账金额为："+order.getActualAmount().toString()+"");
+		log.info("---------【进入交易流水处理类，生成交易流水，流水方式为代付冻结，当前代付金额为："+ order.getWithdrawalsAmount()+"，实际到账金额为："+order.getActualAmount().toString()+"】");
 		RunningOrder runBean  = new RunningOrder();
 		runBean.setOrderRunId(DealNumber.GetRunOrder());
 		runBean.setOrderId(order.getOrderId());
@@ -123,16 +123,16 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		int insertSelective = runningOrderDao.insertSelective(runBean);
 		boolean flag = insertSelective > 0 && insertSelective < 2;
 		if(flag) {
-			log.info("当前流水生成成功，流水金额："+order.getActualAmount().toString()+"");
+			log.info("【当前流水生成成功，流水金额："+order.getActualAmount().toString()+"】");
 		}else {
-			log.info("当前流水生成失败，流水金额："+order.getActualAmount().toString()+"");
+			log.info("【当前流水生成失败，流水金额："+order.getActualAmount().toString()+"】");
 		}
 		return flag;
 	}
 	@Override
 	public boolean createMerchantsFeeRun(WithdrawalsOrder order, Integer runStatus) {
 
-		log.info("---------进入交易流水处理类，生成交易流水，流水方式为代付冻结，当前代付金额为："+ order.getWithdrawalsAmount()+"，实际到账金额为："+order.getActualAmount().toString()+"，代付手续费为："+order.getWithdrawalsFee());
+		log.info("---------【进入交易流水处理类，生成交易流水，流水方式为代付冻结，当前代付金额为："+ order.getWithdrawalsAmount()+"，实际到账金额为："+order.getActualAmount().toString()+"，代付手续费为："+order.getWithdrawalsFee());
 		RunningOrder runBean  = new RunningOrder();
 		runBean.setOrderRunId(DealNumber.GetRunOrder());
 		runBean.setOrderId(order.getOrderId());
@@ -147,9 +147,9 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		int insertSelective = runningOrderDao.insertSelective(runBean);
 		boolean flag = insertSelective > 0 && insertSelective < 2;
 		if(flag) {
-			log.info("当前流水生成成功，流水金额："+order.getWithdrawalsFee().toString()+"");
+			log.info("【当前流水生成成功，流水金额："+order.getWithdrawalsFee().toString()+"】");
 		}else {
-			log.info("当前流水生成失败，流水金额："+order.getWithdrawalsFee().toString()+"");
+			log.info("【当前流水生成失败，流水金额："+order.getWithdrawalsFee().toString()+"】");
 		}
 		return flag;
 	
