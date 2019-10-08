@@ -1,21 +1,20 @@
 package com.pay.gateway.service.impl;
 
-import javax.annotation.Resource;
+import java.math.BigDecimal;
 
-import org.mockito.internal.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pay.gateway.api.OrderContorller;
 import com.pay.gateway.config.common.Common;
 import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.entity.RunningOrder;
-import com.pay.gateway.entity.RunningOrderExample;
+import com.pay.gateway.entity.User;
 import com.pay.gateway.entity.WithdrawalsOrder;
 import com.pay.gateway.mapper.RunningOrderMapper;
 import com.pay.gateway.service.RunningOrderService;
+import com.pay.gateway.service.UserService;
 import com.pay.gateway.util.DealNumber;
 
 import cn.hutool.core.util.StrUtil;
@@ -24,6 +23,10 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 	Logger log = LoggerFactory.getLogger(RunningOrderServiceImpl.class);
 	@Autowired
 	RunningOrderMapper runningOrderDao;
+	
+	@Autowired
+	UserService  userServiceImpl;
+	
 	@Override
 	public boolean createDealRun(DealOrder dealOrder, Integer runStatus) {
 		log.info("---------进入交易流水处理类，生成交易流水，流水方式为交易金额，当前交易金额为："+dealOrder.getDealAmount()+"，实际到账金额为："+dealOrder.getActualAmount().toString()+"");
@@ -43,6 +46,35 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		boolean flag = insertSelective > 0 && insertSelective < 2;
 		if(flag) {
 			log.info("当前流水生成成功，流水金额："+dealOrder.getActualAmount().toString()+"");
+			log.info("若当前账户存在代理商，则开始计算代理商利润当前账户："+dealOrder.getOrderAccount()+"");
+			User user = userServiceImpl.findUserByuserId(dealOrder.getOrderAccount());
+			if(StrUtil.isBlank(user.getRetain3())) {
+				log.info("当前账户不存在代理商");
+			}else {
+				log.info("当前账号存在代理商");
+				User agent = userServiceImpl.findUserByuserId(user.getRetain3());//代理商
+				String fee = agent.getRetain1();//代理商费率
+				if(StrUtil.isNotBlank(fee)) {
+					String money = agent.getRetain3();//代理商当前金额
+					BigDecimal amonut = new BigDecimal(StrUtil.isNotBlank(money)?money:"0");
+					BigDecimal dealAmount = dealOrder.getDealAmount();
+					BigDecimal fee1 = new BigDecimal(fee);
+					BigDecimal agentMount = dealAmount.multiply(fee1);//代理商分润
+					log.info("【代理商分润："+agentMount+"，代理商分润费率："+fee1+"，代理商现有金额："+amonut+"】");
+					User agentUser = new User();
+					agentUser.setId(agent.getId());
+					agentUser.setUserId(agent.getUserId());
+					agentUser.setRetain3(agent.getRetain3());
+					agentUser.setCreateTime(null);
+					agentUser.setSubmitTime(null);
+					boolean flag1 = userServiceImpl.updataUserById(agent);
+					if(flag1) {
+						log.info("【当前地阿里上分润更新成功】");
+					}else {
+						return flag1;
+					}
+				}
+			}
 		}else {
 			log.info("当前流水生成失败，流水金额："+dealOrder.getActualAmount().toString()+"");
 		}

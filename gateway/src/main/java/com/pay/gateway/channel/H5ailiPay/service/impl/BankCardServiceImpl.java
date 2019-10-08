@@ -100,6 +100,7 @@ public class BankCardServiceImpl implements BankCardService {
 		List<BankCard> selectByExampleWithBLOBs = bankCardDao.selectByExampleWithBLOBs(example);//理论上只有一个
 		BankCard first = CollUtil.getFirst(selectByExampleWithBLOBs);
 		if(Common.BANKCARDTYPE_DEAL.equals(first.getBankType()) && StrUtil.isNotBlank(first.getRetain2())) {//不是本家卡 且为收款卡的时候  计算码商利润
+			log.info("------【进入码商利润计算】-------");
 			int i = 0;
 			UserExample userExample = new UserExample();
 			com.pay.gateway.entity.UserExample.Criteria createCriteria = userExample.createCriteria();
@@ -107,11 +108,12 @@ public class BankCardServiceImpl implements BankCardService {
 			List<User> selectByExample = userDao.selectByExample(userExample);
 			if(CollUtil.isNotEmpty(selectByExample)) {
 				User first2 = CollUtil.getFirst(selectByExample);
+				log.info("------【获取码商："+first2+"】-------");
 				String retain1 = first2.getRetain1();//码商或者代理商的利率
 				String retain3 = first2.getRetain3();//码商或者代理商的利润
 				//利润 =  以前利润 + 当前利润 
 				// 当前利润  = 当前交易额度*当前利率
-				BigDecimal money = new BigDecimal(retain3);//利润
+				BigDecimal money = new BigDecimal(StrUtil.isBlank(retain3)?"0":retain3);//利润
 				BigDecimal decimal = dealAmount.add(actualAmount);//当前交易额度
 				BigDecimal re = new BigDecimal(retain1);//利率
 				BigDecimal multiply = decimal.multiply(re);//当前交易利润
