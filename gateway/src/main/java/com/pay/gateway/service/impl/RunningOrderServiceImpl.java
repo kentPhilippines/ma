@@ -61,6 +61,8 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 					BigDecimal fee1 = new BigDecimal(fee);
 					BigDecimal agentMount = dealAmount.multiply(fee1);//代理商分润
 					log.info("【代理商分润："+agentMount+"，代理商分润费率："+fee1+"，代理商现有金额："+amonut+"】");
+					amonut = amonut.add(agentMount);
+					agent.setRetain3(amonut.toString());
 					User agentUser = new User();
 					agentUser.setId(agent.getId());
 					agentUser.setUserId(agent.getUserId());
@@ -69,7 +71,7 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 					agentUser.setSubmitTime(null);
 					boolean flag1 = userServiceImpl.updataUserById(agent);
 					if(flag1) {
-						log.info("【当前地阿里上分润更新成功】");
+						log.info("【当前代理商分润更新成功】");
 					}else {
 						return flag1;
 					}
