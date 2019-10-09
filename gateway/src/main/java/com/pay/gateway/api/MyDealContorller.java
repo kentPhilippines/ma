@@ -68,9 +68,9 @@ public class MyDealContorller {
 	@Autowired
 	RequestUtil requestUtil;
 	Logger log = LoggerFactory.getLogger(MyDealContorller.class);
-	@RequestMapping("/payH5Ali")
+	@RequestMapping("/payTo")
 	@Transactional
-	public void payH5Ali(Deal deal ,HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void payToCard(Deal deal ,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ResultDeal resultDeal = new ResultDeal();
 		boolean validationAll = requestUtil.validationAll(request, response,resultDeal);
 		if(!validationAll)  
@@ -127,7 +127,7 @@ public class MyDealContorller {
 			response.getWriter().write(JSONUtil.toJsonPrettyStr(resultDeal));
 			return;
 		}
-		List<AccountFee>  accountFeeList = accountFeeServiceImpl.findAccountFeeBy(appid,Common.FEE_STATUS1);//理论上可以查询到一条费率状态
+		List<AccountFee>  accountFeeList = accountFeeServiceImpl.findAccountFeeBy(appid,passcode,Common.FEE_STATUS1);//理论上可以查询到一条费率状态
 		if(CollUtil.isEmpty(accountFeeList)) {
 			log.info("------------------------------【15001:当前商户账户费率未配置或费率状态未开通】------------------------------");
 			resultDeal.setCod(Common.COD_15001);

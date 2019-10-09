@@ -17,10 +17,11 @@ public class AccountFeeServiceImpl implements AccountFeeService{
 	@Autowired
 	AccountFeeMapper accountFeeDao;
 	@Override
-	public List<AccountFee> findAccountFeeBy(String appid, Integer feeStatus1) {
+	public List<AccountFee> findAccountFeeBy(String appid, String product, Integer feeStatus1) {
 		AccountFeeExample example = new AccountFeeExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andAccountIdEqualTo(appid);
+		criteria.andChannelProductEqualTo(product);
 		criteria.andFeeStautusEqualTo(feeStatus1);
 		List<AccountFee> selectByExample = accountFeeDao.selectByExample(example);
 		return selectByExample;

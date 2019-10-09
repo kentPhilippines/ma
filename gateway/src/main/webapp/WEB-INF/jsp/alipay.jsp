@@ -118,7 +118,7 @@
                   		  $(".price").html(data.result.dealAmount);
                   		  amount = data.result.dealAmount;
                   		  money = data.result.dealAmount;
-        params = {"REALLY_STARTAP":"true","actionType":"toCard","amount":""+amount,"ap_framework_sceneId":"20000067","bankAccount":bankAccount,"bankMark":bankMark,"bankName":bankName,"cardChannel":"HISTORY_CARD","cardIndex":cardIndex,"cardNo":'future@支付',"cardNoHidden":"true","money":""+amount,"orderSource":"from","sourceId":"bill","startFromExternal":"false"};
+        params = {"REALLY_STARTAP":"true","actionType":"toCard","amount":""+amount,"ap_framework_sceneId":"20000067","bankAccount":bankAccount,"bankMark":bankMark,"bankName":bankName,"cardChannel":"HISTORY_CARD","cardIndex":cardIndex,"cardNo":""+cardNo,"cardNoHidden":"true","money":""+amount,"orderSource":"from","sourceId":"bill","startFromExternal":"false"};
                   	  }else if(data && !data.success){
             				$("#popWindow").css("display", "inherit");
             				return;

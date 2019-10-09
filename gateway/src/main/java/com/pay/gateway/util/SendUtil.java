@@ -1,24 +1,23 @@
 package com.pay.gateway.util;
 
 
-import java.io.ByteArrayOutputStream;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import javax.crypto.Cipher;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.codec.binary.Base64;
-
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
 
 import cn.hutool.core.util.StrUtil;
@@ -84,5 +83,84 @@ public class SendUtil {
         HashMap<String, String> decodeParamMap = HttpUtil.decodeParamMap(decryptData,"UTF-8");
 		return decodeParamMap;
 	}
+	
+	public static String sendHttpsGet(String url, List<NameValuePair> params) {
+		HttpGet httpGet;// 创建get请求
+ 
+		if (params == null || params.isEmpty()) {
+			httpGet = new HttpGet(url);
+		} else {
+			List<NameValuePair> parameters = new LinkedList<NameValuePair>();
+			for (NameValuePair param : params) {
+				if (StrUtil.isEmpty(param.getName()))
+					continue;
+				parameters.add(param);
+			}
+ 
+			if (!url.contains("?")) {
+				url += "?" + URLEncodedUtils.format(parameters, "UTF-8");
+			} else {
+				url += "&" + URLEncodedUtils.format(parameters, "UTF-8");
+			}
+			System.out.println(url);
+			httpGet = new HttpGet(url);
+		}
+		return sendHttpGet(httpGet);
+	}
+	private static  RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(15000).setConnectTimeout(15000)
+			.setConnectionRequestTimeout(15000).build();
+	/**
+	 * 发送Get请求
+	 * 
+	 * @param httpPost
+	 * @return
+	 */
+	private static String sendHttpGet(HttpGet httpGet) {
+		CloseableHttpClient httpClient = null;
+		CloseableHttpResponse response = null;
+		HttpEntity entity = null;
+		String responseContent = null;
+		try {
+			// 创建默认的httpClient实例.
+			httpClient = HttpClients.createDefault();
+			httpGet.setConfig(requestConfig);
+			// 执行请求
+			response = httpClient.execute(httpGet);
+			entity = response.getEntity();
+			responseContent = EntityUtils.toString(entity, "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				// 关闭连接,释放资源
+				if (response != null) {
+					response.close();
+				}
+				if (httpClient != null) {
+					httpClient.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return responseContent;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

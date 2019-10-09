@@ -1,4 +1,4 @@
-package com.pay.gateway.channel.H5ailiPay.service;
+package com.pay.gateway.channel.ailipayToCard.service;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -14,8 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.pay.gateway.channel.H5ailiPay.service.BankCardService;
+import com.pay.gateway.channel.H5ailiPay.service.H5aliPayService;
 import com.pay.gateway.channel.H5ailiPay.util.BankUtil;
 import com.pay.gateway.config.common.Common;
 import com.pay.gateway.config.service.PayOrderService;
@@ -28,23 +29,25 @@ import com.pay.gateway.entity.dealEntity.ResultDeal;
 import com.pay.gateway.util.SendUtil;
 
 import cn.hutool.http.HttpUtil;
-@Component("MyAiliPayToCard")
-public class H5aliPayService extends PayOrderService{
-	Logger log = LoggerFactory.getLogger(H5aliPayService.class);
+@Component("AiliPayToCardServiceImpl")
+public class AiliPayToCardServiceImpl extends PayOrderService{
+	Logger log = LoggerFactory.getLogger(AiliPayToCardServiceImpl.class);
 	@Autowired
 	BankCardService bankCardServiceImpl;
 	@Resource
 	BankUtil bankUtil;
 	@Autowired
 	SendUtil sendUtil;
-	
 	@Value("${deal.url.path}")
 	private String dealurl;
+	/**
+	 * <p>宝转卡简便模式</p>
+	 */
 	@Override
-	@Transactional
 	public ResultDeal deal(Deal deal, Account account, AccountFee accountFee, OrderAll orderAll) {
-		log.info("===========【本地支付宝处理类】======");
+		log.info("===========【本地支付宝处理类--宝转卡简便模式】======");
 		ResultDeal result = new ResultDeal();
+		List<BankCard> findBankCardAll = bankCardServiceImpl.findBankCardAll();
 		BigDecimal amount = bankUtil.findDealAmount(new BigDecimal(orderAll.getOrderAmount()));
 		String param = "order="+orderAll.getOrderId();
 		param += "|amount="+amount;
@@ -63,18 +66,12 @@ public class H5aliPayService extends PayOrderService{
 			return result;
 		}
 		String params = HttpUtil.toParams(careteParam);
-		result.setReturnUrl("http://"+dealurl+"/api/startOrder?"+params);
+		result.setReturnUrl("http://"+dealurl+"/api/ailiPayToCard?"+params);
 		log.info("===========【转发的get请求路径："+result.getReturnUrl()+"======");
 		result.setCod(Common.RESPONSE_STATUS_SU);
 		result.setMsg(Common.RESPONSE_STATUS_SU_MSG);
 		result.setOpenType(Common.OPENTYPE_URL);//URL打开方式
-		log.info("支付宝转到银行卡返回的结果集为："+result.toString());
+		log.info("支付宝转到银行卡边界模式返回的结果集为："+result.toString());
  		return result;
 	}
-	
-
-	
-	
-
-
 }

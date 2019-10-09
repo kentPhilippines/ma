@@ -16,6 +16,20 @@ public class ResultDeal {
 	private String cod;
 	private String trade_id;//外部订单
 	private String order_id;//内部订单
+	private String openType;//打开方式   1 URL 打开   2前端页面打开
+	private String type;//1处理中2成功3未收到回调4失败
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getOpenType() {
+		return openType;
+	}
+	public void setOpenType(String openType) {
+		this.openType = openType;
+	}
 	public String getNotifyUrl() {
 		return notifyUrl;
 	}

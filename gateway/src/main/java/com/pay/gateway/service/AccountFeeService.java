@@ -12,7 +12,7 @@ public interface AccountFeeService {
 	 * @param feeStatus1 
 	 * @return
 	 */
-	List<AccountFee> findAccountFeeBy(String appid, Integer feeStatus1);
+	List<AccountFee> findAccountFeeBy(String appid,String product, Integer feeStatus1);
 
 	/**
 	 * <p>通过账户费率信息查找唯一费率</p>

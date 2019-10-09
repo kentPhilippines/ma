@@ -81,11 +81,13 @@ public class MerchantsContorller {
 		String backCard = decryptionParam.get("backCard");
 		String amount = decryptionParam.get("amount");
 		String ipAddr = decryptionParam.get("ipAddr");
-		List<AccountFee>  accountFeeList = accountFeeServiceImpl.findAccountFeeBy(accountId,Common.FEE_STATUS1);//理论上可以查询到一条费率状态
+		/**
+		 * <p>所有取款费率以宝转卡费率为准</p>
+		 */
+		List<AccountFee>  accountFeeList = accountFeeServiceImpl.findAccountFeeBy(accountId,"PAY1000",Common.FEE_STATUS1);//理论上可以查询到一条费率状态
 		if(CollUtil.isEmpty(accountFeeList)) {
 			return JsonResult.buildFailResult("商户号代付费率未分配");
 		}
-		
 		AccountFee accountFee = CollUtil.getFirst(accountFeeList);	
 		log.info("查找代付费率为："+accountFee.toString());
 		OrderAll orderAll =  new OrderAll();
@@ -119,7 +121,6 @@ public class MerchantsContorller {
 			addExceptionOrder(decryptionParam,orderAll,msg);
 			return JsonResult.buildFailResult(msg);
 		}
-		
 		if(Common.IS_DPAY_OFF.equals(findAccountByAppId.getIsDpay())) {
 			String msg = "商户号未开通代付服务";
 			addExceptionOrder(decryptionParam,orderAll,msg);

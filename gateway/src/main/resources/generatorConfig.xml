@@ -26,9 +26,9 @@
 		</commentGenerator>
 		<!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-						connectionURL="jdbc:mysql://127.0.0.1:3306/payproject?serverTimezone=UTC"
-						userId="root"
-						password="123456">
+						connectionURL="jdbc:mysql://47.75.42.165:3306/payproject?serverTimezone=UTC"
+						userId="payproduct"
+						password="teus2019payproduct">
 		</jdbcConnection>
 		<!-- <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
 			connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:orcl"
@@ -152,7 +152,7 @@
                     <property name="useActualColumnNames" value="true"/>
                     <generatedKey column="id" sqlStatement="JDBC"/>
             </table> -->
-          <table tableName="manage_exception_order" domainObjectName="ExceptionOrderEntity"   enableCountByExample="true"  enableUpdateByExample="true"  enableDeleteByExample="true"  enableSelectByExample="true"  selectByExampleQueryId="true">
+          	<table tableName="manage_user_account" domainObjectName="UserAccount"   enableCountByExample="true"  enableUpdateByExample="true"  enableDeleteByExample="true"  enableSelectByExample="true"  selectByExampleQueryId="true">
                     <property name="my.isgen.usekeys" value="true"/>
                     <property name="useActualColumnNames" value="true"/>
                     <generatedKey column="id" sqlStatement="JDBC"/>

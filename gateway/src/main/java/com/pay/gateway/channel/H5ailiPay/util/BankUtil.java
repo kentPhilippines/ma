@@ -219,12 +219,12 @@ public class BankUtil {
 		for(String a: list) {
 			bankUtil.redisUtil.lSet("Amount",a);//跟新数据
 		}
-		bankUtil.redisUtil.set(amount.toString(),amount.toString(),second);//4分钟过期时间
 		String amount1 = amount.toString();
 		boolean endWith = StrUtil.endWith(amount1,'0');
 		if(endWith) {//如果金额以 0 结尾 就  加一分钱
 			amount = amount.add(new BigDecimal("0.01"));
 		}
+		bankUtil.redisUtil.set(amount.toString(),amount.toString(),second);//4分钟过期时间
 		return amount;
 	}
 	/**
