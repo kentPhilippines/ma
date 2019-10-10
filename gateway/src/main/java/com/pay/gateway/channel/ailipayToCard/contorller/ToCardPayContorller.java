@@ -34,8 +34,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 @Controller
 @RequestMapping("/api")
-public class PayContorller {
-	 Logger log = LoggerFactory.getLogger(PayContorller.class);
+public class ToCardPayContorller {
+	 Logger log = LoggerFactory.getLogger(ToCardPayContorller.class);
 	 @Value("${tomcat.imgpath.path}")
 	 private String imgpath;
 	@Autowired
@@ -77,7 +77,7 @@ public class PayContorller {
 		String bankName = bankCard.getBankName();
 		String bankCardId =bankCard.getBankCard();//8
 		String bankCardName = bankCard.getCardholder();
-		String url = "://platformapi/startapp?appId=09999988"
+		String url = "https://www.alipay.com/?appId=09999988"
 				+ "&actionType=toCard"
 				+ "&sourceId=bill&"
 				+ "cardNo="+bankCardId+""

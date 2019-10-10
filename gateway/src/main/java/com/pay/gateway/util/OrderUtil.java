@@ -21,6 +21,14 @@ import com.pay.gateway.service.ChannelService;
 import com.pay.gateway.service.OrderService;
 import com.pay.gateway.service.RunningOrderService;
 
+/**
+ * ########################################
+ * 目前该方法计算了总流水金额和银行卡流水金额，要想获取
+ * 渠道交易流水，就可以将总流水金额减去银行卡流水金额则为 
+ * 四方交易金额
+ * ########################################
+ * @author K
+ */
 @Service
 public class OrderUtil {
 	@Autowired
@@ -43,6 +51,15 @@ public class OrderUtil {
 	public synchronized boolean updataOrderStatus(String orderIdAll) {
 		return updataOrderStatus(orderIdAll,Common.RUN_STATUS_1);
 	}
+	
+	
+	
+	/**
+	 * <p>订单处理【三方资金处理】</p> 
+	 * @param orderIdAll				全局订单
+	 * @param runStatus					处理状态     自然处理   人工处理
+	 * @return
+	 */
 	@Transactional
 	public synchronized boolean updataOrderStatus(String orderIdAll,Integer runStatus) {
 		log.info("|---------【进入订单修改核心处理类，捕获全局订单编号："+orderIdAll+"】");
@@ -154,9 +171,112 @@ public class OrderUtil {
 		return false;
 	}
 	
-	
-	
-	
+	private synchronized boolean createAccountRunAmount(Account account, AccountFee accountFee, DealOrder dealOrder) {
+		log.info("|---------【进入个人账户资金变动核心处理类，当前处理账户为："+account.getAccountId()+"，该处理类为四方账户专用处理】");
+		/**
+		 * ################################
+		 * 修改個人賬戶邏輯
+		 * 1,獲取T1凍結 D1 凍結
+		 * 2,獲取賬戶餘額,可取現餘額,凍結總額(凍結總額=T1凍結+D1凍結)
+		 * 3,獲取凍結比例,獲取賬戶類型(T1或者D1)
+		 * 4,獲取今日交易金額,獲取纍計交易金額
+		 * 5,獲取實際到賬金額和交易金額(交易訂單)
+		 * 6,計算T1或者D1凍結
+		 * 7,計算今日交易金額纍計
+		 * 8,計算交易金額纍計
+		 * 9,計算賬戶餘額
+		 * 10,計算縂凍結金額(T1+D1)
+		 * 11,計算可提現縂額
+		 * 12,計算賬戶餘額
+		 * ################################
+		 */
+		//1,獲取凍結
+		 BigDecimal freezeD1 = account.getFreezeD1();//D1凍結
+		 BigDecimal freezeT1 = account.getFreezeT1();//T1凍結
+		//2,獲取賬戶餘額,可取現餘額,凍結總額
+		 BigDecimal accountBalance = account.getAccountBalance();
+		 BigDecimal cashBalance = account.getCashBalance();//可提現
+		 BigDecimal freezeBalance = account.getFreezeBalance();
+		//3,獲取凍結比例,凍結類型
+		 String settlementType = accountFee.getSettlementType();//
+		 String accountSette = accountFee.getAccountSette();//凍結比例  該比例修改之後才生效  但是修改之前的比例不作數
+		 //4,獲取今日交易金額,獲取纍計交易金額
+		 BigDecimal sumDealAmount = account.getSumDealAmount();//纍計交易金額
+		 BigDecimal sumDealToDayAmount = account.getSumDealToDayAmount();//當日纍計交易金額 
+		 //5,獲取實際到賬金額和交易金額(交易訂單)
+		 BigDecimal dealAmount = dealOrder.getDealAmount();//訂單交易金額  該金額并不等於實際到賬金額
+		 BigDecimal actualAmount = dealOrder.getActualAmount();//交易實際到賬金額
+		 //6,計算T1或者D1凍結      實際到賬金額*凍結比例
+		 BigDecimal sette = new BigDecimal(accountSette).divide(new BigDecimal("100"));//凍結比例
+		 log.info("冻结比例："+new BigDecimal("1").subtract(sette));
+		 BigDecimal freeze = actualAmount.multiply(new BigDecimal("1").subtract(sette));//實際凍結金額
+		 log.info("冻结金额："+freeze);
+		 //7,計算今日交易金額纍計
+		 sumDealToDayAmount = sumDealToDayAmount.add(dealAmount);
+		 //8,計算交易金額纍計
+		 sumDealAmount = sumDealAmount.add(dealAmount);
+		 //9,計算賬戶餘額 (凍結金額+可提現金額)
+		 log.info("冻结模式："+settlementType);
+		 if(Common.FREEZE_D1.equalsIgnoreCase(settlementType))//當爲D1凍結的時候將凍結資金放入D1凍結賬戶
+			 account.setFreezeD1(freezeD1.add(freeze));
+		 else 
+			 account.setFreezeT1(freezeT1.add(freeze));
+		 BigDecimal freezeD12 = account.getFreezeD1(); 
+		 BigDecimal freezeT12 = account.getFreezeT1();
+		 freezeBalance = freezeT12.add(freezeD12);
+		 BigDecimal subtract = actualAmount.subtract(freeze);//實際可取現金額
+		 cashBalance = cashBalance.add(subtract);//新建可取現金額
+		 accountBalance = cashBalance.add(freezeBalance);
+		 account.setAccountBalance(accountBalance);
+		 account.setCashBalance(cashBalance);
+		 account.setFreezeBalance(freezeBalance);
+		 account.setFreezeD1(freezeD12);
+		 log.info("D1冻结："+freezeD12);
+		 account.setFreezeT1(freezeT12);
+		 log.info("T1冻结："+freezeT12);
+		 account.setSumDealAmount(sumDealAmount);
+		 account.setSumDealToDayAmount(sumDealToDayAmount);
+		 log.info("个人账变记录详情："+account.toString());
+		 boolean acc = accountServiceImpl.updataAccountByAcoountId(account);
+		 log.info( "增加账户账变记录的结果："+acc+"");
+		 if(acc) {
+			 return true;
+		 }
+		return false;
+	}
+	/**
+	 * <p>四方资金处理</p>
+	 * @param orderIdAll
+	 * @param runStatus
+	 * @return
+	 */
+	@Transactional
+	public synchronized boolean updataOrder(String orderIdAll,Integer runStatus) {
+		log.info("|---------【进入订单修改核心处理类，捕获全局订单编号："+orderIdAll+"】");
+		 //修改訂單狀態
+		 boolean flag = orderServiceImpl.updataOrderStatusByAssociatedId(orderIdAll);
+		 DealOrder dealOrder = orderServiceImpl.findOrderByOrderAll(orderIdAll);
+		 //生成流水 總共會生成2筆流水
+		 boolean runAmount = RunningOrderServiceImpl.createDealRun(dealOrder,runStatus);//交易流水
+		 boolean runFee = RunningOrderServiceImpl.createDealRunFee(dealOrder,runStatus);//費率流水
+		 if(!(runAmount || runFee)) 
+				return false;
+		 //修改賬戶金額變動
+		 Account account = accountServiceImpl.findAccountByAppId(dealOrder.getOrderAccount());
+		 AccountFee accountFee = accountFeeServiceImpl.findAccountFeeByFeeId(Integer.valueOf(dealOrder.getRetain2()));
+		 boolean flagAccount = createAccountRunAmount(account,accountFee,dealOrder);
+		 if(flagAccount && runFee && runAmount && flag)
+			 return true;
+		return false;
+	}
+	/**
+	 * <p>四方资金处理</p>
+	 * @param orderIdAll
+	 * @return
+	 */
+	public synchronized boolean updataOrder(String orderIdAll) {
+		return updataOrder(orderIdAll,Common.RUN_STATUS_1);
+	}
 	
 	
 

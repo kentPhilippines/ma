@@ -29,7 +29,6 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 	UserAccountService userAccountServiceImpl;
 	@Autowired
 	UserService  userServiceImpl;
-	
 	@Override
 	public boolean createDealRun(DealOrder dealOrder, Integer runStatus) {
 		log.info("---------进入交易流水处理类，生成交易流水，流水方式为交易金额，当前交易金额为："+dealOrder.getDealAmount()+"，实际到账金额为："+dealOrder.getActualAmount().toString()+"");
@@ -45,6 +44,8 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		runBean.setCardRunD(dealOrder.getOrderAccount());
 		runBean.setCardRunW("SYS");//系統賬戶簡稱
 		runBean.setCardNameRunW(StrUtil.isNotBlank(dealOrder.getDealCardId())?dealOrder.getDealCardId():"");
+		runBean.setRetain1(dealOrder.getDealChannel());//渠道类型
+		runBean.setRetain2(dealOrder.getRetain4());//交易产品
 		int insertSelective = runningOrderDao.insertSelective(runBean);
 		boolean flag = insertSelective > 0 && insertSelective < 2;
 		if(flag) {
@@ -84,8 +85,6 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 					}
 				}
 			}
-			
-			
 		}else {
 			log.info("当前流水生成失败，流水金额："+dealOrder.getActualAmount().toString()+"");
 		}
