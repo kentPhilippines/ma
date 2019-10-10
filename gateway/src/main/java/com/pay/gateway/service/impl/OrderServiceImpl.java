@@ -200,4 +200,30 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 	public ResultDeal deal(Deal deal, Account account, AccountFee accountFee, OrderAll orderAll) {
 		return null;
 	}
+	@Override
+	public boolean createOrderNoBankCaed(String orderId, String dealAmount) {
+		log.info("=========【订单生成抽象实现类开始执行，四方模式】============");
+		OrderAllExample example = new OrderAllExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andOrderIdEqualTo(orderId);
+		List<OrderAll> selectByExample = orderAllDao.selectByExample(example);
+		OrderAll orderAll = CollUtil.getFirst(selectByExample);//理论上这个值不可能为null
+		AccountFeeExample exampleF = new AccountFeeExample();
+		com.pay.gateway.entity.AccountFeeExample.Criteria criteriaF = exampleF.createCriteria();
+		criteriaF.andIdEqualTo(Integer.valueOf(orderAll.getRetain2()));
+		List<AccountFee> selectByExample2 = accountFeeDao.selectByExample(exampleF);
+		AccountFee accountFee = CollUtil.getFirst(selectByExample2);//理论上这个值不可能为null
+		this.amount = new BigDecimal(dealAmount);
+		this.appid = orderAll.getOrderAccount();
+		this.tradeId = orderAll.getRetain1();//外部订单号
+		this.orderType = orderAll.getOrderType();
+		this.dealChannel = accountFee.getAccountChannel();//
+		this.orderGenerationIp = orderAll.getOrderIp();
+		this.orderAll = orderAll;
+		this.accountFee = accountFee ;
+		this.notfty = orderAll.getRetain3();
+		this.accountFeeId = orderAll.getRetain4();
+		this.payType = accountFee.getChannelProduct();
+		return dealOrder();
+	}
 }

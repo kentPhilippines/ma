@@ -39,6 +39,10 @@ public abstract class PayOrderService implements PayService{
 	protected String notfty;//订单回调地址
 	protected String accountFeeId;//費率id
 	
+	
+	
+	
+	
 	/**
 	 * <p>生成订单逻辑</p>
 	 * <li>1,</li>

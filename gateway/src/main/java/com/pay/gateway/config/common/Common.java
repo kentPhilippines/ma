@@ -191,7 +191,7 @@ public final class Common {
 	/**
 	 * <p>缓存里面银行卡唯一标识+金额的位数切割</p>
 	 */
-	public static final Integer BANKCARD_AMOUNT_BUMBER = 12;//
+	public static final Integer BANKCARD_AMOUNT_BUMBER = 11;//
 	
 	
 	

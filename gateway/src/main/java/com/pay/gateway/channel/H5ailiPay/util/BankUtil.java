@@ -1,8 +1,11 @@
 package com.pay.gateway.channel.H5ailiPay.util;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +27,8 @@ import com.pay.gateway.config.redis.RedisUtil;
 import com.pay.gateway.entity.BankCard;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -78,10 +83,10 @@ public class BankUtil {
 			String object2 = (String) bankUtil.redisUtil.get(bank.getBankPhone()+amount);
 			if(StrUtil.isBlank(object) || StrUtil.isBlank(object2)) {
 				//存入缓存并返回可以使用的银行卡
-				bankUtil.redisUtil.set(bank.getBankPhone()+amount.toString(),orderNo,second);//4分钟过期时间
-				listk.add(bank.getBankPhone()+amount.toString());
+				bankUtil.redisUtil.set(bank.getBankPhone()+amount.toString(),orderNo,second);//4分钟过期时间  存入全局订单   key  银行卡唯一标识 +  金额     value = 全局订单号
+				listk.add(bank.getBankPhone()+amount.toString());//手机号 + 金额
 				String join = CollUtil.join(listk, ",");
-				bankUtil.redisUtil.set(bank.getBankPhone(), join);
+				bankUtil.redisUtil.set(bank.getBankPhone(), join);//手机号+金额  的  所有字符串
 				bank.setDealAmount(amount);
 				return bank;
 			}
@@ -155,12 +160,20 @@ public class BankUtil {
 		BigDecimal amount2 = getAmount(amountList,amount);//得到钱数
 		bankUtil.redisUtil.set(phoneK+amount2.toString(),orderNo,second);//4分钟过期时间
 		List<String> listk1 = new ArrayList();
+		log.info("手机号码："+phoneK);//储存的是所有的key
 		Object object = bankUtil.redisUtil.get(phoneK);
+		
+		
+		
 		ArrayList<String> newArrayList = CollUtil.newArrayList(object.toString());
 		newArrayList.add(phoneK+amount2.toString());
 		bankUtil.redisUtil.deleteKey(phoneK);//删除Key 以及数据
 		String join1 = CollUtil.join(newArrayList, ",");
 		bankUtil.redisUtil.set(phoneK,join1);//更新数据
+		
+		
+		
+		
 		for(BankCard bankCardR : bankList) {
 			if(bankCardR.getBankPhone().equals(phoneK)) {
 				bankCardR.setDealAmount(amount2);
@@ -199,32 +212,18 @@ public class BankUtil {
 	 * @return
 	 */
 	public synchronized BigDecimal findDealAmount(BigDecimal amount ) {
-		List<Object> amountList =  bankUtil.redisUtil.lGet("Amount",0,-1);//获取该字段下所有的集合
-		log.info("--------【现有金额列表,正在使用金额列表："+amountList.toString()+"】-----------");
-		if(CollUtil.isNotEmpty(amountList)) {
-			if(amountList.contains(amount.toString())) {//集合包含这个数据
-				BigDecimal amount1 = amount.add(new BigDecimal("0.01"));//递增的钱数
-				return findDealAmount(amount1);
-			}
-		}//集合不包含
-		List<String> list = new ArrayList<String>();
-		for(Object amounts: amountList) {//bankKey 就是具体的银行卡使用记录的  key
-			Object object =  bankUtil.redisUtil.get(amounts.toString());
-			if(ObjectUtil.isNotNull(object)) {//说明当前缓存内的金额使用记录 已过期
-				list.add(object.toString());
-			}
-		}
-		list.add(amount.toString());
-		bankUtil.redisUtil.deleteKey("Amount");//删除Key 以及数据
-		for(String a: list) {
-			bankUtil.redisUtil.lSet("Amount",a);//跟新数据
+		Object object = bankUtil.redisUtil.get(amount.toString());
+		if(ObjectUtil.isNotNull(object)) {//证明存在数据  要加 0.01
+			BigDecimal amount1 = amount.add(new BigDecimal("0.01"));//递增的钱数
+			return findDealAmount(amount1);
 		}
 		String amount1 = amount.toString();
 		boolean endWith = StrUtil.endWith(amount1,'0');
 		if(endWith) {//如果金额以 0 结尾 就  加一分钱
 			amount = amount.add(new BigDecimal("0.01"));
+			return	findDealAmount(amount);
 		}
-		bankUtil.redisUtil.set(amount.toString(),amount.toString(),second);//4分钟过期时间
+		bankUtil.redisUtil.set(amount.toString(),amount.toString(),second);//4分钟过期时间  金额存入
 		return amount;
 	}
 	/**

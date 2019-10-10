@@ -47,7 +47,6 @@ public class AiliPayToCardServiceImpl extends PayOrderService{
 	public ResultDeal deal(Deal deal, Account account, AccountFee accountFee, OrderAll orderAll) {
 		log.info("===========【本地支付宝处理类--宝转卡简便模式】======");
 		ResultDeal result = new ResultDeal();
-		List<BankCard> findBankCardAll = bankCardServiceImpl.findBankCardAll();
 		BigDecimal amount = bankUtil.findDealAmount(new BigDecimal(orderAll.getOrderAmount()));
 		String param = "order="+orderAll.getOrderId();
 		param += "|amount="+amount;

@@ -75,4 +75,12 @@ public interface OrderService {
 	 */
 	OrderAll findOrderAllByOrderAll(String orderIdAll);
 
+	/**
+	 * <p>创建订单,四方模式</p>
+	 * @param orderId
+	 * @param dealAmount
+	 * @return
+	 */
+	boolean createOrderNoBankCaed(String orderId, String dealAmount);
+
 }
