@@ -173,6 +173,7 @@ public class MerchantsContorller {
 		/**
 		 * <p>验证提现商户号是否有足够的钱</p>
 		 */
+		
 		BigDecimal cash = new BigDecimal(amount);
 		User user = userServiceImpl.findUserByuserId(userId);
 		BigDecimal cashBalance =new BigDecimal(StrUtil.isBlank(user.getRetain3())?"0":user.getRetain3() );
