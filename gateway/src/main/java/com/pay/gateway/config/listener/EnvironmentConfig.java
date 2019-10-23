@@ -21,6 +21,7 @@ public class EnvironmentConfig implements EnvironmentAware{
 		log.info("操作系统的名称：" + environment.getProperty("os.name"));
 		log.info("操作系统的构架：" + environment.getProperty("os.arch"));
 		log.info("操作系统的版本：" + environment.getProperty("os.version"));
+		log.info("当前系统：网关" + environment.getProperty("os.version"));
 		// 获取配置信息
 		Setting setting = new Setting(FileUtil.touch("/newwork/GW/kent.setting") , null, true);
 		settingFile.setSetting(setting);

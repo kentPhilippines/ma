@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pay.gateway.channel.H5ailiPay.service.H5aliPayService;
 import com.pay.gateway.config.common.Common;
 import com.pay.gateway.config.redis.RedisUtil;
 import com.pay.gateway.entity.BankCard;

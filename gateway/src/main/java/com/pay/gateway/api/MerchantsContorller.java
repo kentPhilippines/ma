@@ -159,6 +159,7 @@ public class MerchantsContorller {
 		String backCard = decryptionParam.get("backCard");
 		String amount = decryptionParam.get("amount");
 		String ipAddr = decryptionParam.get("ipAddr");
+		decryptionParam.put("accountId", userId);
 		OrderAll orderAll =  new OrderAll();
 		orderAll.setOrderId(DealNumber.GetAllOrder());
 		orderAll.setOrderAccount(userId);
@@ -174,12 +175,20 @@ public class MerchantsContorller {
 		 */
 		BigDecimal cash = new BigDecimal(amount);
 		User user = userServiceImpl.findUserByuserId(userId);
-		BigDecimal cashBalance =new BigDecimal( user.getRetain3());
-		if(cashBalance.compareTo(cash) == -1){
+		BigDecimal cashBalance =new BigDecimal(StrUtil.isBlank(user.getRetain3())?"0":user.getRetain3() );
+		if(cashBalance.compareTo(cash) < 1){
 			String msg = "当前商户号余额不够";
+			decryptionParam.put("accountId", userId);
 			addExceptionOrder(decryptionParam,orderAll,msg);
 			return JsonResult.buildFailResult(msg);
 		}
+		
+		 String withdrawal = StrUtil.isBlank(user.getRetain5())?"":user.getRetain5();
+		 if(StrUtil.isBlank(withdrawal)){ 
+			 String msg = "代付手续费未开通";
+			 addExceptionOrder(decryptionParam,orderAll,msg); 
+			 return JsonResult.buildFailResult(msg); 
+		 }
 		/*
 		 * String withdrawal = accountFee.getWithdrawal();
 		 * if(StrUtil.isBlank(withdrawal)) { String msg = "代付手续费未开通";
@@ -277,7 +286,7 @@ public class MerchantsContorller {
 		exceopt.setOrderAccount(accountId);
 		exceopt.setExplains(msg);
 		exceopt.setOrderGenerationIp(ipAddr);
-		exceopt.setOperation("SYS");
+		exceopt.setOperation("GBOO");
 		exceopt.setExceptOrderAmount(amount);
 		boolean flag = exceptionOrderServiceImpl.addExceptionOrder(exceopt);
 		if(!flag) {
@@ -299,7 +308,7 @@ public class MerchantsContorller {
 		WithdrawalsRecord wr = new WithdrawalsRecord();
 		wr.setAccountId(accountId);
 		wr.setAmount(new BigDecimal(amount));
-		wr.setApprover("SYS");
+		wr.setApprover("GBOO");
 		wr.setAssociatedId(orderAll.getOrderId());
 		wr.setIp(ipAddr);
 		wr.setNote(msg);

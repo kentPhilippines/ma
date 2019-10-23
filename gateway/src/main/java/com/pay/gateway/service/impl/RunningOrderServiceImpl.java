@@ -42,7 +42,7 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		runBean.setOrderGenerationIp(dealOrder.getOrderGenerationIp());
 		runBean.setDealDescribe("用户正常交易流水");
 		runBean.setCardRunD(dealOrder.getOrderAccount());
-		runBean.setCardRunW("SYS");//系統賬戶簡稱
+		runBean.setCardRunW("GBOO");//系統賬戶簡稱
 		runBean.setCardNameRunW(StrUtil.isNotBlank(dealOrder.getDealCardId())?dealOrder.getDealCardId():"");
 		runBean.setRetain1(dealOrder.getDealChannel());//渠道类型
 		runBean.setRetain2(dealOrder.getRetain4());//交易产品
@@ -55,11 +55,11 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 			UserAccount userAccount  = userAccountServiceImpl.findUserByAccount(dealOrder.getOrderAccount());
 			if(StrUtil.isNotBlank(userAccount.getUserId())) {
 				User user = userServiceImpl.findUserByuserId(userAccount.getUserId());
-				if(StrUtil.isBlank(user.getRetain3())) {
+				if(StrUtil.isBlank(user.getRetain4())) {
 					log.info("【当前账户不存在代理商】");
 				}else {
 					log.info("【当前账号存在代理商】");
-					User agent = userServiceImpl.findUserByuserId(user.getRetain3());//代理商
+					User agent = userServiceImpl.findUserByuserId(user.getRetain4());//代理商
 					String fee = agent.getRetain1();//代理商费率
 					if(StrUtil.isNotBlank(fee)) {
 						String money = agent.getRetain3();//代理商当前金额
@@ -103,7 +103,7 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		runBean.setOrderGenerationIp(dealOrder.getOrderGenerationIp());
 		runBean.setDealDescribe("用户正常交易流水手续费");
 		runBean.setCardRunD(dealOrder.getOrderAccount());
-		runBean.setCardRunW("SYS");//系統賬戶簡稱
+		runBean.setCardRunW("GBOO");//系統賬戶簡稱
 		runBean.setCardNameRunW(StrUtil.isNotBlank(dealOrder.getDealCardId())?dealOrder.getDealCardId():"");
 		int insertSelective = runningOrderDao.insertSelective(runBean);
 		boolean flag = insertSelective > 0 && insertSelective < 2;
@@ -126,7 +126,7 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		runBean.setRunOrderAmount(order.getActualAmount().toString());
 		runBean.setOrderGenerationIp(order.getOrderGenerationIp());
 		runBean.setDealDescribe("用户代付资金账户冻结");
-		runBean.setCardRunD("SYS");//系統賬戶簡稱
+		runBean.setCardRunD("GBOO");//系統賬戶簡稱
 		runBean.setCardRunW(order.getOrderAccount());
 		int insertSelective = runningOrderDao.insertSelective(runBean);
 		boolean flag = insertSelective > 0 && insertSelective < 2;
@@ -151,7 +151,7 @@ public class RunningOrderServiceImpl implements RunningOrderService {
 		runBean.setOrderGenerationIp(order.getOrderGenerationIp());
 		runBean.setDealDescribe("用户代付手续费资金账户冻结");
 		runBean.setCardRunD(order.getOrderAccount());//系統賬戶簡稱
-		runBean.setCardRunW("SYS");
+		runBean.setCardRunW("GBOO");
 		int insertSelective = runningOrderDao.insertSelective(runBean);
 		boolean flag = insertSelective > 0 && insertSelective < 2;
 		if(flag) {

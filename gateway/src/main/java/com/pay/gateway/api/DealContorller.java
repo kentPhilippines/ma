@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.pay.gateway.channel.H5ailiPay.service.H5aliPayService;
 import com.pay.gateway.service.AccountFeeService;
 import com.pay.gateway.service.AccountService;
 import com.pay.gateway.service.ChannelService;
@@ -24,8 +23,6 @@ public class DealContorller {
 	ChannelService channelServiceImpl;
 	@Autowired
 	OrderService orderServiceImpl;
-	@Autowired
-	H5aliPayService H5aliPayServiceImpl;
 	@Autowired
 	RequestUtil requestUtil;
 	Logger log = LoggerFactory.getLogger(DealContorller.class);

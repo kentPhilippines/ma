@@ -165,7 +165,7 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		record.setRetain3("YES");
 		record.setCreateTime(null);
 		criteriaDealOrder.andOrderIdEqualTo(orderNo);
-		int updateByExample = dealOrderDao.updateByExample(record, example);
+		int updateByExample = dealOrderDao.updateByExampleSelective(record, example);
 		return updateByExample > 0 && updateByExample < 2;
 	}
 	/**
@@ -225,5 +225,17 @@ public class OrderServiceImpl extends PayOrderService implements OrderService  {
 		this.accountFeeId = orderAll.getRetain4();
 		this.payType = accountFee.getChannelProduct();
 		return dealOrder();
+	}
+	@Override
+	public boolean updataOrderEr(String orderId) {
+		DealOrder record = new DealOrder();
+		DealOrderExample example = new DealOrderExample();
+		com.pay.gateway.entity.DealOrderExample.Criteria criteriaDealOrder = example.createCriteria();
+		criteriaDealOrder.andOrderIdEqualTo(orderId);
+		DealOrder dealOrder = new DealOrder();
+		dealOrder.setOrderStatus(Common.ORDERDEASTATUS_ER);
+		dealOrder.setCreateTime(null);
+		int updateByExampleSelective = dealOrderDao.updateByExampleSelective(dealOrder, example);
+		return updateByExampleSelective > 0 && updateByExampleSelective < 2;
 	}
 }

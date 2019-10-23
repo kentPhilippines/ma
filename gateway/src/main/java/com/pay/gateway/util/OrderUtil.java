@@ -21,6 +21,8 @@ import com.pay.gateway.service.ChannelService;
 import com.pay.gateway.service.OrderService;
 import com.pay.gateway.service.RunningOrderService;
 
+import cn.hutool.core.util.StrUtil;
+
 /**
  * ########################################
  * 目前该方法计算了总流水金额和银行卡流水金额，要想获取
@@ -254,8 +256,12 @@ public class OrderUtil {
 	public synchronized boolean updataOrder(String orderIdAll,Integer runStatus) {
 		log.info("|---------【进入订单修改核心处理类，捕获全局订单编号："+orderIdAll+"】");
 		 //修改訂單狀態
+		DealOrder dealOrder = orderServiceImpl.findOrderByOrderAll(orderIdAll);
+		if(Common.ORDERDEASTATUS_SU.equals(dealOrder.getOrderStatus())) {
+			log.info("|---------【 当前订单本身就是成功无需做修改，直接返回false】");
+			 return true;
+		}
 		 boolean flag = orderServiceImpl.updataOrderStatusByAssociatedId(orderIdAll);
-		 DealOrder dealOrder = orderServiceImpl.findOrderByOrderAll(orderIdAll);
 		 //生成流水 總共會生成2筆流水
 		 boolean runAmount = RunningOrderServiceImpl.createDealRun(dealOrder,runStatus);//交易流水
 		 boolean runFee = RunningOrderServiceImpl.createDealRunFee(dealOrder,runStatus);//費率流水

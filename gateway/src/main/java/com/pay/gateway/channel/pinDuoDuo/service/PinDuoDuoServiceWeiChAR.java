@@ -35,10 +35,9 @@ import com.pay.gateway.util.SettingFile;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-
-@Component("PinDuoDuoServiceAliPay")
-public class PinDuoDuoService extends PayOrderService{
-	Logger log = LoggerFactory.getLogger(PinDuoDuoService.class);
+@Component("PinDuoDuoServiceWeiChAR")
+public class PinDuoDuoServiceWeiChAR extends PayOrderService{
+	Logger log = LoggerFactory.getLogger(PinDuoDuoServiceWeiChAR.class);
 	@Autowired
 	BankCardService bankCardServiceImpl;
 	@Autowired
@@ -84,7 +83,7 @@ public class PinDuoDuoService extends PayOrderService{
 			pay_attach 			附加信 息 		string 	N N 附加信息
 		 */
 		String appId = settingFile.getName("pinDuoDuoAppId");
-		String product = settingFile.getName("pinDuoDuoProduct_type_alipay");// 支付宝H5
+		String product = settingFile.getName("pinDuoDuoProduct_type_weichar");// 微信
 		String url = settingFile.getName("pinDuoDuo_url");
 		String key = settingFile.getName("pinDuoDuo_key");
 		String pay_notifyurl = settingFile.getName("pinDuoDuopay_notifyurl");

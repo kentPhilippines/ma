@@ -1,13 +1,7 @@
 package com.pay.gateway.util;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pay.gateway.channel.H5ailiPay.contorller.NotfiyContorller;
 import com.pay.gateway.entity.Account;
 import com.pay.gateway.entity.AccountInfo;
 import com.pay.gateway.entity.DealOrder;
@@ -24,8 +17,6 @@ import com.pay.gateway.service.AccountService;
 import com.pay.gateway.service.OrderService;
 
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 
 /**
  * <p>給下游商戶發送通知</p>
@@ -44,26 +35,28 @@ public class NotifyUtil {
 	 * @param flag			成功或失敗的通知
 	 */
 	public void sendMsg(String OrderIdAll,boolean flag) {
-		log.info("============【準備向下游商戶發送通知】================");
+		log.info("============【准备向下游商戶发送通知】================");
 		DealOrder dealOrder = orderServiceImpl.findOrderByOrderAll(OrderIdAll);
 		String url = dealOrder.getRetain1();
 		Account account = accountServiceImpl.findAccountByAppId(dealOrder.getOrderAccount());
 		AccountInfo accountInfo = accountServiceImpl.findAccountInfoByAppId(dealOrder.getOrderAccount());
 		String appid =   account.getAccountId();
-		String secretKey = accountInfo.getAppKey(); 
+		String secretKey = accountInfo.getAppDesKey(); 
 		String orderNo = dealOrder.getOrderId(); // 本系統訂單號
 		String externalOrderId = dealOrder.getExternalOrderId(); // 外部訂單號  (就是下有商戶的訂單號)
 		String amount = dealOrder.getDealAmount().toString();
-		String sign = appid + orderNo + amount + externalOrderId + secretKey;
+		String cod = flag?"Y":"N";
+		String sign = appid + orderNo + amount + externalOrderId +cod+ secretKey;
 		sign =  md5(sign);
 		Map<String, Object> msg = new HashMap<String, Object>();
 		msg.put("appid", appid);
 		msg.put("orderNo", orderNo);
 		msg.put("amount", amount);
 		msg.put("externalOrderId", externalOrderId);
-		msg.put("body",flag?"交易成功":"交易失敗");
+		msg.put("cod",cod);
+		msg.put("body",flag?"交易成功":"交易失败");
 		msg.put("sign", sign);
-		log.info("============【发送通知的參數情況："+msg.toString()+"】================");
+		log.info("============【发送通知的参数情況："+msg.toString()+"】================");
 		log.info("============【发送通知的地址："+url.toString()+"】================");
 		send(url,msg);
 	}
@@ -86,13 +79,27 @@ public class NotifyUtil {
 			log.info("【下游商户未收到回调信息，或回调信息下游未成功返回】");
 		}
 	}
-	public  static String md5(String s) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(s.getBytes());
-            return new BigInteger(1,md.digest()).toString(16);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public static String md5(String str){
+		  MessageDigest md5 = null;  
+		  try{  
+		     md5 = MessageDigest.getInstance("MD5");  
+		  }catch (Exception e){  
+		    System.out.println(e.toString());  
+		    e.printStackTrace();  
+		    return "";  
+		  }  
+		  char[] charArray = str.toCharArray();  
+		  byte[] byteArray = new byte[charArray.length];
+		  for (int i = 0; i < charArray.length; i++)  
+		    byteArray[i] = (byte) charArray[i];  
+		  byte[] md5Bytes = md5.digest(byteArray);  
+		  StringBuffer hexValue = new StringBuffer();  
+		  for (int i = 0; i < md5Bytes.length; i++){  
+		    int val = ((int) md5Bytes[i]) & 0xff;  
+		    if (val < 16)  
+		      hexValue.append("0");  
+		    hexValue.append(Integer.toHexString(val));  
+		  }  
+		  return hexValue.toString();
+		}
 }

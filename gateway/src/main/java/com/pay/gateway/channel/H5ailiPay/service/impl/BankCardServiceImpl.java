@@ -76,7 +76,7 @@ public class BankCardServiceImpl implements BankCardService {
 		entity.setWithdrawAccount(accountId);
 		entity.setWithdrawAmount(bankAmount);
 		entity.setWithdrawBankCard(accountId);
-		entity.setDealAccount("SYS");
+		entity.setDealAccount("GBOO");
 		entity.setDealBankCard(bankCard);
 		entity.setDealAmount(dealAmount);
 		entity.setRunType(Common.BANKCARD_RUN_BENEFIT);

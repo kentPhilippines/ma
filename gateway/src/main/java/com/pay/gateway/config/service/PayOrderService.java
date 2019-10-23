@@ -12,6 +12,8 @@ import com.pay.gateway.entity.Account;
 import com.pay.gateway.entity.AccountFee;
 import com.pay.gateway.entity.DealOrder;
 import com.pay.gateway.entity.OrderAll;
+import com.pay.gateway.entity.dealEntity.Deal;
+import com.pay.gateway.entity.dealEntity.ResultDeal;
 import com.pay.gateway.service.OrderService;
 import com.pay.gateway.util.DealNumber;
 
@@ -72,5 +74,12 @@ public abstract class PayOrderService implements PayService{
 		log.info("---【订单填充后的数据："+dealOrder.toString()+"】------");
 		Boolean  falg = OrderServiceImpl.addDealOrder(dealOrder);
 		return falg;
+	}
+	
+	
+	@Override
+	public ResultDeal deal(Deal deal, Account account, AccountFee accountFee, OrderAll orderAll) {
+		
+		return null;
 	}
 }
